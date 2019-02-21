@@ -12,5 +12,46 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
+
+Route::group(['middleware' => 'guest'], function() {
+
+    Route::post('/register', 'RegistrationController@postRegister');
+    Route::get('/login', 'LoginController@index');
+    Route::post('/login', 'LoginController@postLogin');
+
+});
+
+Route::middleware(['auth'])->group(function() {
+
+    Route::get('dashboard', 'DashboardController@index');
+    Route::get('profile', 'ProfileController@index');
+
+    Route::middleware('canView')->group(function() {
+        Route::get('clients', 'ProfileController@myclients');
+        Route::prefix('user')->group(function() {
+            Route::get('{user_id}/delete/client/{client_id}', 'ClientController@delete')->middleware('userCanDeleteClient');
+            Route::get('edit/{user_id}', 'ProfileController@edit')->middleware('userCanEditClient');
+            Route::post('update/{user_id?}', 'ProfileController@update')->middleware('userCanEditClient');
+            Route::get('create', 'ProfileController@create');
+            Route::post('create', 'ProfileController@store');
+        });
+    });
+
+    Route::prefix('profile')->group(function() {
+        Route::post('update', 'ProfileController@update');
+    });
+
+    Route::middleware('admin')->group(function() {
+        Route::prefix('user')->group(function() {
+            Route::get('delete/{user_id}', 'ProfileController@delete');
+            Route::get('clients/{user_id}', 'ClientController@create');
+        });
+    });
+
+    Route::get('manageusers', 'ManageUsers@index')->middleware('admin');
+
+});
+
+Route::get('/logout', 'LoginController@logout');
