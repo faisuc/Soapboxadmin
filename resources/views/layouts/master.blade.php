@@ -10,7 +10,11 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/circular-std/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/libs/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome/css/fontawesome-all.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap-datetimepicker.min.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
+        @if (Sentinel::check())
+            <meta name="active_user" content="{{ Sentinel::getUser()->id }}">
+        @endif
         @yield('styles')
     </head>
     <body>
@@ -47,6 +51,8 @@
         <script src="{{ asset('assets/vendor/slimscroll/jquery.slimscroll.js') }}"></script>
         <script src="{{ asset('assets/libs/js/main-js.js') }}"></script>
         <script src="{{ asset('assets/libs/js/script.js') }}"></script>
+        <script src="{{ asset('assets/libs/js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+        @yield('js')
     </body>
 </html>

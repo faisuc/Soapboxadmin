@@ -127,3 +127,22 @@ if ( ! function_exists('is_accountManager'))
     }
 
 }
+
+if ( ! function_exists('is_client'))
+{
+
+    function is_client($user_id = null)
+    {
+
+        if (null == $user_id)
+        {
+            return in_array('client', userRoles(Sentinel::getUser()->id));
+        }
+        else
+        {
+            return in_array('client', userRoles($user_id));
+        }
+
+    }
+
+}

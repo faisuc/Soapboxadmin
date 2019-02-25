@@ -38,4 +38,13 @@ jQuery(document).ready(function($) {
 
     });
 
+    $('.datetimepicker').datetimepicker({
+        format: 'yyyy-mm-dd HH:ii P',
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-right",
+        todayHighlight: true
+    });
+
 });

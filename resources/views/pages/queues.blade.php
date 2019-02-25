@@ -1,0 +1,73 @@
+@extends('layouts.master')
+@section('title', 'Queues')
+
+@section('dashboardContent')
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="/post/add" class="btn btn-primary">NEW POST</a>
+                </div>
+                @if (is_admin() || is_accountManager())
+                    <div class="col-md-5 text-right">
+                        <b>Select Client: </b>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-control" name="client" onchange="(window.location = '/queues/' + this.options[this.selectedIndex].value);">
+                            <option value="">My Posts</option>
+                            @foreach ($managedClients as $client)
+                                <option {{ Request::route('user_id') && Request::route('user_id') == $client->id ? 'selected' : '' }} value="{{ $client->id }}">{{ $client->fullname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-danger">
+                                {{ $error }}
+                            </div>
+                        @endforeach
+                    @endif
+
+                    @if (session()->has('flash_message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('flash_message') }}
+                        </div>
+                    @endif
+                </div
+            </div>
+            <div class="row">
+                @forelse ($posts as $post)
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <h3>{{ $post->title }}</h3>
+                                    <div class="tools">
+                                        <span><i class="fa fa-clock-o"></i> {{ $post->schedule_to_post_date }}
+                                    </div>
+                                    {{ $post->description }}
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group">
+                                    <a href="/post/edit/{{ $post->id }}" class="btn"><i class="fas fa-edit"></i></a>
+                                    <a href="/post/delete/{{ $post->id }}" class="btn confirmDeleteButton"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-md-12">
+                        <h3>No Posts.</h3>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+@endsection

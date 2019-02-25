@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Sentinel;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class User extends EloquentUser
 {
@@ -43,7 +44,23 @@ class User extends EloquentUser
 
     public function clients()
     {
-        return $this->hasMany('App\Clients', 'user_id');
+
+        $clients = $this->select(
+            DB::raw('users.*')
+        )->join('clients', function($join) {
+            $join->on('users.id', '=', 'clients.client_id');
+        })->where('clients.user_id', '=', $this->id)
+        ->get();
+
+        return $clients;
+
+    }
+
+    public function posts()
+    {
+
+        return $this->hasMany('App\Post', 'user_id', 'id');
+
     }
 
     public function getFullNameAttribute()

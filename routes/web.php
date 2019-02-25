@@ -27,6 +27,16 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('dashboard', 'DashboardController@index');
     Route::get('profile', 'ProfileController@index');
+    Route::get('messages/{user_id?}', 'MessageController@index');
+    Route::get('queues/{user_id?}', 'PostController@index');
+
+    Route::prefix('post')->group(function() {
+        Route::get('add', 'PostController@create');
+        Route::post('store', 'PostController@store');
+        Route::get('edit/{post_id}', 'PostController@edit');
+        Route::post('update/{post_id}', 'PostController@update');
+        Route::get('delete/{post_id}', 'PostController@delete');
+    });
 
     Route::middleware('canView')->group(function() {
         Route::get('clients', 'ProfileController@myclients');

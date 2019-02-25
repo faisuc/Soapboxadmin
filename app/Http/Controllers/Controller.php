@@ -8,6 +8,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\User;
 use App\Client;
+use App\Media;
+use App\Post;
 use View;
 use Sentinel;
 use DB;
@@ -19,12 +21,16 @@ class Controller extends BaseController
 
     protected $user;
     protected $client;
+    protected $media;
+    protected $post;
 
-    public function __construct(User $user, Client $client)
+    public function __construct(User $user, Client $client, Media $media, Post $post)
     {
 
         $this->user = $user;
         $this->client = $client;
+        $this->media = $media;
+        $this->post = $post;
 
     }
 
@@ -37,6 +43,7 @@ class Controller extends BaseController
         View::share('activeUser', $activeUser);
         View::share('userRoles', DB::table('roles')->get());
         View::share('managerLists', $this->getManagerLists());
+        View::share('post_statuses', $this->post_statuses());
 
         if (Request::route('user_id'))
         {
@@ -81,6 +88,35 @@ class Controller extends BaseController
         ->get();
 
         return $clients;
+
+    }
+
+    public function clientManagers($user_id)
+    {
+
+        $clients = $this->user->select(
+            DB::raw('users.*')
+        )->join('clients', function($join) {
+            $join->on('users.id', '=', 'clients.user_id');
+        })->where('clients.client_id', '=', $user_id)
+        ->get();
+
+        return $clients;
+
+    }
+
+    public function post_statuses()
+    {
+
+        $statuses = [
+            0 => 'Rejected',
+            1 => 'For Review',
+            2 => 'Ready for Post',
+            3 => 'Waiting Client Review',
+            4 => 'Waiting Staff Review'
+        ];
+
+        return $statuses;
 
     }
 
