@@ -38,7 +38,7 @@
                             {{ session()->get('flash_message') }}
                         </div>
                     @endif
-                </div
+                </div>
             </div>
             <div class="row">
                 @forelse ($posts as $post)

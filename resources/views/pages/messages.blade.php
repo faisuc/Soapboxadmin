@@ -84,7 +84,7 @@
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script>
-      var socket = io.connect("http://madhatmedia.soapboxadmin.local:3001");
+      var socket = io.connect("{{ config('app.url') }}:3001");
     </script>
     <script src="{{ asset('assets/libs/js/chat.js') }}"></script>
 @endsection
