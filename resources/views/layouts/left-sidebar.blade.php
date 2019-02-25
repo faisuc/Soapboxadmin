@@ -13,10 +13,10 @@
                         <li class="nav-item ">
                             <a class="nav-link" href="/dashboard"><i class="fa fa-fw fa-tachometer-alt"></i>Dashboard</a>
                             <a class="nav-link" href="/queues"><i class="fa fa-fw fa-clock"></i>Content QUEUE</a>
-                            <a class="nav-link" href="/posts"><i class="fa fa-fw fa-piggy-bank"></i>Content Bank</a>
+                            <!--<a class="nav-link" href="/posts"><i class="fa fa-fw fa-piggy-bank"></i>Content Bank</a>-->
                             <a class="nav-link" href="/messages"><i class="fa fa-fw fa-comment"></i>Messages</a>
                             <a class="nav-link" href="/profile"><i class="fa fa-fw fa-user-circle"></i>My Profile</a>
-                            <a class="nav-link" href="/archive"><i class="fa fa-fw fa-archive"></i>Archive</a>
+                            <!--<a class="nav-link" href="/archive"><i class="fa fa-fw fa-archive"></i>Archive</a>-->
                             @if (is_admin())
                                 <a class="nav-link" href="/manageusers"><i class="fa fa-fw fa-users"></i>Manage Users</a>
                             @endif
