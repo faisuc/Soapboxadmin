@@ -1,6 +1,6 @@
 var socket          = require('socket.io');
 var express         = require('express');
-var https           = require('https');
+//var https           = require('https');
 var http            = require('http');
 var fs              = require('fs');
 
@@ -8,10 +8,11 @@ var app = express();
 var http_server = http.createServer(app).listen(3001);
 var port = process.env.PORT || 3001;
 var io = socket.listen(http_server);
-
+/*
 http_server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });
+*/
 
 var users = {};
 
