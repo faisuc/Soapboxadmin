@@ -44,7 +44,7 @@
                 @forelse ($posts as $post)
                     <div class="col-md-3">
                         <div class="card">
-                            <img class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
+                            <img height="300px" class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">
                                     <h3>{{ $post->title }}</h3>
@@ -53,9 +53,12 @@
                                     </div>
                                     {{ $post->description }}
                                 </p>
+                                    <a href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
+                                    <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
                             </div>
                             <div class="card-footer">
                                 <div class="btn-group">
+                                    <a href="#" data-post-id="{{ $post->id }}" class="btn" data-toggle="modal" data-target=".postnotes-modal"><i class="fas fa-sticky-note"></i></a>
                                     <a href="/post/edit/{{ $post->id }}" class="btn"><i class="fas fa-edit"></i></a>
                                     <a href="/post/delete/{{ $post->id }}" class="btn confirmDeleteButton"><i class="fas fa-trash-alt"></i></a>
                                 </div>
@@ -70,4 +73,7 @@
             </div>
         </div>
     </div>
+
+    @include('modals.post_notes')
+
 @endsection

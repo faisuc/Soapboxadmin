@@ -146,3 +146,21 @@ if ( ! function_exists('is_client'))
     }
 
 }
+
+if ( ! function_exists('convertSocialType'))
+{
+
+    function convertSocialType($type_id)
+    {
+
+        $socials = [
+            1 => 'Facebook Page',
+            2 => 'Facebook Group',
+            3 => 'Twitter'
+        ];
+
+        return $socials[$type_id];
+
+    }
+
+}

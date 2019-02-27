@@ -10,10 +10,14 @@ use App\User;
 use App\Client;
 use App\Media;
 use App\Post;
+use App\PostNotes;
+use App\ImageRepository;
+use App\TextRepository;
 use View;
 use Sentinel;
 use DB;
 use Request;
+use App\SocialAccount;
 
 class Controller extends BaseController
 {
@@ -23,14 +27,22 @@ class Controller extends BaseController
     protected $client;
     protected $media;
     protected $post;
+    protected $postNotes;
+    protected $imageRepo;
+    protected $textRepo;
+    protected $socialAccount;
 
-    public function __construct(User $user, Client $client, Media $media, Post $post)
+    public function __construct(User $user, Client $client, Media $media, Post $post, PostNotes $postNotes, ImageRepository $imageRepo, TextRepository $textRepo, SocialAccount $socialAccount)
     {
 
         $this->user = $user;
         $this->client = $client;
         $this->media = $media;
         $this->post = $post;
+        $this->postNotes = $postNotes;
+        $this->imageRepo = $imageRepo;
+        $this->textRepo = $textRepo;
+        $this->socialAccount = $socialAccount;
 
     }
 
