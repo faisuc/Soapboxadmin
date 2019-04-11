@@ -46,10 +46,15 @@ class SocialAccountController extends Controller
         $name = $request->input('name');
         $url = $request->input('url');
         $type_id = $request->input('social_account');
+        $user_id = $request->input('user_id');
+
+        if (!$user_id) {
+            $user_id = Sentinel::getUser()->id;
+        }
 
         $social = new $this->socialAccount;
         $social->type_id = $type_id;
-        $social->user_id = Sentinel::getUser()->id;
+        $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
         $social->save();

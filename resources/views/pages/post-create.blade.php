@@ -46,6 +46,14 @@
                             <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required>
                         </div>
                         <div class="form-group">
+                            <label for="inputStatus">Status</label>
+                            <select id="inputStatus" name="status" class="form-control">
+                                @foreach ($post_statuses as $key => $status)
+                                    <option value="{{ $key }}">{{ $status }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="inputPhoto">Photo</label>
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
                         </div>

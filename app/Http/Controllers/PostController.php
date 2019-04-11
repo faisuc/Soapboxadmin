@@ -57,6 +57,7 @@ class PostController extends Controller
         $link = $request->input('link');
         $schedule_date = $request->input('schedule_date');
         $user_id = $request->input('user_id');
+        $status = $request->input('status');
 
         if (!$user_id) {
             $user_id = Sentinel::getUser()->id;
@@ -89,6 +90,7 @@ class PostController extends Controller
         $post->user_id = $user_id;
         $post->title = $title;
         $post->description = $description;
+        $post->status = $status;
 
         if ($media_id != 0)
         {

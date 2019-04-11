@@ -14,7 +14,7 @@
                             </div>
                             <div class="col-md-4">
                                 <select class="form-control" name="client" onchange="(window.location = '/socialaccounts/' + this.options[this.selectedIndex].value);">
-                                    <option value="">My Posts</option>
+                                    <option value="">My Social Accounts</option>
                                     @foreach ($managedClients as $client)
                                         <option {{ Request::route('user_id') && Request::route('user_id') == $client->id ? 'selected' : '' }} value="{{ $client->id }}">{{ $client->fullname }}</option>
                                     @endforeach
@@ -80,8 +80,12 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form action="socialaccount/add" method="post">
+                <form action="/socialaccount/add" method="post">
                     @csrf
+
+                    @if (Request::route('user_id'))
+                            <input type="hidden" name="user_id" value="{{ Request::route('user_id') }}">
+                        @endif
                 <div class="modal-body">
                       <div class="form-group">
                       <label for="inputSocialAccount" class="col-form-label">Social Account:</label>
