@@ -6,7 +6,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="/post/add" class="btn btn-primary">NEW POST</a>
+                    <a href="/post/add{{ Request::route('user_id') ? '/' . Request::route('user_id') : '' }}" class="btn btn-primary">NEW POST</a>
                 </div>
                 @if (is_admin() || is_accountManager())
                     <div class="col-md-5 text-right">

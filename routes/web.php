@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('socialaccount/delete/{social_id}', 'SocialAccountController@delete');
 
     Route::prefix('post')->group(function() {
-        Route::get('add', 'PostController@create');
+        Route::get('add/{user_id?}', 'PostController@create');
         Route::post('store', 'PostController@store');
         Route::get('edit/{post_id}', 'PostController@edit');
         Route::post('update/{post_id}', 'PostController@update');

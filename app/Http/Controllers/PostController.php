@@ -56,6 +56,11 @@ class PostController extends Controller
         $description = $request->input('description');
         $link = $request->input('link');
         $schedule_date = $request->input('schedule_date');
+        $user_id = $request->input('user_id');
+
+        if (!$user_id) {
+            $user_id = Sentinel::getUser()->id;
+        }
 
         $data = [];
         $media_id = 0;
@@ -81,7 +86,7 @@ class PostController extends Controller
         }
 
         $post = new $this->post;
-        $post->user_id = Sentinel::getUser()->id;
+        $post->user_id = $user_id;
         $post->title = $title;
         $post->description = $description;
 

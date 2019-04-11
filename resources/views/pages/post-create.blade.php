@@ -11,6 +11,9 @@
                 <div class="card-body">
                     <form action="/post/store" method="post" enctype="multipart/form-data">
                         @csrf
+                        @if (Request::route('user_id'))
+                            <input type="hidden" name="user_id" value="{{ Request::route('user_id') }}">
+                        @endif
 
                         @if ($errors->any())
                             @foreach ($errors->all() as $error)
