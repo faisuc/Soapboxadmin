@@ -43,7 +43,7 @@
             <div class="row">
                 @forelse ($posts as $post)
                     <div class="col-md-3">
-                        <div class="card" style="color: #ffffff; background-color:
+                        <div class="card" style="border: 5px solid
                             @if ($post->status == 0)
                                 #f44336;
                             @elseif ($post->status == 1)
@@ -51,7 +51,7 @@
                             @elseif ($post->status == 2)
                                 #4caf50;
                             @elseif ($post->status == 3)
-                                #ffff00;
+                                #4caf50;
                             @elseif ($post->status == 4)
                                 #0000FF;
                             @endif
@@ -59,14 +59,14 @@
                             <img height="300px" class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
                             <div class="card-body">
                                 <p class="card-text">
-                                    <h3 style="color: #ffffff;">{{ $post->title }}</h3>
+                                    <h3>{{ $post->title }}</h3>
                                     <div class="tools">
                                         <span><i class="fa fa-clock-o"></i> {{ $post->schedule_to_post_date }}
                                     </div>
                                     {{ $post->description }}
                                 </p>
-                                    <a style="color: #ffffff;" href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
-                                    <a style="color: #ffffff;" href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
+                                    <a href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
+                                    <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
                             </div>
                             <div class="card-footer">
                                 <div class="btn-group">

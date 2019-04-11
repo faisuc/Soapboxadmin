@@ -122,7 +122,7 @@ class Controller extends BaseController
 
         $statuses = [
             0 => 'Rejected',
-            1 => 'For Review',
+            //1 => 'For Review',
             2 => 'Ready for Post',
             3 => 'Waiting Client Review',
             4 => 'Waiting Staff Review'
