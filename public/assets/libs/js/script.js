@@ -95,7 +95,7 @@ jQuery(document).ready(function($) {
                     } else {
                         queueContainer.find('.card').attr('style', 'border: 5px solid #FFFF00');
                     }
-                    console.log(role);
+
                     $('.post-notes-container .empty').hide();
                     var html = '';
                     html += `<div class="alert alert-info" role="alert">
