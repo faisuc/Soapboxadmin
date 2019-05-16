@@ -87,6 +87,15 @@ jQuery(document).ready(function($) {
             success: function(response) {
 
                 if (response.success) {
+                    var role = response.role[0].slug;
+                    var queueContainer = $('.queue-' + post_id);
+
+                    if (role == 'client') {
+                        queueContainer.find('.card').attr('style', 'border: 5px solid #0000FF');
+                    } else {
+                        queueContainer.find('.card').attr('style', 'border: 5px solid #FFFF00');
+                    }
+                    console.log(role);
                     $('.post-notes-container .empty').hide();
                     var html = '';
                     html += `<div class="alert alert-info" role="alert">

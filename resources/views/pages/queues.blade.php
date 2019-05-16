@@ -42,7 +42,7 @@
             </div>
             <div class="row">
                 @forelse ($posts as $post)
-                    <div class="col-md-3">
+                    <div class="col-md-3 queue-{{ $post->id }}">
                         <div class="card" style="border: 5px solid
                             @if ($post->status == 0)
                                 #f44336;
@@ -51,7 +51,7 @@
                             @elseif ($post->status == 2)
                                 #4caf50;
                             @elseif ($post->status == 3)
-                                #4caf50;
+                                #FFFF00;
                             @elseif ($post->status == 4)
                                 #0000FF;
                             @endif

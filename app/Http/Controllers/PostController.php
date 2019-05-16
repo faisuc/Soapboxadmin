@@ -90,7 +90,16 @@ class PostController extends Controller
         $post->user_id = $user_id;
         $post->title = $title;
         $post->description = $description;
-        $post->status = $status;
+
+        if ($user = Sentinel::getUser())
+        {
+            if ($user->inRole('client'))
+            {
+                $post->status = 4;
+            } else {
+                $post->status = 3;
+            }
+        }
 
         if ($media_id != 0)
         {

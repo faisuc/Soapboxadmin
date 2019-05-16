@@ -19,12 +19,27 @@ class PostNotesController extends Controller
 
                 $content = $request->input('content');
                 $post_id = $request->input('post_id');
+                $roles = Sentinel::getUser()->roles;
 
                 $note = new $this->postNotes;
                 $note->user_id = Sentinel::getUser()->id;
                 $note->content = $content;
                 $note->post_id = $post_id;
                 $note->save();
+
+                if ($user = Sentinel::getUser())
+                {
+                    if ($user->inRole('client'))
+                    {
+                        DB::table('posts')
+                            ->where('id', $post_id)
+                            ->update(['status' => 4]);
+                    } else {
+                        DB::table('posts')
+                        ->where('id', $post_id)
+                        ->update(['status' => 3]);
+                    }
+                }
 
                 $note = $this->postNotes->select(
                     DB::raw('post_notes.*, users.*, post_notes.created_at as created_at, post_notes.id as id')
@@ -33,7 +48,7 @@ class PostNotesController extends Controller
                 })->where('post_notes.id', '=', $note->id)
                 ->first();
 
-                return response()->json(['success' => true, 'collection' => $note]);
+                return response()->json(['success' => true, 'collection' => $note, 'role' => $roles]);
 
             } catch(\Exception $e) {
 
