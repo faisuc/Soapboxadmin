@@ -28,8 +28,7 @@ class FacebookController extends Controller
 
 	public function fb_connect_app()
     {
-    	Session::forget('fb_access_token'); die();
-		$this->_loadSharedViews();
+    	$this->_loadSharedViews();
 
         $data = [];
 
@@ -179,9 +178,12 @@ class FacebookController extends Controller
 			}
 		}
 		else {
-			echo "<pre>";
-			print_r($userdata1);
-			die();
+			Session::forget('fb_access_token');
+			$user_profile = $this->api->api('/me');
+		    echo "<pre>";
+		    print_r($user_profile);
+		    echo "</pre>";
+		    die();
 			return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
 		}
     }
