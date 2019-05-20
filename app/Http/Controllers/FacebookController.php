@@ -171,7 +171,7 @@ class FacebookController extends Controller
 		$res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
 		Session::forget('fb_access_token');
 		if($res->getHttpStatusCode() == 200) {
-			return redirect('fb_connect_app')->with('message', 'Your Schedule Post has been created.');
+			return redirect('fb_connect_app')->with('flash_message', 'Your Schedule Post has been created.');
 		}
     }
 
