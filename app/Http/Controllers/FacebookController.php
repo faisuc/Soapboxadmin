@@ -155,24 +155,29 @@ class FacebookController extends Controller
 			$facebook_page_id = $page['id'];
 		}
 
-		date_default_timezone_set('Asia/Kolkata');
-		// $message = 'scheduled post my script new script';
-		// echo $current_time.'--'.$timestamp; die();
-		// echo $token; die();
-		$message = $request->input('message');
-        $timestamp = $request->input('timestamp');
-		$timestamp = strtotime($timestamp);
+		if($facebook_page_id != '') {
+			date_default_timezone_set('Asia/Kolkata');
+			// $message = 'scheduled post my script new script';
+			// echo $current_time.'--'.$timestamp; die();
+			// echo $token; die();
+			$message = $request->input('message');
+	        $timestamp = $request->input('timestamp');
+			$timestamp = strtotime($timestamp);
 
-		$data = array(
-			'message' => $message,
-			'scheduled_publish_time' => $timestamp,
-			'published' => 'false'
-		);
+			$data = array(
+				'message' => $message,
+				'scheduled_publish_time' => $timestamp,
+				'published' => 'false'
+			);
 
-		$res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
-		Session::forget('fb_access_token');
-		if($res->getHttpStatusCode() == 200) {
-			return redirect('fb_connect_app')->with('flash_message', 'Your Schedule Post has been created.');
+			$res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
+			Session::forget('fb_access_token');
+			if($res->getHttpStatusCode() == 200) {
+				return redirect('fb_connect_app')->with('flash_message', 'Your Schedule Post has been created.');
+			}
+		}
+		else {
+			return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
 		}
     }
 
