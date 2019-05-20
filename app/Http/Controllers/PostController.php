@@ -316,7 +316,7 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        // Session:: flush(); die();
+        // Session::flush(); die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
@@ -332,7 +332,8 @@ class PostController extends Controller
         // $this->removeAccess();
         /**/
         
-        $userdata1 = $this->api->get('/me/accounts', $token);
+        // $userdata1 = $this->api->get('/me/accounts', $token);
+        $userdata1 = $this->api->get('/me/permissions', $token);
         echo "<pre>";
         print_r($userdata1);
         die();
