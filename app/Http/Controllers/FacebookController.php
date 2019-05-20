@@ -150,6 +150,7 @@ class FacebookController extends Controller
 		$userdata = $this->api->get('/me/accounts', $token);
 		$userdata = $userdata->getDecodedBody();
 
+		$facebook_page_id = '';
 		foreach ($userdata['data'] as $page_key => $page) {
 			$pageAccessToken = $page['access_token'];
 			$facebook_page_id = $page['id'];
