@@ -28,6 +28,7 @@ class FacebookController extends Controller
 
 	public function fb_connect_app()
     {
+    	Session::forget('fb_access_token'); die();
 		$this->_loadSharedViews();
 
         $data = [];
@@ -47,7 +48,6 @@ class FacebookController extends Controller
 
     public function fb_callback()
     {
-    	Session::forget('fb_access_token'); die();
     	$app_id = getenv('FACEBOOK_CLIENT_ID');
     	$this->setFacebookObject();
 
