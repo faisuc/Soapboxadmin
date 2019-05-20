@@ -98,9 +98,8 @@ class SocialAccountController extends Controller
 
     public function fb_connect_app()
     {
-        echo "string"; die();
         $this->setFacebookObject();
-        Session::flush();
+        // Session::flush();
         echo 'Token: '.Session::get('fb_access_token').'<br>';
         if(Session::get('fb_access_token') == '')
         {
