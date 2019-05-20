@@ -178,11 +178,11 @@ class FacebookController extends Controller
 			}
 		}
 		else {
-			Session::forget('fb_access_token');
 			$user_profile = $this->api->api('/me');
 		    echo "<pre>";
 		    print_r($user_profile);
 		    echo "</pre>";
+			Session::forget('fb_access_token');
 		    die();
 			return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
 		}
