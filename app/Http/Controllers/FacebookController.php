@@ -28,9 +28,6 @@ class FacebookController extends Controller
 
 	public function fb_connect_app()
     {
-    	echo "<pre>";
-    	print_r($_SERVER);
-    	die();
     	$this->_loadSharedViews();
 
         $data = [];
