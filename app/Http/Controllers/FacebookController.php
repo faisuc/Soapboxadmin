@@ -154,8 +154,8 @@ class FacebookController extends Controller
 			$facebook_page_id = $page['id'];
 		}
 
+		date_default_timezone_set('Asia/Kolkata');
 		// $message = 'scheduled post my script new script';
-		// date_default_timezone_set('Asia/Kolkata');
 		// echo $current_time.'--'.$timestamp; die();
 		// echo $token; die();
 		$message = $request->input('message');
