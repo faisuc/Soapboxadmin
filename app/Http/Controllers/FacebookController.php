@@ -47,6 +47,7 @@ class FacebookController extends Controller
 
     public function fb_callback()
     {
+    	$app_id = getenv('FACEBOOK_CLIENT_ID');
     	$this->setFacebookObject();
 
     	$helper = $this->api->getRedirectLoginHelper();
