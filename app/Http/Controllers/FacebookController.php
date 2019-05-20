@@ -28,6 +28,7 @@ class FacebookController extends Controller
 
 	public function fb_connect_app()
     {
+    	echo Session::get('fb_access_token'); die();
     	$this->_loadSharedViews();
 
         $data = [];
