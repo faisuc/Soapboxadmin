@@ -103,6 +103,7 @@ class SocialAccountController extends Controller
         echo 'Token: '.Session::get('fb_access_token').'<br>';
         if(Session::get('fb_access_token') == '')
         {
+            echo "string"; die();
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
