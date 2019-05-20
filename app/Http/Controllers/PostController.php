@@ -329,10 +329,9 @@ class PostController extends Controller
         $token = Session::get('fb_access_token');
 
         /**/
-        $this->removeAccess();
+        // $this->removeAccess();
         /**/
-        die();
-
+        
         $userdata1 = $this->api->get('/me/accounts', $token);
         echo "<pre>";
         print_r($userdata1);
