@@ -148,6 +148,9 @@ class FacebookController extends Controller
     	$token = Session::get('fb_access_token');
 
 		$userdata = $this->api->get('/me/accounts', $token);
+		echo "<pre>";
+		print_r($userdata);
+		die();
 		$userdata = $userdata->getDecodedBody();
 
 		$facebook_page_id = '';
