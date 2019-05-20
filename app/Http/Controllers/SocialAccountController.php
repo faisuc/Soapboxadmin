@@ -48,6 +48,7 @@ class SocialAccountController extends Controller
     public function store(Request $request)
     {
         $this->fb_connect_app();
+        die();
         
         $name = $request->input('name');
         $url = $request->input('url');
