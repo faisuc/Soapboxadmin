@@ -329,26 +329,7 @@ class PostController extends Controller
         $token = Session::get('fb_access_token');
 
         /**/
-        $response = $this->api->get('/me?fields=id,name', $token);
-        $user_profile = $response->getGraphUser();
-        $user_id = $user_profile['id'];
-        try {
-            // Returns a `Facebook\FacebookResponse` object
-            $response = $this->api->get(
-                '/'.$user_id.'/permissions',
-                $token
-            );
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-
-        $graphNode = $response->getGraphNode();
-        echo "<pre>";
-        print_r($graphNode);
+        $this->removeAccess();
         /**/
         die();
 
@@ -395,6 +376,31 @@ class PostController extends Controller
             die();*/
             return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
         }
+    }
+
+    public function removeAccess()
+    {
+        $response = $this->api->get('/me?fields=id,name', $token);
+        $user_profile = $response->getGraphUser();
+        $user_id = $user_profile['id'];
+        try {
+            // Returns a `Facebook\FacebookResponse` object
+            $response = $this->api->get(
+                '/'.$user_id.'/permissions',
+                $token
+            );
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        $graphNode = $response->getGraphNode();
+        echo "<pre>";
+        print_r($graphNode);
+        echo "</pre>";
     }
 
 }
