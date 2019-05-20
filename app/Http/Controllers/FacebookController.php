@@ -28,9 +28,7 @@ class FacebookController extends Controller
 
 	public function fb_connect_app()
     {
-		Session::forget('fb_access_token');
-    	echo Session::get('fb_access_token'); die();
-    	$this->_loadSharedViews();
+		$this->_loadSharedViews();
 
         $data = [];
 
@@ -171,7 +169,7 @@ class FacebookController extends Controller
 		);
 
 		$res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
-		Session::flush();
+		Session::forget('fb_access_token');
 		echo "<pre>";
 		print_r($res);
 		die();
