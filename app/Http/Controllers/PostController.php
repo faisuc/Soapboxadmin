@@ -316,7 +316,8 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        Session::flush(); $this->api->destroySession(); die();
+        // Session::flush(); $this->api->destroySession(); die();
+        echo 'Token: '.Session::get('fb_access_token'); die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
