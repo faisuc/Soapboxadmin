@@ -178,7 +178,8 @@ class FacebookController extends Controller
 			}
 		}
 		else {
-			$user_profile = $this->api->getUser();
+			$response = $this->api->get('/me?fields=id,name', $token);
+			$user_profile = $response->getGraphUser();
 		    echo "<pre>";
 		    print_r($user_profile);
 		    echo "</pre>";
