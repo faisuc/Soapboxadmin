@@ -119,7 +119,8 @@ class FacebookController extends Controller
 		Session::put('fb_access_token', $accessToken);
 		// echo Session::get('fb_access_token'); die();
 		// header('Location: http://127.0.0.1:3000/fb_connect_app');
-		$fb_connect_url = URL::to('/').'/fb_publish_post';
+		// $fb_connect_url = URL::to('/').'/fb_publish_post';
+		$fb_connect_url = URL::to('/').'/fb_connect_app';
 		return redirect()->away($fb_connect_url);
     }
 
