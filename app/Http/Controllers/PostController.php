@@ -334,8 +334,8 @@ class PostController extends Controller
         // $this->removeAccess();
         /**/
         
-        // $userdata1 = $this->api->get('/me/accounts', $token);
-        $userdata1 = $this->api->get('/me', $token);
+        $userdata1 = $this->api->get('/me/accounts', $token);
+        // $userdata1 = $this->api->get('/me', $token);
         echo "<pre>";
         print_r($userdata1);
         die();
