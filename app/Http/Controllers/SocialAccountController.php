@@ -47,8 +47,6 @@ class SocialAccountController extends Controller
 
     public function store(Request $request)
     {
-        $this->fb_connect_app();
-        die();
         
         $name = $request->input('name');
         $url = $request->input('url');
@@ -65,6 +63,8 @@ class SocialAccountController extends Controller
         $social->name = $name;
         $social->url = $url;
         $social->save();
+        
+        $this->fb_connect_app();
 
         return redirect()->back()->with('flash_message', 'Social account has been added.');
 
