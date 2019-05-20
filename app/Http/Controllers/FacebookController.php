@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Sentinel;
 use Session;
+use Redirect;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 
 class FacebookController extends Controller
 {
 	private $api;
-    public function __construct()
-    {
-    	// Session::flush();
-    	$app_id = getenv('FACEBOOK_CLIENT_ID');
+	public function setFacebookObject()
+	{
+		// Session::flush();
+		$app_id = getenv('FACEBOOK_CLIENT_ID');
     	$app_secret = getenv('FACEBOOK_CLIENT_SECRET');
 		$fb = new Facebook([
 			'app_id' => $app_id,
@@ -22,27 +23,31 @@ class FacebookController extends Controller
 			'default_graph_version' => 'v2.5',
 		]);
 		$this->api = $fb;
-    }
+	}
 
-    public function fb_connect_app()
+	public function fb_connect_app()
     {
-    	// $this->_loadSharedViews();
+    	$this->_loadSharedViews();
 
         $data = [];
-    	if(Session::get('fb_access_token') == '')
+
+        $this->setFacebookObject();
+
+        /*if(Session::get('fb_access_token') == '')
     	{
     		$helper = $this->api->getRedirectLoginHelper();
 			$permissions = ['email','user_posts','manage_pages','publish_pages'];
 			$loginUrl = $helper->getLoginUrl('https://127.0.0.1:3000/fb_callback', $permissions);
 			$data['loginUrl'] = $loginUrl;
-    	}
+    	}*/
+
         return view('pages.fb_connect_app', $data);
-
-
     }
 
     public function fb_callback()
     {
+    	$this->setFacebookObject();
+
     	$helper = $this->api->getRedirectLoginHelper();
 
 		try {
@@ -58,7 +63,6 @@ class FacebookController extends Controller
 		  	echo 'Facebook SDK returned an error: ' . $e->getMessage();
 		  	exit;
 		}
-
 
 		if (! isset($accessToken)) {
 		  	if ($helper->getError()) {
@@ -106,13 +110,34 @@ class FacebookController extends Controller
 		  var_dump($accessToken->getValue());
 		}
 
-		$_SESSION['fb_access_token'] = (string) $accessToken;
+		// $_SESSION['fb_access_token'] = (string) $accessToken;
+		$accessToken = (string) $accessToken;
+		Session::set('fb_access_token', $accessToken);
 		header('Location: http://127.0.0.1:3000/fb_connect_app');
     }
 
-    public function fb_publish_post()
+    public function fb_publish_post(Request $request)
     {
-    	$token = 'EAAkcVsx4IuIBAJ6nAs1i1pJknIUEP2xsvVdPdEkx8RY554qeXAyIFSGl1V1P1qUXUyN290jo8UA2dz8RENaZAcClZCmmdwSCZAPyNDR2RueEPLjGMZBnowiXXPG6cxCkIvPcMvgxpHI9JAE6lkYJ7V5nV5qBXf9taFvKyvgaXAZDZD';//Session::get('fb_access_token');
+		$validatedData = $request->validate([
+            'message' => 'required|min:3',
+            'timestamp' => 'required|after:12 minutes'
+        ]);
+
+        /*$current_time = date('Y-m-d h:i:s');
+		$next_timestamp = date('Y-m-d h:i A',strtotime("+12 minutes"));*/
+		
+    	$this->setFacebookObject();
+
+    	if(Session::get('fb_access_token') == '')
+    	{
+    		$helper = $this->api->getRedirectLoginHelper();
+			$permissions = ['email','user_posts','manage_pages','publish_pages'];
+			$loginUrl = $helper->getLoginUrl('https://127.0.0.1:3000/fb_callback', $permissions);
+			return redirect()->away($loginUrl);
+			echo "Not Redirecting. Error Occur"; die();
+    	}
+
+    	$token = Session::get('fb_access_token');
 
 		$userdata = $this->api->get('/me/accounts', $token);
 		$userdata = $userdata->getDecodedBody();
@@ -122,13 +147,13 @@ class FacebookController extends Controller
 			$facebook_page_id = $page['id'];
 		}
 
-		$message = 'scheduled post my script new script';
+		// $message = 'scheduled post my script new script';
 		// date_default_timezone_set('Asia/Kolkata');
-		$current_time = date('Y-m-d h:i:s');
-		$timestamp = date('Y-m-d H:i:s',strtotime("+12 minutes"));
-		$timestamp = strtotime($timestamp);
 		// echo $current_time.'--'.$timestamp; die();
 		// echo $token; die();
+		$message = $request->input('message');
+        $timestamp = $request->input('timestamp');
+		$timestamp = strtotime($timestamp);
 
 		$data = array(
 			'message' => $message,

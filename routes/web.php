@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function() {
     /**/
     Route::get('fb_connect_app', 'FacebookController@fb_connect_app');
     Route::get('fb_callback', 'FacebookController@fb_callback');
-    Route::get('fb_publish_post', 'FacebookController@fb_publish_post');
+    Route::post('fb_publish_post', 'FacebookController@fb_publish_post');
     /**/
 
     Route::prefix('post')->group(function() {
