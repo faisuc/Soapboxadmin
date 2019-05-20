@@ -41,9 +41,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('socialaccount/delete/{social_id}', 'SocialAccountController@delete');
 
     /**/
-    Route::get('fb_connect_app', 'FacebookController@fb_connect_app');
-    Route::get('fb_callback', 'FacebookController@fb_callback');
-    Route::post('fb_publish_post', 'FacebookController@fb_publish_post');
+    // Route::get('fb_connect_app', 'FacebookController@fb_connect_app');
+    Route::get('fb_callback', 'SocialAccountController@fb_callback');
+    // Route::post('fb_publish_post', 'FacebookController@fb_publish_post');
     /**/
 
     Route::prefix('post')->group(function() {

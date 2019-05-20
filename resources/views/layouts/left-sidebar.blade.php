@@ -15,7 +15,6 @@
                             <a class="nav-link" href="/queues"><i class="fa fa-fw fa-clock"></i>Content QUEUE</a>
                             <a class="nav-link" href="/contentbank"><i class="fa fa-fw fa-piggy-bank"></i>Content Bank</a>
                             <a class="nav-link" href="/socialaccounts"><i class="fas fa-share-square"></i>Social Accounts</a>
-                            <a class="nav-link" href="/fb_connect_app"><i class="fas fa-clock"></i>FB Schedule Post</a>
                             <a class="nav-link" href="/messages"><i class="fa fa-fw fa-comment"></i>Messages</a>
                             <a class="nav-link" href="/profile"><i class="fa fa-fw fa-user-circle"></i>My Profile</a>
                             <!--<a class="nav-link" href="/archive"><i class="fa fa-fw fa-archive"></i>Archive</a>-->
