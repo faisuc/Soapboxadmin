@@ -48,6 +48,7 @@ class SocialAccountController extends Controller
     public function store(Request $request)
     {
         $this->setFacebookObject();
+        Session::forget('fb_access_token'); die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
