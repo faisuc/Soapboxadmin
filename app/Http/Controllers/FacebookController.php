@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sentinel;
 use Session;
 use Redirect;
+use URL;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 
@@ -37,7 +38,7 @@ class FacebookController extends Controller
     	{
     		$helper = $this->api->getRedirectLoginHelper();
 			$permissions = ['email','user_posts','manage_pages','publish_pages'];
-			$loginUrl = $helper->getLoginUrl('https://127.0.0.1:3000/fb_callback', $permissions);
+			$loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
 			$data['loginUrl'] = $loginUrl;
     	}*/
 
@@ -113,7 +114,9 @@ class FacebookController extends Controller
 		// $_SESSION['fb_access_token'] = (string) $accessToken;
 		$accessToken = (string) $accessToken;
 		Session::set('fb_access_token', $accessToken);
-		header('Location: http://127.0.0.1:3000/fb_connect_app');
+		// header('Location: http://127.0.0.1:3000/fb_connect_app');
+		$fb_connect_url = URL::to('/').'/fb_publish_post';
+		return redirect()->away($fb_connect_url);
     }
 
     public function fb_publish_post(Request $request)
@@ -132,7 +135,7 @@ class FacebookController extends Controller
     	{
     		$helper = $this->api->getRedirectLoginHelper();
 			$permissions = ['email','user_posts','manage_pages','publish_pages'];
-			$loginUrl = $helper->getLoginUrl('https://127.0.0.1:3000/fb_callback', $permissions);
+			$loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
 			return redirect()->away($loginUrl);
 			echo "Not Redirecting. Error Occur"; die();
     	}
