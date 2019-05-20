@@ -50,7 +50,9 @@ class FacebookController extends Controller
     	$this->setFacebookObject();
 
     	$helper = $this->api->getRedirectLoginHelper();
-
+    	if (isset($_GET['state'])) {
+            $helper->getPersistentDataHandler()->set('state', $_GET['state']);
+        }
 		try {
 		  	$accessToken = $helper->getAccessToken();
 		}
