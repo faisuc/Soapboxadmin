@@ -147,12 +147,9 @@ class FacebookController extends Controller
 
     	$token = Session::get('fb_access_token');
 
-		$userdata = $this->api->get('/me/accounts', $token);
-		echo "<pre>";
-		print_r($userdata);
-		die();
-		$userdata = $userdata->getDecodedBody();
-
+		$userdata1 = $this->api->get('/me/accounts', $token);
+		$userdata = $userdata1->getDecodedBody();
+		
 		$facebook_page_id = '';
 		foreach ($userdata['data'] as $page_key => $page) {
 			$pageAccessToken = $page['access_token'];
@@ -181,6 +178,9 @@ class FacebookController extends Controller
 			}
 		}
 		else {
+			echo "<pre>";
+			print_r($userdata1);
+			die();
 			return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
 		}
     }
