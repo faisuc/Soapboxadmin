@@ -380,6 +380,8 @@ class PostController extends Controller
 
     public function removeAccess()
     {
+        $token = Session::get('fb_access_token');
+
         $response = $this->api->get('/me?fields=id,name', $token);
         $user_profile = $response->getGraphUser();
         $user_id = $user_profile['id'];
@@ -398,9 +400,7 @@ class PostController extends Controller
         }
 
         $graphNode = $response->getGraphNode();
-        echo "<pre>";
-        print_r($graphNode);
-        echo "</pre>";
+        
     }
 
 }
