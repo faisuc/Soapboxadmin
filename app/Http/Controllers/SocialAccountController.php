@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Sentinel;
+use Session;
+use Redirect;
+use URL;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
 
 class SocialAccountController extends Controller
 {
