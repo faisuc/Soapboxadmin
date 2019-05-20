@@ -65,7 +65,7 @@
                                     </div>
                                     {{ $post->description }}
                                 </p>
-                                <a href="/fb_publish_post" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
+                                <a href="/fb_publish_post/{{ $post->id }}" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
                                 <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
                             </div>
                             <div class="card-footer">
