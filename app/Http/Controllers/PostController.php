@@ -313,7 +313,7 @@ class PostController extends Controller
         return redirect()->away($fb_connect_url);
     }
 
-    public function fb_publish_post(Request $request)
+    public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
 
