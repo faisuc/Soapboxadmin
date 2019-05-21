@@ -399,7 +399,8 @@ class PostController extends Controller
             }
         }
 
-        $post_details = $can_edit = $this->post->where('user_id', Sentinel::getUser()->id)->where('id', $post_id)->first();
+        $post_details = $this->post->where('user_id', Sentinel::getUser()->id)->where('id', $post_id)->first();
+        $post_details = $this->post->find($post_id);
         echo "<pre>";
         print_r($post_details);
         die();
