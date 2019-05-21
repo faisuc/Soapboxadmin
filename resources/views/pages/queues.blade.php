@@ -87,14 +87,14 @@
     </div>
 
     @if (isset($fb_manage_pages))
-        @include('modals.fb_pages');
+        @include('modals.fb_pages')
         <script type="text/javascript">
         $(document).ready(function() {
             $('.fbpages-modal').modal();
         });
         </script>
     @endif
-    
+
     @include('modals.post_notes')
 
 @endsection

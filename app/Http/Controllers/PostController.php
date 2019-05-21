@@ -402,26 +402,25 @@ class PostController extends Controller
         $post_details = $this->post->where('user_id', Sentinel::getUser()->id)->where('id', $post_id)->first();
         $post = $this->post->find($post_id);
         
-        echo "title: ".$post->title.'<br>';
-        echo "description: ".$post->description.'<br>';
-        echo "featured_image_id: ".$post->featured_image_id.'<br>';
-        echo "link: ".$post->link.'<br>';
-        echo "status: ".$post->status.'<br>';
-        echo "schedule: ".$post->schedule_to_post_date.'<br>';
-
-        die();
+        $title = $post->title;
+        $description = $post->description;
+        $image = $post->featured_image_id;
+        $link = $post->link;
+        $status = $post->status;
+        $schedule = $post->schedule_to_post_date;
 
         if($facebook_page_id != '') {
-            date_default_timezone_set('Asia/Kolkata');
+            // date_default_timezone_set('Asia/Kolkata');
             // $message = 'scheduled post my script new script';
             // echo $current_time.'--'.$timestamp; die();
             // echo $token; die();
-            $message = $request->input('message');
-            $timestamp = $request->input('timestamp');
+            $timestamp = $schedule;
             $timestamp = strtotime($timestamp);
 
             $data = array(
-                'message' => $message,
+                'message' => $title,
+                // 'description' => $description,
+                // 'link' => $link,
                 'scheduled_publish_time' => $timestamp,
                 'published' => 'false'
             );
@@ -429,7 +428,7 @@ class PostController extends Controller
             $res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
             session()->forget('fb_access_token');
             if($res->getHttpStatusCode() == 200) {
-                return redirect('fb_connect_app')->with('flash_message', 'Your Schedule Post has been created.');
+                return redirect('/queues')->with('flash_message', 'Your Schedule Post has been posted.');
             }
         }
         else {
