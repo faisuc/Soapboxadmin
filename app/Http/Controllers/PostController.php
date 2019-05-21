@@ -399,7 +399,10 @@ class PostController extends Controller
             }
         }
 
-        echo $post_id; die();
+        $post_details = $this->post->where('user_id', $user_id)->get();
+        echo "<pre>";
+        print_r($post_details);
+        die();
 
         if($facebook_page_id != '') {
             date_default_timezone_set('Asia/Kolkata');
