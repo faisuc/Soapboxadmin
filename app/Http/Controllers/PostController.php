@@ -355,6 +355,7 @@ class PostController extends Controller
 
         if ($user_id == null)
         {
+            echo "string";
             $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
         }
         else
