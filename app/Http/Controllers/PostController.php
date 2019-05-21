@@ -374,54 +374,32 @@ class PostController extends Controller
         $data['fb_manage_pages'] = true;
         $accounts = $accounts->getDecodedBody();
         $data['pages'] = $accounts['data'];
+        $data['post_id'] = $post_id;
 
         return view('pages.queues', $data);
     }
 
-    public function fb_publish_post($post_id = null)
+    public function fb_publish_post($page_id,$post_id)
     {
         $this->setFacebookObject();
-        // echo 'Token: '.session()->get('fb_access_token'); //die();
-        if(session()->get('fb_access_token') == '')
-        {
-            $helper = $this->api->getRedirectLoginHelper();
-            $permissions = ['email','user_posts','manage_pages','publish_pages'];
-            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_oauth_callback', $permissions);
-            echo $loginUrl; die();
-            return redirect()->away($loginUrl);
-            echo "Not Redirecting. Error Occur"; die();
-        }
-
-        // echo 'Token 2: '.session()->get('fb_access_token').'<br>'; die();
-        $token = session()->get('fb_access_token');
-
-        /**/
-        // $this->removeAccess();
-        /**/
         
+        $token = session()->get('fb_access_token');
         $userdata = $this->api->get('/me', $token);
         $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
         $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
-        $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
-        echo "<pre>";
-        print_r($userdata);
-        echo "</pre>";
-        echo "<pre>";
-        print_r($accounts);
-        echo "</pre>";
-        echo "<pre>";
-        print_r($permissions);
-        echo "</pre>";
-        die();
-
-        $userdata = $userdata1->getDecodedBody();
+        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
+        $accounts = $accounts->getDecodedBody();
         
         $facebook_page_id = '';
         foreach ($userdata['data'] as $page_key => $page) {
-            $pageAccessToken = $page['access_token'];
-            $facebook_page_id = $page['id'];
+            if($page['id'] == $page_id) {
+                $pageAccessToken = $page['access_token'];
+                $facebook_page_id = $page['id'];
+            }
         }
+
+        echo $post_id; die();
 
         if($facebook_page_id != '') {
             date_default_timezone_set('Asia/Kolkata');

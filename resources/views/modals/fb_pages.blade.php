@@ -9,16 +9,10 @@
             </div>
             <div class="modal-body">
                 <div class="post-notes-container">
-                    @forelse ($pages as $page)    
+                    @forelse ($pages as $page)
+                    <a href="/fb_publish_post/{{ $page['id'] }}/{{ $post_id }}">{{ $page['name'] }}</a>
                     @empty
                     @endforelse
-                    <?php
-                    foreach ($pages as $page_key => $page) {
-                        echo "<pre>";
-                        print_r($page);
-                        echo "</pre>";
-                    }
-                    ?>
                 </div>
             </div>
             <div class="modal-footer">
