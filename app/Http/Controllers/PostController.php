@@ -372,7 +372,9 @@ class PostController extends Controller
         }
 
         $data['fb_manage_pages'] = true;
-        $accounts = array('data'=>'');
+        echo "<pre>";
+        print_r($accounts);
+        die();
         $data['pages'] = $accounts['data'];
 
         return view('pages.queues', $data);
