@@ -124,11 +124,6 @@ class FacebookController extends Controller
 		return redirect()->away($fb_connect_url);
     }
 
-    public function deauthorize_fb_app()
-    {
-    	echo "string";
-    }
-
     public function fb_publish_post(Request $request)
     {
 		$validatedData = $request->validate([
