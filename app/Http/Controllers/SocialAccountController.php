@@ -100,8 +100,8 @@ class SocialAccountController extends Controller
     {
         $this->setFacebookObject();
 
-        // Session::flush();
-        // echo 'Token: '.session()->get('fb_access_token').'<br>';
+        // session()->flush();
+        echo 'Token: '.session()->get('fb_access_token').'<br>';
         if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
