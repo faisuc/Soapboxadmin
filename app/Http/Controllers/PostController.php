@@ -321,7 +321,7 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        Session::forget('fb_access_token');
+        // Session::forget('fb_access_token');
         echo 'Token: '.Session::get('fb_access_token'); //die();
         if(Session::get('fb_access_token') == '')
         {
