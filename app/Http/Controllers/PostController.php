@@ -373,7 +373,7 @@ class PostController extends Controller
 
         $data['fb_manage_pages'] = true;
         echo "<pre>";
-        print_r($accounts);
+        print_r($accounts['data']);
         die();
         $data['pages'] = $accounts['data'];
 
