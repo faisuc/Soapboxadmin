@@ -108,7 +108,7 @@ class SocialAccountController extends Controller
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
             // echo $loginUrl;
-            return redirect($loginUrl);
+            return redirect()->to($loginUrl);
             // redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
         }
