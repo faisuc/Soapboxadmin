@@ -328,11 +328,11 @@ class PostController extends Controller
         die();
     }
 
-    public function display_pages($post_id=null)
+    public function display_pages($post_id=null,$user_id=null)
     {
         $this->_loadSharedViews();
 
-        $this->setFacebookObject();
+        /*$this->setFacebookObject();
         if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
@@ -349,13 +349,12 @@ class PostController extends Controller
         $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
         $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
-        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
+        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);*/
         
         $data['posts'] = [];
-
+        
         if ($user_id == null)
         {
-            echo "string";
             $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
         }
         else
@@ -372,11 +371,9 @@ class PostController extends Controller
             $data['managedClients'] = $this->user->find(Sentinel::getUser()->id)->clients();
         }
 
-        DB::enableQueryLog();
-        print_r(DB::getQueryLog());
-        echo "<pre>";
-        print_r($data['posts']);
-        die();
+        $data['fb_manage_pages'] = true;
+        $accounts = array('data'=>'');
+        $data['pages'] = $accounts['data'];
 
         return view('pages.queues', $data);
     }
