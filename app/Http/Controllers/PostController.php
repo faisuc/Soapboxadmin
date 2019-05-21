@@ -318,6 +318,14 @@ class PostController extends Controller
         echo "string";
     }
 
+    public function destroy_session_fb_app()
+    {
+        Session::flush();
+        echo "<pre>";
+        print_r(Session::get());
+        die();
+    }
+
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
