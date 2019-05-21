@@ -305,7 +305,7 @@ class PostController extends Controller
 
         // $_SESSION['fb_access_token'] = (string) $accessToken;
         $accessToken = (string) $accessToken;
-        Session::put('fb_access_token', $accessToken);
+        session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
         // header('Location: http://127.0.0.1:3000/fb_connect_app');
         // $fb_connect_url = URL::to('/').'/fb_publish_post';
@@ -329,20 +329,19 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        Session::forget('fb_access_token');
-        echo 'Token: '.Session::get('fb_access_token'); //die();
-        if(Session::get('fb_access_token') == '')
+        // echo 'Token: '.session()->get('fb_access_token'); //die();
+        if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_oauth_callback', $permissions);
-            echo '<br>Login URl: '.$loginUrl; die();
+            // echo '<br>Login URl: '.$loginUrl; die();
             return redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
         }
 
-        echo 'Token 2: '.Session::get('fb_access_token').'<br>'; die();
-        $token = Session::get('fb_access_token');
+        // echo 'Token 2: '.session()->get('fb_access_token').'<br>'; die();
+        $token = session()->get('fb_access_token');
 
         /**/
         // $this->removeAccess();
@@ -387,7 +386,7 @@ class PostController extends Controller
             );
 
             $res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
-            Session::forget('fb_access_token');
+            session()->forget('fb_access_token');
             if($res->getHttpStatusCode() == 200) {
                 return redirect('fb_connect_app')->with('flash_message', 'Your Schedule Post has been created.');
             }
@@ -397,7 +396,7 @@ class PostController extends Controller
             $user_profile = $response->getGraphUser();
             $user_id = $user_profile['id'];
             echo $user_id;
-            Session::forget('fb_access_token');
+            session()->forget('fb_access_token');
             die();*/
             return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
         }
@@ -405,7 +404,7 @@ class PostController extends Controller
 
     public function removeAccess()
     {
-        $token = Session::get('fb_access_token');
+        $token = session()->get('fb_access_token');
 
         $response = $this->api->get('/me?fields=id,name', $token);
         $user_profile = $response->getGraphUser();

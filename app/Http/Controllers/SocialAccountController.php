@@ -100,10 +100,9 @@ class SocialAccountController extends Controller
     {
         $this->setFacebookObject();
 
-        echo 'Token: '.session()->get('fb_access_token'); die();
         // Session::flush();
-        // echo 'Token: '.Session::get('fb_access_token').'<br>';
-        if(Session::get('fb_access_token') == '')
+        // echo 'Token: '.session()->get('fb_access_token').'<br>';
+        if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
@@ -187,7 +186,7 @@ class SocialAccountController extends Controller
 
         // $_SESSION['fb_access_token'] = (string) $accessToken;
         $accessToken = (string) $accessToken;
-        Session::put('fb_access_token', $accessToken);
+        session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
         // header('Location: http://127.0.0.1:3000/fb_connect_app');
         $fb_connect_url = URL::to('/').'/fb_connect_app';
