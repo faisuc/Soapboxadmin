@@ -321,14 +321,14 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        Session::flush();
-        echo 'Token: '.Session::get('fb_access_token'); die();
+        // Session::flush();
+        // echo 'Token: '.Session::get('fb_access_token'); die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
-            echo '<br>Login URl: '.$loginUrl;
+            echo '<br>Login URl: '.$loginUrl; die();
             return redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
         }
