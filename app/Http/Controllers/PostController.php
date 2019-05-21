@@ -329,6 +329,8 @@ class PostController extends Controller
 
     public function display_pages($post_id=null)
     {
+        $this->_loadSharedViews();
+        
         $this->setFacebookObject();
         if(session()->get('fb_access_token') == '')
         {
