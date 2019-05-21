@@ -321,8 +321,8 @@ class PostController extends Controller
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
-        // Session::flush();
-        // echo 'Token: '.Session::get('fb_access_token'); die();
+        Session::flush();
+        echo 'Token: '.Session::get('fb_access_token'); die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
@@ -340,14 +340,15 @@ class PostController extends Controller
         // $this->removeAccess();
         /**/
         
-        $accounts = $this->api->get('/me/accounts', $token);
         $userdata = $this->api->get('/me', $token);
-        $permissions = $this->api->get('/me/permissions', $token);
-        echo "<pre>";
-        print_r($accounts);
-        echo "</pre>";
+        $user_id = $userdata['id'];
+        $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+        $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
         echo "<pre>";
         print_r($userdata);
+        echo "</pre>";
+        echo "<pre>";
+        print_r($accounts);
         echo "</pre>";
         echo "<pre>";
         print_r($permissions);
