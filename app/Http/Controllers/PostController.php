@@ -392,7 +392,7 @@ class PostController extends Controller
         $accounts = $accounts->getDecodedBody();
         
         $facebook_page_id = '';
-        foreach ($userdata['data'] as $page_key => $page) {
+        foreach ($accounts['data'] as $page_key => $page) {
             if($page['id'] == $page_id) {
                 $pageAccessToken = $page['access_token'];
                 $facebook_page_id = $page['id'];
