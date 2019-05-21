@@ -373,9 +373,6 @@ class PostController extends Controller
 
         $data['fb_manage_pages'] = true;
         $accounts = $accounts->getDecodedBody();
-        echo "<pre>";
-        print_r($accounts['data']);
-        die();
         $data['pages'] = $accounts['data'];
 
         return view('pages.queues', $data);
