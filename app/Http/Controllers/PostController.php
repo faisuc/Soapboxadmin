@@ -9,6 +9,7 @@ use Sentinel;
 use Session;
 use Redirect;
 use URL;
+use DB;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 
