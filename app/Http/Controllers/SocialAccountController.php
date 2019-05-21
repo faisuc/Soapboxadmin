@@ -65,9 +65,19 @@ class SocialAccountController extends Controller
         $social->url = $url;
         $social->save();
         
-        $this->fb_connect_app();
+        // $this->fb_connect_app();
+        $this->setFacebookObject();
+        if(session()->get('fb_access_token') == '')
+        {
+            $helper = $this->api->getRedirectLoginHelper();
+            $permissions = ['email','user_posts','manage_pages','publish_pages'];
+            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
+            // echo $loginUrl; die();
+            return redirect()->away($loginUrl);
+            // echo "Not Redirecting. Error Occur"; die();
+        }
 
-        return redirect()->back()->with('flash_message', 'Social account has been added.');
+        // return redirect()->back()->with('flash_message', 'Social account has been added.');
 
     }
 
@@ -103,16 +113,15 @@ class SocialAccountController extends Controller
 
         // session()->flush();
         // echo 'Token: '.session()->get('fb_access_token'); die();
-        if(session()->get('fb_access_token') == '')
+        /*if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
-            // echo $loginUrl; die();
-            return redirect($loginUrl);
-            // return redirect()->away($loginUrl);
+            echo $loginUrl; die();
+            return redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
-        }
+        }*/
 
         return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         
