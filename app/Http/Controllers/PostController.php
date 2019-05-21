@@ -320,9 +320,9 @@ class PostController extends Controller
 
     public function destroy_session_fb_app()
     {
-        Session::flush();
+        session_destroy();
         echo "<pre>";
-        print_r(Session::get());
+        print_r(session()->get());
         die();
     }
 
