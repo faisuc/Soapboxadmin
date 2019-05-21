@@ -44,12 +44,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('fb_connect_app', 'SocialAccountController@fb_connect_app');
     Route::get('fb_callback', 'SocialAccountController@fb_callback');
     Route::get('fb_publish_post/{post_id?}', 'PostController@fb_publish_post');
+    Route::get('display_pages/{post_id?}', 'PostController@display_pages');
     Route::get('fb_oauth_callback', 'PostController@fb_callback');
     Route::get('deauthorize_fb_app', 'PostController@deauthorize_fb_app');
     Route::get('destroy_session_fb_app', 'PostController@destroy_session_fb_app');
-    Route::get('/fab_oauth/{url}', function($url){
-        return redirect($url);
-    });
     /**/
 
     Route::prefix('post')->group(function() {

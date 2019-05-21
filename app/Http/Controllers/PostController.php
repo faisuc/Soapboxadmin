@@ -327,6 +327,50 @@ class PostController extends Controller
         die();
     }
 
+    public function display_pages($post_id=null)
+    {
+        $this->setFacebookObject();
+        if(session()->get('fb_access_token') == '')
+        {
+            $helper = $this->api->getRedirectLoginHelper();
+            $permissions = ['email','user_posts','manage_pages','publish_pages'];
+            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_oauth_callback', $permissions);
+            echo $loginUrl; die();
+            return redirect()->away($loginUrl);
+            echo "Not Redirecting. Error Occur"; die();
+        }
+
+        $token = session()->get('fb_access_token');
+
+        $userdata = $this->api->get('/me', $token);
+        $userdata = $userdata->getGraphUser();
+        $user_id = $userdata['id'];
+        $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
+        
+        $data['posts'] = [];
+
+        if ($user_id == null)
+        {
+            $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+        }
+        else
+        {
+            $data['posts'] = $this->post->where('user_id', $user_id)->get();
+        }
+
+        if (is_admin())
+        {
+            $data['managedClients'] = Sentinel::getUserRepository()->with('roles')->where('id', '<>', Sentinel::getUser()->id)->get();
+        }
+        else
+        {
+            $data['managedClients'] = $this->user->find(Sentinel::getUser()->id)->clients();
+        }
+
+        return view('pages.queues', $data);
+    }
+
     public function fb_publish_post($post_id = null)
     {
         $this->setFacebookObject();
