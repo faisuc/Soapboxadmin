@@ -327,7 +327,7 @@ class PostController extends Controller
         {
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
-            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
+            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_oauth_callback', $permissions);
             echo '<br>Login URl: '.$loginUrl; die();
             return redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
