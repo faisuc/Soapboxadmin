@@ -47,6 +47,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('fb_oauth_callback', 'PostController@fb_callback');
     Route::get('deauthorize_fb_app', 'PostController@deauthorize_fb_app');
     Route::get('destroy_session_fb_app', 'PostController@destroy_session_fb_app');
+    Route::get('/fab_oauth/{url}', function($url){
+        return redirect($url);
+    });
     /**/
 
     Route::prefix('post')->group(function() {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Sentinel;
 use Session;
+use Redirect;
 use URL;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
@@ -108,7 +109,7 @@ class SocialAccountController extends Controller
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
             // echo $loginUrl;
-            return redirect($loginUrl);
+            return redirect()->to($path);
             // redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
         }
