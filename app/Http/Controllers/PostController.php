@@ -336,7 +336,7 @@ class PostController extends Controller
             $helper = $this->api->getRedirectLoginHelper();
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_oauth_callback', $permissions);
-            // echo '<br>Login URl: '.$loginUrl; die();
+            echo $loginUrl; die();
             return redirect()->away($loginUrl);
             echo "Not Redirecting. Error Occur"; die();
         }
@@ -349,6 +349,7 @@ class PostController extends Controller
         /**/
         
         $userdata = $this->api->get('/me', $token);
+        $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
         $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
         $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
