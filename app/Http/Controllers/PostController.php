@@ -370,6 +370,8 @@ class PostController extends Controller
             $data['managedClients'] = $this->user->find(Sentinel::getUser()->id)->clients();
         }
 
+        DB::enableQueryLog();
+        print_r(DB::getQueryLog());
         echo "<pre>";
         print_r($data['posts']);
         die();
