@@ -332,7 +332,7 @@ class PostController extends Controller
     {
         $this->_loadSharedViews();
 
-        /*$this->setFacebookObject();
+        $this->setFacebookObject();
         if(session()->get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
@@ -349,7 +349,7 @@ class PostController extends Controller
         $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
         $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
-        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);*/
+        // $permissions = $this->api->get('/'.$user_id.'/permissions', $token);
         
         $data['posts'] = [];
         
