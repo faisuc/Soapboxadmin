@@ -323,9 +323,6 @@ class PostController extends Controller
     {
         // session_destroy();
         session()->forget('fb_access_token');
-        echo "<pre>";
-        print_r(session()->get());
-        die();
     }
 
     public function display_pages($post_id=null,$user_id=null)
