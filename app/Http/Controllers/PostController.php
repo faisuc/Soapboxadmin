@@ -320,7 +320,8 @@ class PostController extends Controller
 
     public function destroy_session_fb_app()
     {
-        session_destroy();
+        // session_destroy();
+        session()->forget('fb_access_token');
         echo "<pre>";
         print_r(session()->get());
         die();
