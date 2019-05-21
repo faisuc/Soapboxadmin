@@ -322,7 +322,7 @@ class PostController extends Controller
     {
         $this->setFacebookObject();
         Session::flush();
-        echo 'Token: '.Session::get('fb_access_token'); die();
+        echo 'Token: '.Session::get('fb_access_token'); //die();
         if(Session::get('fb_access_token') == '')
         {
             $helper = $this->api->getRedirectLoginHelper();
@@ -333,7 +333,7 @@ class PostController extends Controller
             echo "Not Redirecting. Error Occur"; die();
         }
 
-        echo 'Token 2: '.Session::get('fb_access_token').'<br>';
+        echo 'Token 2: '.Session::get('fb_access_token').'<br>'; die();
         $token = Session::get('fb_access_token');
 
         /**/
