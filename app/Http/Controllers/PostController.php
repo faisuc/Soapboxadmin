@@ -400,9 +400,15 @@ class PostController extends Controller
         }
 
         $post_details = $this->post->where('user_id', Sentinel::getUser()->id)->where('id', $post_id)->first();
-        $post_details = $this->post->find($post_id);
-        echo "<pre>";
-        print_r($post_details);
+        $post = $this->post->find($post_id);
+        
+        echo "title: ".$post->title.'<br>';
+        echo "description: ".$post->description.'<br>';
+        echo "featured_image_id: ".$post->featured_image_id.'<br>';
+        echo "link: ".$post->link.'<br>';
+        echo "status: ".$post->status.'<br>';
+        echo "schedule: ".$post->schedule_to_post_date.'<br>';
+
         die();
 
         if($facebook_page_id != '') {
