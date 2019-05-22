@@ -9,10 +9,12 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    @if(session()->get('fb_access_token') == '')
-                    <div class="alert alert-danger">
-                        <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
-                    </div>
+                    @if (!session()->has('flash_message'))
+                        @if(session()->get('fb_access_token') == '')
+                        <div class="alert alert-danger">
+                            <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
+                        </div>
+                        @endif
                     @endif
                     <form action="/post/store" method="post" enctype="multipart/form-data">
                         @csrf
