@@ -56,7 +56,6 @@ class PostController extends Controller
         if(session()->get('fb_access_token') != '')
         {
             $token = session()->get('fb_access_token');
-            echo $token; die();
             $userdata = $this->api->get('/me', $token);
             $userdata = $userdata->getGraphUser();
             $user_id = $userdata['id'];
