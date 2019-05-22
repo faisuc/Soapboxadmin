@@ -63,7 +63,7 @@
                         </div>
                     </form>
                     @else
-                    <a href="/socialaccounts">Connect FB Account/ Create Social Account</a>
+                    <a href="/socialaccounts" class="btn btn-primary">Connect FB Account/ Create Social Account</a>
                     @endif
                 </div>
             </div>
