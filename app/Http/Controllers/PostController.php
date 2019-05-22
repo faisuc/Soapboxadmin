@@ -143,7 +143,7 @@ class PostController extends Controller
         /* Schedule Post Facebook Page */
         $page_id = $request->input('fb_page');
         $post_id = $post->id;
-        $this->fb_publish_post($page_id,$post_id);
+        $publish_post = $this->fb_publish_post($page_id,$post_id);
         /* Schedule Post Facebook Page */
 
         return redirect()->back()->with('flash_message', 'New post has been created.');
@@ -401,6 +401,7 @@ class PostController extends Controller
 
     public function fb_publish_post($page_id,$post_id)
     {
+        $response = array();
         $this->setFacebookObject();
         
         $token = session()->get('fb_access_token');
@@ -446,20 +447,20 @@ class PostController extends Controller
             );
 
             $res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
-            session()->forget('fb_access_token');
+            // session()->forget('fb_access_token');
             if($res->getHttpStatusCode() == 200) {
-                return redirect('/queues')->with('flash_message', 'Your Schedule Post has been posted.');
+                $response['success'] = true;
+                $response['message'] = "Your Schedule Post has been posted.";
+                // return redirect('/queues')->with('flash_message', 'Your Schedule Post has been posted.');
             }
         }
         else {
-            /*$response = $this->api->get('/me?fields=id,name', $token);
-            $user_profile = $response->getGraphUser();
-            $user_id = $user_profile['id'];
-            echo $user_id;
-            session()->forget('fb_access_token');
-            die();*/
-            return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
+            $response['success'] = true;
+            $response['message'] = "Please Create a Page on Your Facebook Account.";
+            // return redirect('fb_connect_app')->with('flash_message', 'Please Create a Page on Your Facebook Account.');
         }
+
+        return $response;
     }
 
     public function removeAccess()
