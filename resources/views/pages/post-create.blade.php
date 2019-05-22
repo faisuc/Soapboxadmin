@@ -58,6 +58,13 @@
                             <label for="inputPhoto">Photo</label>
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
                         </div>
+                        <?php
+                        if(isset($pages)) {
+                            echo "<pre>";
+                            print_r($pages);
+                            echo "</pre>";
+                        }
+                        ?>
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
                         </div>

@@ -9,6 +9,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
+                    @if(session()->get('fb_access_token') != '')
                     <form action="/post/update/{{ $post->id }}" method="post" enctype="multipart/form-data">
                         @csrf
 
@@ -61,6 +62,9 @@
                             <input type="submit" value="SAVE" class="btn btn-primary">
                         </div>
                     </form>
+                    @else
+                    <a href="/socialaccounts" class="btn btn-primary">Connect FB Account/ Create Social Account</a>
+                    @endif
                 </div>
             </div>
         </div>

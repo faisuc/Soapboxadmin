@@ -51,7 +51,22 @@ class PostController extends Controller
 
         $this->_loadSharedViews();
 
-        return view('pages.post-create');
+        $this->setFacebookObject();
+        $data = [];
+        if(session()->get('fb_access_token') != '')
+        {
+            $token = session()->get('fb_access_token');
+            echo $token; die();
+            $userdata = $this->api->get('/me', $token);
+            $userdata = $userdata->getGraphUser();
+            $user_id = $userdata['id'];
+            $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+            
+            $accounts = $accounts->getDecodedBody();
+            $data['pages'] = $accounts['data'];
+        }
+        
+        return view('pages.post-create', $data);
 
     }
 
