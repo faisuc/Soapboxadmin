@@ -9,7 +9,11 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    @if(session()->get('fb_access_token') != '')
+                    @if(session()->get('fb_access_token') == '')
+                    <div class="alert alert-danger">
+                        <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
+                    </div>
+                    @endif
                     <form action="/post/store" method="post" enctype="multipart/form-data">
                         @csrf
                         @if (Request::route('user_id'))
@@ -58,20 +62,18 @@
                             <label for="inputPhoto">Photo</label>
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
                         </div>
-                        <?php
-                        if(isset($pages)) {
-                            echo "<pre>";
-                            print_r($pages);
-                            echo "</pre>";
-                        }
-                        ?>
+                        @if(isset($pages))
+                            <label>Facebook Pages</label>
+                            @foreach ($pages as $page_key => $page)
+                            <label class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
+                            </label>
+                            @endforeach
+                        @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
                         </div>
                     </form>
-                    @else
-                    <a href="/socialaccounts" class="btn btn-primary">Connect FB Account/ Create Social Account</a>
-                    @endif
                 </div>
             </div>
         </div>
