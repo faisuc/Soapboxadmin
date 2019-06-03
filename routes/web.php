@@ -50,6 +50,15 @@ Route::middleware(['auth'])->group(function() {
     Route::get('destroy_session_fb_app', 'PostController@destroy_session_fb_app');
     /**/
 
+    /* Twitter */
+    Route::get('twitter_callback', 'SocialAccountController@twitter_callback');
+    /* Twitter */
+
+    /*Google*/
+    Route::get('/redirect_google', 'SocialAccountController@redirectToProvider');
+    Route::get('/callback/google', 'SocialAccountController@handleProviderCallback');
+    Route::get('/create-google-post', 'SocialAccountController@create_google_post');
+    /*Google*/
     Route::prefix('post')->group(function() {
         Route::get('add/{user_id?}', 'PostController@create');
         Route::post('store', 'PostController@store');

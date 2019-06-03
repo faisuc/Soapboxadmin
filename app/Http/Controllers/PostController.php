@@ -58,7 +58,8 @@ class PostController extends Controller
         // session()->forget('fb_access_token');
         if(session()->get('fb_access_token') != '')
         {
-            $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';//session()->get('fb_access_token');
+            $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+            // $token = session()->get('fb_access_token');
             $userdata = $this->api->get('/me', $token);
             $userdata = $userdata->getGraphUser();
             $user_id = $userdata['id'];
@@ -66,6 +67,10 @@ class PostController extends Controller
             
             $accounts = $accounts->getDecodedBody();
             $data['pages'] = $accounts['data'];
+        }
+
+        if(session()->get('twitter_logged_in') != '') {
+            $data['twitter'] = true;
         }
         
         return view('pages.post-create', $data);
@@ -141,10 +146,33 @@ class PostController extends Controller
         }
 
         /* Schedule Post Facebook Page */
-        $page_id = $request->input('fb_page');
-        $post_id = $post->id;
-        $publish_post = $this->fb_publish_post($page_id,$post_id);
+        if ($request->input('fb_page') != '') {
+            $page_id = $request->input('fb_page');
+            $post_id = $post->id;
+            $publish_post = $this->fb_publish_post($page_id,$post_id);
+        }
         /* Schedule Post Facebook Page */
+
+        if ($request->input('twitter_post') != '') {
+
+            $callback_url = getenv('TWITTER_REDIRECT');
+            $consumer_key = getenv('TWITTER_CLIENT_ID');
+            $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+            
+            $oauth_token = session()->get('twitter_oauth_token');
+            $oauth_token_secret = session()->get('twitter_oauth_token_secret');
+
+            /* Direct POST */
+            $url = 'https://api.twitter.com/1.1/statuses/update.json';
+            $parameters = array('status' => $title);
+            $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+            /* Direct POST */
+
+            /* Schedule POST /
+            $url = 'https://ads-api.twitter.com/5/accounts/:account_id/scheduled_tweets';
+            /* Schedule POST */
+
+        }
 
         return redirect()->back()->with('flash_message', 'New post has been created.');
 
@@ -154,7 +182,6 @@ class PostController extends Controller
     {
 
         $this->_loadSharedViews();
-
         if ($this->post->find($post_id))
         {
 
@@ -172,6 +199,26 @@ class PostController extends Controller
             }
 
             $data['post'] = $this->post->find($post_id);
+            $this->setFacebookObject();
+            $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+            // session()->put('fb_access_token',$token);
+            // session()->forget('fb_access_token');
+            if(session()->get('fb_access_token') != '')
+            {
+                $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+                // $token = session()->get('fb_access_token');
+                $userdata = $this->api->get('/me', $token);
+                $userdata = $userdata->getGraphUser();
+                $user_id = $userdata['id'];
+                $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+                
+                $accounts = $accounts->getDecodedBody();
+                $data['pages'] = $accounts['data'];
+            }
+
+            if(session()->get('twitter_logged_in') != '') {
+                $data['twitter'] = true;
+            }
 
             return view('pages.post-edit', $data);
         }
@@ -231,6 +278,37 @@ class PostController extends Controller
             $media = $this->media->find($media_id);
             $media->post_id = $post_id;
             $media->save();
+        }
+
+        /* Schedule Post Facebook Page */
+        if ($request->input('fb_page') != '') {
+            $page_id = $request->input('fb_page');
+            $post_id = $post->id;
+            $publish_post = $this->fb_publish_post($page_id,$post_id);
+        }
+        /* Schedule Post Facebook Page */
+
+        if ($request->input('twitter_post') != '') {
+
+            $callback_url = getenv('TWITTER_REDIRECT');
+            $consumer_key = getenv('TWITTER_CLIENT_ID');
+            $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+            
+            $oauth_token = session()->get('twitter_oauth_token');
+            $oauth_token_secret = session()->get('twitter_oauth_token_secret');
+
+            /* Direct POST */
+            $url = 'https://api.twitter.com/1.1/statuses/update.json';
+            $parameters = array('status' => $title);
+            $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+            /* Direct POST */
+
+            /* Schedule POST /
+            $parameters = array('status' => $title);
+            $account_url = 'https://ads-api.twitter.com/5/accounts';
+            $accounts = $this->Request($account_url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, array());
+            // $url = 'https://ads-api.twitter.com/5/accounts/'.$account_id.'/scheduled_tweets';
+            /* Schedule POST */
         }
 
         return redirect()->back()->with('flash_message', 'Post has been updated.');
@@ -487,5 +565,118 @@ class PostController extends Controller
         $graphNode = $response->getGraphNode();
         
     }
+
+    /* Twitter */
+    function BaseString($url, $parameters, $method = null){
+        if( empty($method) ){
+            $method = 'GET';
+        }
+
+        $get_url = rawurlencode($url);
+
+        $string = array();
+
+        ksort($parameters);
+
+        foreach ($parameters as $key => $value) {
+            $string[] = "$key=" . rawurlencode($value);
+        }
+
+        return $method."&".$get_url."&".rawurlencode(implode('&', $string));
+    }
+
+
+    function AuthorizationOAuth($parameters){
+        $oauth = '';
+
+        foreach ($parameters as $key => $value) {
+            $oauth .= $key.'="'.rawurlencode($value).'", ';
+        }
+
+        return array("Authorization: OAuth ".substr($oauth, 0,-2), 'Expect:');
+    }
+
+
+    function RequestToken($oauth, $url, $method){
+        $header = $this->AuthorizationOAuth($oauth);
+
+        $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+            if( $method == 1 ){
+                curl_setopt($curl, CURLOPT_POST, 1);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $oauth);
+            }
+            
+            $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
+    }
+
+    function Request($url, $method, $key, $key_secret, $token, $token_secret, $parameters){
+        $param = array(
+            'oauth_consumer_key' => $key,
+            'oauth_nonce' => time(),
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_timestamp' => time(),
+            'oauth_token' => $token,
+            'oauth_version' => '1.0',
+        );
+
+        if( strtolower($method) == 'post' ){
+            $get_method = 'POST';
+        }elseif( strtolower($method) == 'delete' ){
+            $get_method = 'DELETE';
+        }else{
+            $get_method = 'GET';
+        }
+
+        if( !empty($parameters) ){
+            $array_merge = array_merge($param, $parameters);
+            $the_param = $array_merge;
+        }else{
+            $the_param = $param;
+        }
+
+        $base_string = $this->BaseString($url, $the_param, $get_method);
+
+        $composite_key = $key_secret."&".$token_secret;
+
+        $oauth_signature = base64_encode(hash_hmac('sha1', $base_string, $composite_key, true));
+
+        $the_param['oauth_signature'] = $oauth_signature;
+
+        if( $get_method == 'POST' or $get_method == "DELETE" ){
+            $options = array('http' =>
+                            array(
+                                'method'  => $get_method,
+                                'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+                                'content'  => http_build_query($the_param)
+                            )
+                        );
+
+            $context  = stream_context_create($options);
+
+            $result = file_get_contents($url, false, $context);
+
+            $json = json_decode($result, true);
+
+            return $json;
+        }
+
+        else{
+            $get_url = $url."?".http_build_query($the_param);
+            echo $get_url; die();
+            $result = file_get_contents($get_url);        
+            $json = json_decode($result, true);
+            return $json;
+        }
+    }
+    /* Twitter */
 
 }
