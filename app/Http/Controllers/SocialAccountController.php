@@ -135,7 +135,26 @@ class SocialAccountController extends Controller
 
         if ($social_id)
         {
-
+            /* Remove Session */
+            $socialAccountDetails = $this->socialAccount->where('id', $social_id)->get();
+            $socialAccountDetails = $socialAccountDetails[0];
+            $type = $socialAccountDetails->type_id;
+            if($type == 1) {
+                if((session()->get('fb_access_token'))) {
+                    session()->forget('fb_access_token');
+                }
+            }
+            elseif ($type == 3) {
+                if((session()->get('twitter_logged_in'))) {
+                    session()->forget('twitter_logged_in');
+                }
+            }
+            elseif ($type == 5) {
+                if((session()->get('instagram'))) {
+                    session()->forget('instagram');
+                }
+            }
+            /* Remove Session */
             $this->socialAccount->destroy($social_id);
 
             return redirect()->back()->with('flash_message', 'Social account has been unlinked.');
