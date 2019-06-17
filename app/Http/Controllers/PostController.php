@@ -61,12 +61,12 @@ class PostController extends Controller
 
         $this->setFacebookObject();
         $data = [];
-        $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+        // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
         // session()->put('fb_access_token',$token);
         // session()->forget('fb_access_token');
         if(session()->get('fb_access_token') != '')
         {
-            $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+            // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
             // $token = session()->get('fb_access_token');
             $userdata = $this->api->get('/me', $token);
             $userdata = $userdata->getGraphUser();
@@ -302,6 +302,7 @@ class PostController extends Controller
 
         if ($request->input('twitter_post') != '') {
 
+            $post_id = $post->id;
             $callback_url = getenv('TWITTER_REDIRECT');
             $consumer_key = getenv('TWITTER_CLIENT_ID');
             $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
@@ -309,7 +310,11 @@ class PostController extends Controller
             $oauth_token = session()->get('twitter_oauth_token');
             $oauth_token_secret = session()->get('twitter_oauth_token_secret');
 
-            /* Direct POST */
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
+            
+            /* Direct POST /
             $url = 'https://api.twitter.com/1.1/statuses/update.json';
             $parameters = array('status' => $title);
             $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
@@ -897,5 +902,39 @@ class PostController extends Controller
         return array($http, $response);
     }
     /* Instagram */
+
+
+    /* Cron */
+    public function run_cron()
+    {
+        $callback_url = getenv('TWITTER_REDIRECT');
+        $consumer_key = getenv('TWITTER_CLIENT_ID');
+        $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
+        date_default_timezone_set('Asia/Kolkata');
+        $current_time = date('Y-m-d H:i');
+        $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
+        
+        foreach ($cronData as $data) {
+            $post_id = $data->post_id;
+            $post_date = $data->post_date;
+
+            if(strtotime($post_date) == strtotime($current_time)){
+                
+                $postData = $this->post->find($post_id);
+                $title = $postData->title;
+
+                $oauth_token = $data->session;
+                $oauth_token_secret = $data->session_secret;
+
+                /* Direct POST */
+                $url = 'https://api.twitter.com/1.1/statuses/update.json';
+                $parameters = array('status' => $title);
+                $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+                /* Direct POST */
+            }            
+
+        }
+    }
 
 }
