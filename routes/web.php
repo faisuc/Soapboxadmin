@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('update/{post_id}', 'PostController@update');
         Route::get('delete/{post_id}', 'PostController@delete');
     });
-    Route::get('run-cron', 'PostController@run_cron');
+    // Route::get('run-cron', 'PostController@run_cron');
 
     Route::prefix('ajax')->group(function() {
         Route::post('add/post/notes', 'PostNotesController@store');
@@ -99,5 +99,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('manageusers', 'ManageUsers@index')->middleware('admin');
 
 });
+
+Route::get('run-cron', 'PostController@run_cron');
 
 Route::get('/logout', 'LoginController@logout');
