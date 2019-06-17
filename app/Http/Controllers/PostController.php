@@ -208,13 +208,13 @@ class PostController extends Controller
 
             $data['post'] = $this->post->find($post_id);
             $this->setFacebookObject();
-            $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+            // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
             // session()->put('fb_access_token',$token);
             // session()->forget('fb_access_token');
             if(session()->get('fb_access_token') != '')
             {
-                $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
-                // $token = session()->get('fb_access_token');
+                // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
+                $token = session()->get('fb_access_token');
                 $userdata = $this->api->get('/me', $token);
                 $userdata = $userdata->getGraphUser();
                 $user_id = $userdata['id'];
