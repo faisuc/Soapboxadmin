@@ -61,13 +61,14 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        
         $social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
         $social->save();
+
+        $social_id = $social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
@@ -119,7 +120,12 @@ class SocialAccountController extends Controller
                 $twitter_url = 'https://api.twitter.com/oauth/authorize?'.$response;
                 return redirect()->away($twitter_url);
             }
-
+        }
+        if($type_id == 5) {
+            if(session()->get('instagram') == '') {
+                session()->put('instagram',$social_id);
+            }
+            return redirect()->back()->with('flash_message', 'Social account has been added.');
         }
 
     }

@@ -10,10 +10,12 @@
             <div class="card">
                 <div class="card-body">
                     <?php $temp = 0; ?>
-                    @if(session()->get('fb_access_token') == '' || session()->get('twitter_logged_in') == '')
+                    @if(session()->get('fb_access_token') == '' || session()->get('twitter_logged_in') == '' || session()->get('instagram') == '')
                         @if(session()->get('fb_access_token') != '')
                         <?php $temp = 0 ?>
                         @elseif(session()->get('twitter_logged_in') != '')
+                        <?php $temp = 0 ?>
+                        @elseif(session()->get('instagram') != '')
                         <?php $temp = 0 ?>
                         @else
                         <?php $temp++; ?>
@@ -71,7 +73,7 @@
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
                         </div>
                         <div class="form-group">
-                            <img src="{{ $post->featuredimage }}" class="img-responsive" style="width: 200px;">
+                            <img src="{{ url($post->featuredimage) }}" class="img-responsive" style="width: 200px;">
                         </div>
                         @if(isset($pages))
                             <label>Facebook Pages</label>
@@ -87,6 +89,18 @@
                                 <input class="custom-control-input" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
                             </label>
                         </div>
+                        @endif
+                        @if(isset($instagram))
+                        <hr>
+                        <div class="form-group">
+                            <label for="inputInstaUser">Instagram User</label>
+                            <input id="inputInstaUser" type="text" placeholder="Instagram Username/Email" name="insta_username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputInstaPassword">Instagram Password</label>
+                            <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control" required>
+                        </div>
+                        <hr>
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">

@@ -157,7 +157,8 @@ if ( ! function_exists('convertSocialType'))
             1 => 'Facebook Page',
             2 => 'Facebook Group',
             3 => 'Twitter',
-            4 => 'Google Business'
+            4 => 'Google Business',
+            5 => 'Instagram'
         ];
 
         return $socials[$type_id];

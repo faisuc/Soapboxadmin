@@ -94,6 +94,7 @@
                         <option value="2">Facebook Group</option>
                         <option value="3">Twitter</option>
                         <option value="4">Google Business</option>
+                        <option value="5">Instagram</option>
                       </select>
                     </div>
                     <div class="form-group">

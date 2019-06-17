@@ -15,6 +15,14 @@ use Facebook\Facebook;
 
 class PostController extends Controller
 {
+    private $image; 
+    private $image_type;
+    public $username;
+    public $password;
+    private $guid;
+    private $userAgent = 'Instagram 6.21.2 Android (19/4.4.2; 480dpi; 1152x1920; Meizu; MX4; mx4; mt6595; en_US)';
+    private $instaSignature ='25eace5393646842f0d0c3fb2ac7d3cfa15c052436ee86b5406a8433f54d24a5';
+    private $instagramUrl = 'https://i.instagram.com/api/v1/';
 
     public function index($user_id = null)
     {
@@ -220,6 +228,11 @@ class PostController extends Controller
                 $data['twitter'] = true;
             }
 
+            if(session()->get('instagram')) {
+                // session()->forget('instagram');
+                $data['instagram'] = true;
+            }
+
             return view('pages.post-edit', $data);
         }
 
@@ -229,7 +242,6 @@ class PostController extends Controller
 
     public function update(Request $request, $post_id = null)
     {
-
         $title = $request->input('title');
         $description = $request->input('description');
         $link = $request->input('link');
@@ -311,6 +323,48 @@ class PostController extends Controller
             /* Schedule POST */
         }
 
+        if(session()->get('instagram') != '') {
+            $social_id = session()->get('instagram');
+            $insta_user = $request->input('insta_username');
+            $insta_pass = $request->input('insta_password');
+            $filename = $post->featured_image;
+
+            $username = $insta_user;
+            $password = $insta_pass;
+            $caption = $title;
+            $schedule = $schedule_date;
+            date_default_timezone_set('Asia/Kolkata');
+            $schedule = strtotime($schedule);
+
+            // $new_filename = url($filename);
+            $root = $_SERVER['DOCUMENT_ROOT'];
+            $request_uri = $_SERVER['REQUEST_URI'];
+            $request_uri = explode('/public', $request_uri)[0];
+            $new_filename = $root.$request_uri.$filename;
+
+            $this->image_load($new_filename);
+            $this->image_resize(480,600);
+            $this->image_save($new_filename, IMAGETYPE_JPEG);
+
+            $response = $this->insta_login($username, $password);
+
+            if(strpos($response[1], "Sorry")) {
+                echo "Request failed, there's a chance that this proxy/ip is blocked";
+                print_r($response);
+                exit();
+            }         
+            if(empty($response[1])) {
+                echo "Empty response received from the server while trying to login";
+                print_r($response); 
+                exit(); 
+            }
+
+            $post = $this->insta_post($new_filename, $caption, $schedule);
+            echo "<pre>";
+            print_r($response);
+            die();
+        }
+        
         return redirect()->back()->with('flash_message', 'Post has been updated.');
 
     }
@@ -678,5 +732,170 @@ class PostController extends Controller
         }
     }
     /* Twitter */
+
+    /* Instagram */
+    function image_load($filename) {   
+        $image_info = getimagesize($filename); 
+        $this->image_type = $image_info[2]; 
+        if( $this->image_type == IMAGETYPE_JPEG ) {
+            $this->image = imagecreatefromjpeg($filename);
+        } elseif( $this->image_type == IMAGETYPE_GIF ) {  
+            $this->image = imagecreatefromgif($filename); 
+        } elseif( $this->image_type == IMAGETYPE_PNG ) {  
+            $this->image = imagecreatefrompng($filename); 
+        } 
+        unset($image_info); 
+    }
+
+    function image_save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
+        if( $image_type == IMAGETYPE_JPEG ) {
+            imagejpeg($this->image,$filename,$compression);
+        } elseif ( $image_type == IMAGETYPE_GIF ) {   
+            imagegif($this->image,$filename); 
+        } elseif ( $image_type == IMAGETYPE_PNG ) {   
+            imagepng($this->image,$filename); 
+        } 
+        if( $permissions != null) {   
+            chmod($filename,$permissions); 
+        } 
+    }
+
+    function image_output($image_type=IMAGETYPE_JPEG) {   
+        if( $image_type == IMAGETYPE_JPEG ) { 
+            imagejpeg($this->image); 
+        } elseif ( $image_type == IMAGETYPE_GIF ) {   
+            imagegif($this->image); 
+        } elseif ( $image_type == IMAGETYPE_PNG ) {   
+            imagepng($this->image); 
+        } 
+    } 
+
+    function image_getWidth() {   
+        return imagesx($this->image); 
+    } 
+
+    function image_getHeight() {   
+        return imagesy($this->image); 
+    } 
+
+    function image_resizeToHeight($height) {   
+        $ratio = $height / $this->image_getHeight(); 
+        $width = $this->image_getWidth() * $ratio; 
+        $this->image_resize($width,$height); 
+    }   
+
+    function image_resizeToWidth($width) { 
+        $ratio = $width / $this->image_getWidth(); 
+        $height = $this->image_getheight() * $ratio; $this->image_resize($width,$height); 
+    }   
+
+    function image_scale($scale) { 
+        $width = $this->image_getWidth() * $scale/100; 
+        $height = $this->image_getheight() * $scale/100; 
+        $this->image_resize($width,$height); 
+    }   
+
+    function image_resize($width,$height) { 
+        $new_image = imagecreatetruecolor($width, $height); 
+        imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->image_getWidth(), $this->image_getHeight()); $this->image = $new_image; 
+    }
+
+    public function insta_login($username, $password) {
+        $this->username = $username;
+        $this->password = $password;    
+        $this->guid = $this->GenerateGuid();
+        $device_id = "android-" . $this->guid;  
+        $data = '{"device_id":"'.$device_id.'","guid":"'.$this->guid.'","username":"'. $this->username.'","password":"'.$this->password.'","Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"}';
+        $sig = $this->GenerateSignature($data);
+        $data = 'signed_body='.$sig.'.'.urlencode($data).'&ig_sig_key_version=6';   
+        return $this->insta_request('accounts/login/', true, $data, false);   
+    }
+
+    private function GenerateGuid() {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
+                mt_rand(0, 65535), 
+                mt_rand(0, 65535), 
+                mt_rand(0, 65535), 
+                mt_rand(16384, 20479), 
+                mt_rand(32768, 49151), 
+                mt_rand(0, 65535), 
+                mt_rand(0, 65535), 
+                mt_rand(0, 65535));
+    }
+
+    private function GenerateSignature($data) {
+        return hash_hmac('sha256', $data, $this->instaSignature); 
+    }
+
+    public function insta_post($photo, $caption, $schedule){
+        $response = $this->insta_postImage($photo,$schedule);
+        if(empty($response[1])) {
+            echo "Empty response received from the server while trying to post the image";
+            exit(); 
+        }
+
+        $obj = @json_decode($response[1], true);
+        $status = $obj['status'];
+        if($status == 'ok') {
+            // Remove and line breaks from the caption
+            $media_id = $obj['media_id'];       
+            $response = $this->insta_postCaption($caption, $media_id);    
+            return $response;
+        }       
+    }
+
+    private function insta_postImage($photo,$schedule) {
+        $data = $this->insta_getPostData($photo,$schedule);
+        return $this->insta_request('media/upload/', true, $data, true);  
+    }
+
+    private function insta_postCaption($caption, $media_id) {
+        $caption = preg_replace("/\r|\n/", "", $caption);
+        $device_id = "android-".$this->guid;
+        $data = '{"device_id":"'.$device_id.'","guid":"'. $this->guid .'","media_id":"'.$media_id.'","caption":"'.trim($caption).'","device_timestamp":"'.time().'","source_type":"5","filter_type":"0","extra":"{}","Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"}';   
+        $sig = $this->GenerateSignature($data);
+        $new_data = 'signed_body='.$sig.'.'.urlencode($data).'&ig_sig_key_version=6';
+        return $this->insta_request('media/configure/', true, $new_data, true);       
+    }
+
+    private function insta_getPostData($path,$schedule)  {
+        $post_data = array('device_timestamp' => time());
+        // $post_data = array('device_timestamp' => $schedule);
+        if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+            $post_data['photo'] = new \CURLFile(realpath($path));
+        } else {
+            $post_data['photo'] = "@".realpath($path);
+        }
+        return $post_data;
+    }
+
+    private function insta_request($url, $post, $post_data, $cookies) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->instagramUrl . $url);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+        if($post) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+                curl_setopt($ch, CURLOPT_SAFE_UPLOAD, 1);
+            }       
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        }
+        
+        if($cookies) {
+            curl_setopt($ch, CURLOPT_COOKIEFILE,   dirname(__FILE__). '/cookies.txt');            
+        } else {
+            curl_setopt($ch, CURLOPT_COOKIEJAR,  dirname(__FILE__). '/cookies.txt');
+        }
+        $response = curl_exec($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);    
+        curl_close($ch);    
+        return array($http, $response);
+    }
+    /* Instagram */
 
 }
