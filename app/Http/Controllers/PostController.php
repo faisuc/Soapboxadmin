@@ -933,6 +933,8 @@ class PostController extends Controller
                 $parameters = array('status' => $title);
                 $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
                 /* Direct POST */
+
+                DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
             }            
 
         }
