@@ -9,14 +9,23 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    @if (!session()->has('flash_message'))
-                        @if(session()->get('fb_access_token') == '')
-                        <div class="alert alert-danger">
-                            <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
-                        </div>
+                   <?php $temp = 0; ?>
+                    @if(session()->get('fb_access_token') == '' || session()->get('twitter_logged_in') == '')
+                        @if(session()->get('fb_access_token') != '')
+                        <?php $temp = 0 ?>
+                        @elseif(session()->get('twitter_logged_in') != '')
+                        <?php $temp = 0 ?>
+                        @else
+                        <?php $temp++; ?>
                         @endif
                     @endif
-                    <form action="/post/store" method="post" enctype="multipart/form-data">
+                    @if($temp > 0)
+                    <div class="alert alert-danger">
+                        <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
+                    </div>
+                    @endif
+                    <!-- <form action="/post/store" method="post" enctype="multipart/form-data"> -->
+                    <form action="{{ url('/post/store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @if (Request::route('user_id'))
                             <input type="hidden" name="user_id" value="{{ Request::route('user_id') }}">
@@ -71,6 +80,13 @@
                                 <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
                             </label>
                             @endforeach
+                        @endif
+                        @if(isset($twitter))
+                        <div class="form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
+                            </label>
+                        </div>
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">

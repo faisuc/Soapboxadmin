@@ -59,7 +59,7 @@
                                                             <th scope="row">{{ $social->id }}</th>
                                                             <td>{{ convertSocialType($social->type_id) }}</td>
                                                             <td>{{ $social->url }}</td>
-                                                            <td><a href="/socialaccount/delete/{{ $social->id }}" role="button" class="btn btn-danger">Unlink</a></td>
+                                                            <td><a href="{{ url('/socialaccount/delete/'.$social->id.' ') }}" role="button" class="btn btn-danger">Unlink</a></td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -80,7 +80,7 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form action="/socialaccount/add" method="post">
+                <form action="{{ url('/socialaccount/add') }}" method="post">
                     @csrf
 
                     @if (Request::route('user_id'))
@@ -93,6 +93,8 @@
                         <option value="1">Facebook Page</option>
                         <option value="2">Facebook Group</option>
                         <option value="3">Twitter</option>
+                        <option value="4">Google Business</option>
+                        <option value="5">Instagram</option>
                       </select>
                     </div>
                     <div class="form-group">
