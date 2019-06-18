@@ -735,7 +735,9 @@ class PostController extends Controller
                 $result = file_get_contents($url, false, $context);
             }
             /**/
-            
+            echo "<pre>";
+            print_r($json);
+            die();
             $json = json_decode($result, true);
 
             return $json;
