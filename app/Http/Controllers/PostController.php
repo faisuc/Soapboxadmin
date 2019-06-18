@@ -687,6 +687,10 @@ class PostController extends Controller
             'oauth_version' => '1.0',
         );
 
+        echo "<pre>";
+        print_r($param);
+        die();
+
         if( strtolower($method) == 'post' ){
             $get_method = 'POST';
         }elseif( strtolower($method) == 'delete' ){
