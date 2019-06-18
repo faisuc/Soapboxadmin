@@ -720,9 +720,11 @@ class PostController extends Controller
                         );
 
             $context  = stream_context_create($options);
-            echo $url.'<br>';
-            echo $context; die();
+
             $result = file_get_contents($url, false, $context);
+            echo "<pre>";
+            print_r($result);
+            die();
 
             $json = json_decode($result, true);
 
