@@ -719,13 +719,23 @@ class PostController extends Controller
                             )
                         );
 
-            $context  = stream_context_create($options);
-            phpinfo(); die();
-            $result = file_get_contents($url, false, $context);
-            echo "<pre>";
-            print_r($result);
-            die();
-
+            /**/
+            if($get_method == 'POST') {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); 
+                curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HEADER, 'Content-Type: application/x-www-form-urlencoded\r\n');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($the_param));
+                $result = curl_exec($ch);
+            }
+            else {
+                $context  = stream_context_create($options);
+                $result = file_get_contents($url, false, $context);
+            }
+            /**/
+            
             $json = json_decode($result, true);
 
             return $json;
