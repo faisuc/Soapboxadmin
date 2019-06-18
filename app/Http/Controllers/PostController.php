@@ -720,7 +720,7 @@ class PostController extends Controller
                         );
 
             $context  = stream_context_create($options);
-
+            phpinfo(); die();
             $result = file_get_contents($url, false, $context);
             echo "<pre>";
             print_r($result);
