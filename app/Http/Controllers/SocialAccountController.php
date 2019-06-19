@@ -375,27 +375,25 @@ class SocialAccountController extends Controller
 
     public function twitter_callback()
     {
-        if( isset($_GET['oauth_token']) and isset($_GET['oauth_verifier']) and (session()->get('twitter_logged_in') == '') ){
+        if( isset($_GET['oauth_token']) and isset($_GET['oauth_verifier']) ){
             $oauth_token = $_GET['oauth_token'];
             $oauth_verifier = $_GET['oauth_verifier'];
-
+            
             $get_data = file_get_contents("https://api.twitter.com/oauth/access_token?oauth_token=$oauth_token&oauth_verifier=$oauth_verifier");
             $array = explode("&", $get_data);
             
             $social_id = $_GET['social_id'];
             $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
-            echo $oauth_token.'--'.$twitter_secret; die();
             $social = $this->socialAccount->find($social_id);
             $social->twitter_session = $oauth_token;
             $social->twitter_secret = $twitter_secret;
             $social->save();
             
-            session()->put('twitter_oauth_token', str_replace("oauth_token=", NULL, $array[0]));
+            /*session()->put('twitter_oauth_token', str_replace("oauth_token=", NULL, $array[0]));
             session()->put('twitter_oauth_token_secret', str_replace("oauth_token_secret=", NULL, $array[1]));
             session()->put('twitter_user_id', str_replace("user_id=", NULL, $array[2]));
             session()->put('twitter_screen_name', str_replace("screen_name=", NULL, $array[3]));
-            
-            session()->put('twitter_logged_in', 1);
+            session()->put('twitter_logged_in', 1);*/
             
             return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         }else{
