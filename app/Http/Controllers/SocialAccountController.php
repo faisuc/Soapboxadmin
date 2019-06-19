@@ -271,14 +271,13 @@ class SocialAccountController extends Controller
 
         // $_SESSION['fb_access_token'] = (string) $accessToken;
         $accessToken = (string) $accessToken;
-
-        echo $accessToken; die();
-        $social_id = $_GET['social_id'];
-        $twitter_session = str_replace("oauth_token=", NULL, $array[0]);
-        $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
+        $state = $_GET['state'];
+        $state = explode('=', $state);
+        $social_id = $state[1];
+        echo $social_id; die();
+        $facebook_token = $accessToken;
         $social = $this->socialAccount->find($social_id);
-        $social->twitter_session = $twitter_session;
-        $social->twitter_secret = $twitter_secret;
+        $social->facebook_token = $facebook_token;
         $social->save();
         session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
