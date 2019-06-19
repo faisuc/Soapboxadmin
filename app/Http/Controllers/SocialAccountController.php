@@ -68,7 +68,7 @@ class SocialAccountController extends Controller
         $social->url = $url;
         $social->save();*/
 
-        $social_id = '62';//$social->id;
+        $social_id = '65';//$social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
