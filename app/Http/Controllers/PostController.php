@@ -956,8 +956,8 @@ class PostController extends Controller
 
                 /* Direct POST */
                 $url = 'https://api.twitter.com/1.1/statuses/update.json';
-                // $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
-                $parameters = array('status' => $title);
+                $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
+                // $parameters = array('status' => $title);
                 $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
                 if(isset($result['errors'])) {
                     echo "<pre>";
