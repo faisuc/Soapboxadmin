@@ -61,14 +61,14 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        $social = new $this->socialAccount;
+        /*$social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
-        $social->save();
+        $social->save();*/
 
-        $social_id = $social->id;
+        $social_id = '61';//$social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
@@ -89,14 +89,18 @@ class SocialAccountController extends Controller
         }
         if($type_id == 3) {
             $url = 'https://api.twitter.com/oauth/request_token';
-            $callback_url = getenv('TWITTER_REDIRECT').'?social_id='.$social->id;
+            $callback_url = getenv('TWITTER_REDIRECT').'?social_id='.$social_id;
+            // $callback_url = getenv('TWITTER_REDIRECT');
             $consumer_key = getenv('TWITTER_CLIENT_ID');
             $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
+            $nonce = base64_encode(uniqid());
+            $nonce = preg_replace('~[\W]~','',$nonce);
 
             $data = array(
                 'oauth_callback' => $callback_url,
                 'oauth_consumer_key' => $consumer_key,
-                'oauth_nonce' => time(),
+                'oauth_nonce' => $nonce,
                 'oauth_signature_method' => 'HMAC-SHA1',
                 'oauth_timestamp' => time(),
                 'oauth_version' => '1.0'
@@ -378,14 +382,15 @@ class SocialAccountController extends Controller
         if( isset($_GET['oauth_token']) and isset($_GET['oauth_verifier']) ){
             $oauth_token = $_GET['oauth_token'];
             $oauth_verifier = $_GET['oauth_verifier'];
-            
+
             $get_data = file_get_contents("https://api.twitter.com/oauth/access_token?oauth_token=$oauth_token&oauth_verifier=$oauth_verifier");
             $array = explode("&", $get_data);
             
             $social_id = $_GET['social_id'];
+            $twitter_session = str_replace("oauth_token=", NULL, $array[0]);
             $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
             $social = $this->socialAccount->find($social_id);
-            $social->twitter_session = $oauth_token;
+            $social->twitter_session = $twitter_session;
             $social->twitter_secret = $twitter_secret;
             $social->save();
             
