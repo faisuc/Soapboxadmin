@@ -947,7 +947,7 @@ class PostController extends Controller
             $post_date = $data->post_date;
 
             if(strtotime($post_date) == strtotime($current_time)){
-                echo "string"; die();
+                
                 $postData = $this->post->find($post_id);
                 $title = $postData->title;
 
