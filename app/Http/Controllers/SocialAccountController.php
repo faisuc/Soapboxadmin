@@ -274,12 +274,12 @@ class SocialAccountController extends Controller
         $state = $_GET['state'];
         $state = explode('=', $state);
         $social_id = $state[1];
-        echo $social_id; die();
+
         $facebook_token = $accessToken;
         $social = $this->socialAccount->find($social_id);
         $social->facebook_token = $facebook_token;
         $social->save();
-        session()->put('fb_access_token', $accessToken);
+        // session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
         // header('Location: http://127.0.0.1:3000/fb_connect_app');
         $fb_connect_url = URL::to('/').'/fb_connect_app';
