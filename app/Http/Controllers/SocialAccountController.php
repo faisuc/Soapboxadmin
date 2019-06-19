@@ -61,14 +61,14 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        /*$social = new $this->socialAccount;
+        $social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
-        $social->save();*/
+        $social->save();
 
-        $social_id = '61';//$social->id;
+        $social_id = $social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
