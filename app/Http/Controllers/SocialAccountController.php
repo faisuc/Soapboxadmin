@@ -61,14 +61,14 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        $social = new $this->socialAccount;
+        /*$social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
-        $social->save();
+        $social->save();*/
 
-        $social_id = $social->id;
+        $social_id = '62';//$social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
@@ -76,7 +76,12 @@ class SocialAccountController extends Controller
         if( $type_id == 1 ) {
             // $this->fb_connect_app();
             $this->setFacebookObject();
-            if(session()->get('fb_access_token') == '')
+            $helper = $this->api->getRedirectLoginHelper();
+            $permissions = ['email','user_posts','manage_pages','publish_pages'];
+            $helper->getPersistentDataHandler()->set('state', 'social_id='.$social_id);
+            $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_callback', $permissions);
+            return redirect()->away($loginUrl);
+            /*if(session()->get('fb_access_token') == '')
             {
                 $helper = $this->api->getRedirectLoginHelper();
                 $permissions = ['email','user_posts','manage_pages','publish_pages'];
@@ -84,8 +89,8 @@ class SocialAccountController extends Controller
                 // echo $loginUrl; die();
                 return redirect()->away($loginUrl);
                 // echo "Not Redirecting. Error Occur"; die();
-            }
-            return redirect()->back()->with('flash_message', 'Social account has been added.');
+            }*/
+            // return redirect()->back()->with('flash_message', 'Social account has been added.');
         }
         if($type_id == 3) {
             $url = 'https://api.twitter.com/oauth/request_token';
@@ -266,6 +271,15 @@ class SocialAccountController extends Controller
 
         // $_SESSION['fb_access_token'] = (string) $accessToken;
         $accessToken = (string) $accessToken;
+
+        echo $accessToken; die();
+        $social_id = $_GET['social_id'];
+        $twitter_session = str_replace("oauth_token=", NULL, $array[0]);
+        $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
+        $social = $this->socialAccount->find($social_id);
+        $social->twitter_session = $twitter_session;
+        $social->twitter_secret = $twitter_secret;
+        $social->save();
         session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
         // header('Location: http://127.0.0.1:3000/fb_connect_app');
