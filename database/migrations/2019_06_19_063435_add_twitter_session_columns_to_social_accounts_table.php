@@ -14,8 +14,8 @@ class AddTwitterSessionColumnsToSocialAccountsTable extends Migration
     public function up()
     {
         Schema::table('social_accounts', function (Blueprint $table) {
-            $table->string('twitter_session',255)->after('url');
-            $table->string('twitter_secret',255)->after('twitter_session');
+            $table->string('twitter_session',255)->nullable()->after('url');
+            $table->string('twitter_secret',255)->nullable()->after('twitter_session');
         });
     }
 
