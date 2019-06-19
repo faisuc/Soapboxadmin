@@ -233,8 +233,10 @@ class PostController extends Controller
             /*if(session()->get('twitter_logged_in') != '') {
                 $data['twitter'] = true;
             }*/
-            if($social_account->twitter_session && $social_account->twitter_secret) {
-                $data['twitter'] = true;
+            if(!empty($social_account)) {
+                if($social_account->twitter_session && $social_account->twitter_secret) {
+                    $data['twitter'] = true;
+                }
             }
 
             if(session()->get('instagram')) {
