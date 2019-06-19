@@ -379,12 +379,12 @@ class SocialAccountController extends Controller
             $oauth_token = $_GET['oauth_token'];
             $oauth_verifier = $_GET['oauth_verifier'];
 
-
             $get_data = file_get_contents("https://api.twitter.com/oauth/access_token?oauth_token=$oauth_token&oauth_verifier=$oauth_verifier");
             $array = explode("&", $get_data);
             
             $social_id = $_GET['social_id'];
             $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
+            echo $oauth_token.'--'.$twitter_secret; die();
             $social = $this->socialAccount->find($social_id);
             $social->twitter_session = $oauth_token;
             $social->twitter_secret = $twitter_secret;
