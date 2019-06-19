@@ -580,8 +580,11 @@ class PostController extends Controller
     {
         $response = array();
         $this->setFacebookObject();
-        
-        $token = session()->get('fb_access_token');
+
+        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+
+        // $token = session()->get('fb_access_token');
+        $token = $social_account->facebook_token;
         $userdata = $this->api->get('/me', $token);
         $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
