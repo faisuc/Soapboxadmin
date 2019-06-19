@@ -167,10 +167,17 @@ class PostController extends Controller
             $consumer_key = getenv('TWITTER_CLIENT_ID');
             $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
             
-            $oauth_token = session()->get('twitter_oauth_token');
-            $oauth_token_secret = session()->get('twitter_oauth_token_secret');
+            /*$oauth_token = session()->get('twitter_oauth_token');
+            $oauth_token_secret = session()->get('twitter_oauth_token_secret');*/
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+            $oauth_token = $social_account->twitter_session;
+            $oauth_token_secret = $social_account->twitter_secret;
+            
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
 
-            /* Direct POST */
+            /* Direct POST /
             $url = 'https://api.twitter.com/1.1/statuses/update.json';
             $parameters = array('status' => $title);
             $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
@@ -208,12 +215,11 @@ class PostController extends Controller
 
             $data['post'] = $this->post->find($post_id);
             $this->setFacebookObject();
-            // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
-            // session()->put('fb_access_token',$token);
-            // session()->forget('fb_access_token');
+            
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+
             if(session()->get('fb_access_token') != '')
             {
-                // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
                 $token = session()->get('fb_access_token');
                 $userdata = $this->api->get('/me', $token);
                 $userdata = $userdata->getGraphUser();
@@ -224,7 +230,10 @@ class PostController extends Controller
                 $data['pages'] = $accounts['data'];
             }
 
-            if(session()->get('twitter_logged_in') != '') {
+            /*if(session()->get('twitter_logged_in') != '') {
+                $data['twitter'] = true;
+            }*/
+            if($social_account->twitter_session && $social_account->twitter_secret) {
                 $data['twitter'] = true;
             }
 
@@ -307,8 +316,11 @@ class PostController extends Controller
             $consumer_key = getenv('TWITTER_CLIENT_ID');
             $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
             
-            $oauth_token = session()->get('twitter_oauth_token');
-            $oauth_token_secret = session()->get('twitter_oauth_token_secret');
+            /*$oauth_token = session()->get('twitter_oauth_token');
+            $oauth_token_secret = session()->get('twitter_oauth_token_secret');*/
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+            $oauth_token = $social_account->twitter_session;
+            $oauth_token_secret = $social_account->twitter_secret;
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);

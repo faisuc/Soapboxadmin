@@ -21,6 +21,9 @@
                         <?php $temp++; ?>
                         @endif
                     @endif
+                    @if(isset($twitter))
+                    <?php $temp = 0 ?>
+                    @endif
                     @if($temp > 0)
                     <div class="alert alert-danger">
                         <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
