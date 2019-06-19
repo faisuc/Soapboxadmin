@@ -163,6 +163,7 @@ class PostController extends Controller
 
         if ($request->input('twitter_post') != '') {
 
+            $post_id = $post->id;
             $callback_url = getenv('TWITTER_REDIRECT');
             $consumer_key = getenv('TWITTER_CLIENT_ID');
             $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
@@ -172,7 +173,7 @@ class PostController extends Controller
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
-            
+
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
