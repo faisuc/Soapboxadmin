@@ -21,6 +21,9 @@
                         <?php $temp++; ?>
                         @endif
                     @endif
+                    @if(isset($facebook))
+                    <?php $temp = 0 ?>
+                    @endif
                     @if(isset($twitter))
                     <?php $temp = 0 ?>
                     @endif
@@ -78,13 +81,15 @@
                         <div class="form-group">
                             <img src="{{ url($post->featuredimage) }}" class="img-responsive" style="width: 200px;">
                         </div>
-                        @if(isset($pages))
-                            <label>Facebook Pages</label>
-                            @foreach ($pages as $page_key => $page)
-                            <label class="custom-control custom-radio">
-                                <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
-                            </label>
-                            @endforeach
+                        @if(isset($facebook))
+                            @if(!empty($pages))
+                                <label>Facebook Pages</label>
+                                @foreach ($pages as $page_key => $page)
+                                <label class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
+                                </label>
+                                @endforeach
+                            @endif
                         @endif
                         @if(isset($twitter))
                         <div class="form-group">
