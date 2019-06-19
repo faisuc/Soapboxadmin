@@ -959,6 +959,9 @@ class PostController extends Controller
                 // $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
                 $parameters = array('status' => $title);
                 $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+                echo "<pre>";
+                print_r($result);
+                echo "</pre>";
                 /* Direct POST */
 
                 DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
