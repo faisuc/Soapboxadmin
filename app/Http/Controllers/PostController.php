@@ -64,6 +64,8 @@ class PostController extends Controller
         // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
         // session()->put('fb_access_token',$token);
         // session()->forget('fb_access_token');
+        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+
         if(session()->get('fb_access_token') != '')
         {
             // $token = 'EAAUKtADcetYBAGy9lPpQrMe8fODdcZCwtnNyTWb9J3MqOiCcDgOJc1r7f6kCvgTvyfb8OWyHG286DelvaLejOOTe6SuhbRPb89xYbkrPkjFNRZBnh4XaFXnZCQ42TVifHKuOGtuSHt8cTBR86zSzZA0apZCfZCGx48uZAcZAkwNjp1xUpWO0SFV9';
@@ -77,8 +79,13 @@ class PostController extends Controller
             $data['pages'] = $accounts['data'];
         }
 
-        if(session()->get('twitter_logged_in') != '') {
+        /*if(session()->get('twitter_logged_in') != '') {
             $data['twitter'] = true;
+        }*/
+        if(!empty($social_account)) {
+            if($social_account->twitter_session && $social_account->twitter_secret) {
+                $data['twitter'] = true;
+            }
         }
         
         return view('pages.post-create', $data);
