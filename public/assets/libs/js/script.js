@@ -176,4 +176,16 @@ jQuery(document).ready(function($) {
         });
     })
 
+    /* Facebook Pages Display For Post */
+    $(document).on('change','input[name="facebook_post"]',function() {
+        let check = $(this).prop('checked');
+        if(check) {
+            $('#facebook-pages').show();
+        }
+        else {
+            $('#facebook-pages').hide();
+        }
+    });
+    /* Facebook Pages Display For Post */
+
 });
