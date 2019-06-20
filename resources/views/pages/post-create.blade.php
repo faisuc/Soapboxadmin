@@ -19,11 +19,13 @@
                         <?php $temp++; ?>
                         @endif
                     @endif
-                    @if(isset($facebook))
-                    <?php $temp = 0 ?>
-                    @endif
-                    @if(isset($twitter))
-                    <?php $temp = 0 ?>
+                    @if(isset($facebook) || isset($twitter))
+                        @if(isset($facebook))
+                        <?php $temp = 0 ?>
+                        @endif
+                        @if(isset($twitter))
+                        <?php $temp = 0 ?>
+                        @endif
                     @endif
                     @if($temp > 0)
                     <div class="alert alert-danger">
@@ -81,20 +83,39 @@
                         </div>
                         @if(isset($facebook))
                             @if(!empty($pages))
-                                <label>Facebook Pages</label>
-                                @foreach ($pages as $page_key => $page)
-                                <label class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
+                                <label for="facebook_post">Facebook Pages</label>
+                                <label class="custom-control custom-checkbox">
+                                    <input class="custom-control-input" id="facebook_post" type="checkbox" name="facebook_post"><span class="custom-control-label">Post to Facebook</span>
                                 </label>
-                                @endforeach
+                                <div id="facebook-pages" style="display: none;">
+                                    @foreach ($pages as $page_key => $page)
+                                    <label class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" name="fb_page" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
                             @endif
                         @endif
                         @if(isset($twitter))
+                        <hr>
                         <div class="form-group">
+                            <label for="twitter_post">Twitter Post</label>
                             <label class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
+                                <input class="custom-control-input" id="twitter_post" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
                             </label>
                         </div>
+                        @endif
+                        @if(isset($instagram))
+                        <hr>
+                        <div class="form-group">
+                            <label for="inputInstaUser">Instagram User</label>
+                            <input id="inputInstaUser" type="text" placeholder="Instagram Username/Email" name="insta_username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputInstaPassword">Instagram Password</label>
+                            <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control" required>
+                        </div>
+                        <hr>
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">

@@ -61,7 +61,7 @@ class PostController extends Controller
 
         $this->setFacebookObject();
         $data = [];
-        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+        // $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
 
         /*if(session()->get('fb_access_token') != '')
         {
@@ -78,9 +78,11 @@ class PostController extends Controller
         /*if(session()->get('twitter_logged_in') != '') {
             $data['twitter'] = true;
         }*/
-        if(!empty($social_account)) {
-            if($social_account->facebook_token) {
-                $token = $social_account->facebook_token;
+        $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        if(!empty($facebook_account)) {
+            if($facebook_account->facebook_token) {
+                $token = $facebook_account->facebook_token;
                 $userdata = $this->api->get('/me', $token);
                 $userdata = $userdata->getGraphUser();
                 $user_id = $userdata['id'];
@@ -90,7 +92,9 @@ class PostController extends Controller
                 $data['pages'] = $accounts['data'];
                 $data['facebook'] = true;
             }
-            if($social_account->twitter_session && $social_account->twitter_secret) {
+        }
+        if (!empty($twitter_account)) {
+            if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
                 $data['twitter'] = true;
             }
         }
@@ -168,7 +172,7 @@ class PostController extends Controller
         }
 
         /* Schedule Post Facebook Page */
-        if ($request->input('fb_page') != '') {
+        if ($request->input('facebook_post') != '') {
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
@@ -231,7 +235,7 @@ class PostController extends Controller
             $data['post'] = $this->post->find($post_id);
             $this->setFacebookObject();
             
-            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+            // $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
 
             /*if(session()->get('fb_access_token') != '')
             {
@@ -248,9 +252,11 @@ class PostController extends Controller
             /*if(session()->get('twitter_logged_in') != '') {
                 $data['twitter'] = true;
             }*/
-            if(!empty($social_account)) {
-                if($social_account->facebook_token) {
-                    $token = $social_account->facebook_token;
+            $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            if(!empty($facebook_account)) {
+                if($facebook_account->facebook_token) {
+                    $token = $facebook_account->facebook_token;
                     $userdata = $this->api->get('/me', $token);
                     $userdata = $userdata->getGraphUser();
                     $user_id = $userdata['id'];
@@ -260,11 +266,13 @@ class PostController extends Controller
                     $data['pages'] = $accounts['data'];
                     $data['facebook'] = true;
                 }
-                if($social_account->twitter_session && $social_account->twitter_secret) {
+            }
+            if(!empty($twitter_account)) {
+                if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
                     $data['twitter'] = true;
                 }
             }
-
+            
             if(session()->get('instagram')) {
                 // session()->forget('instagram');
                 $data['instagram'] = true;
@@ -330,7 +338,7 @@ class PostController extends Controller
         }
 
         /* Schedule Post Facebook Page */
-        if ($request->input('fb_page') != '') {
+        if ($request->input('facebook_post') != '') {
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
