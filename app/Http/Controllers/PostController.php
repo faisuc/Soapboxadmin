@@ -397,6 +397,7 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
             // $new_filename = url($filename);
+            echo $filename.'<br>';
             $root = $_SERVER['DOCUMENT_ROOT'];
             $request_uri = $_SERVER['REQUEST_URI'];
             $request_uri = explode('/public', $request_uri)[0];
@@ -420,7 +421,7 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $post = $this->insta_post($new_filename, $caption, $schedule);
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
             echo "<pre>";
             print_r($response);
             die();
