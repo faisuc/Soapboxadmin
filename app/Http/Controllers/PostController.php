@@ -212,6 +212,54 @@ class PostController extends Controller
 
         }
 
+        if($request->input('instagram_post') != '') {
+            // $social_id = session()->get('instagram');
+            $insta_user = $request->input('insta_username');
+            $insta_pass = $request->input('insta_password');
+            $filename = $post->featured_image;
+
+            $username = $insta_user;
+            $password = $insta_pass;
+            $caption = $title;
+            $schedule = $schedule_date;
+            date_default_timezone_set('Asia/Kolkata');
+            $schedule = strtotime($schedule);
+
+            // $new_filename = url($filename);
+            $root = $_SERVER['DOCUMENT_ROOT'];
+            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                /*$request_uri = $_SERVER['REQUEST_URI'];
+                $request_uri = explode('/public', $request_uri)[0];*/
+                $new_filename = $root.$filename;
+            }
+            else {
+                $request_uri = '/public/';
+                $new_filename = $root.$request_uri.$filename;
+            }
+
+            $this->image_load($new_filename);
+            $this->image_resize(480,600);
+            $this->image_save($new_filename, IMAGETYPE_JPEG);
+
+            $response = $this->insta_login($username, $password);
+
+            if(strpos($response[1], "Sorry")) {
+                echo "Request failed, there's a chance that this proxy/ip is blocked";
+                print_r($response);
+                exit();
+            }         
+            if(empty($response[1])) {
+                echo "Empty response received from the server while trying to login";
+                print_r($response); 
+                exit(); 
+            }
+
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
+            /*echo "<pre>";
+            print_r($response);
+            die();*/
+        }
+
         return redirect()->back()->with('flash_message', 'New post has been created.');
 
     }
@@ -426,9 +474,9 @@ class PostController extends Controller
             }
 
             $insta_post = $this->insta_post($new_filename, $caption, $schedule);
-            echo "<pre>";
+            /*echo "<pre>";
             print_r($response);
-            die();
+            die();*/
         }
         
         return redirect()->back()->with('flash_message', 'Post has been updated.');
