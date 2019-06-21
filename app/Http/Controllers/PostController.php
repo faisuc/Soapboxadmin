@@ -401,7 +401,8 @@ class PostController extends Controller
             /*$request_uri = $_SERVER['REQUEST_URI'];
             $request_uri = explode('/public', $request_uri)[0];
             $new_filename = $root.$request_uri.$filename;*/
-            $new_filename = $root.$filename;
+            $request_uri = '/public/';
+            $new_filename = $root.$request_uri.$filename;
 
             $this->image_load($new_filename);
             $this->image_resize(480,600);
