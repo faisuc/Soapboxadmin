@@ -397,12 +397,16 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
             // $new_filename = url($filename);
-            $root = $_SERVER['DOCUMENT_ROOT'];
-            /*$request_uri = $_SERVER['REQUEST_URI'];
-            $request_uri = explode('/public', $request_uri)[0];
-            $new_filename = $root.$request_uri.$filename;*/
-            $request_uri = '/public/';
-            $new_filename = $root.$request_uri.$filename;
+            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                $root = $_SERVER['DOCUMENT_ROOT'];
+                /*$request_uri = $_SERVER['REQUEST_URI'];
+                $request_uri = explode('/public', $request_uri)[0];*/
+                $new_filename = $root.$filename;
+            }
+            else {
+                $request_uri = '/public/';
+                $new_filename = $root.$request_uri.$filename;
+            }
 
             $this->image_load($new_filename);
             $this->image_resize(480,600);
