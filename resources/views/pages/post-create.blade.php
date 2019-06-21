@@ -9,23 +9,19 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                   <?php $temp = 0; ?>
-                    @if(session()->get('fb_access_token') == '' || session()->get('twitter_logged_in') == '')
-                        @if(session()->get('fb_access_token') != '')
-                        <?php $temp = 0 ?>
-                        @elseif(session()->get('twitter_logged_in') != '')
-                        <?php $temp = 0 ?>
-                        @else
-                        <?php $temp++; ?>
-                        @endif
-                    @endif
-                    @if(isset($facebook) || isset($twitter))
+                    <?php $temp = 1; ?>
+                    @if(isset($facebook) || isset($twitter) || isset($instagram))
                         @if(isset($facebook))
                         <?php $temp = 0 ?>
                         @endif
                         @if(isset($twitter))
                         <?php $temp = 0 ?>
                         @endif
+                        @if(isset($instagram))
+                        <?php $temp = 0 ?>
+                        @endif
+                    @else
+                        <?php $temp++; ?>
                     @endif
                     @if($temp > 0)
                     <div class="alert alert-danger">
@@ -108,14 +104,21 @@
                         @if(isset($instagram))
                         <hr>
                         <div class="form-group">
-                            <label for="inputInstaUser">Instagram User</label>
-                            <input id="inputInstaUser" type="text" placeholder="Instagram Username/Email" name="insta_username" class="form-control" required>
+                            <label for="instagram_post">Instagram Pages</label>
+                            <label class="custom-control custom-checkbox">
+                                <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label for="inputInstaPassword">Instagram Password</label>
-                            <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control" required>
+                        <div id="instagram_user_pass" style="display: none;">
+                            <div class="form-group">
+                                <label for="inputInstaUser">Instagram User</label>
+                                <input id="inputInstaUser" type="text" placeholder="Instagram Username/Email" name="insta_username" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputInstaPassword">Instagram Password</label>
+                                <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control">
+                            </div>
                         </div>
-                        <hr>
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
