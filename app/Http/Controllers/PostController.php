@@ -192,12 +192,12 @@ class PostController extends Controller
             
             /*$oauth_token = session()->get('twitter_oauth_token');
             $oauth_token_secret = session()->get('twitter_oauth_token_secret');*/
-            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
-            $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
 
             /* Direct POST /
@@ -226,10 +226,16 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
             // $new_filename = url($filename);
-            $root = $_SERVER['DOCUMENT_ROOT'];
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $oauth_token = $username;
+            $oauth_token_secret = $password;
+
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
+
+            /*$root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-                /*$request_uri = $_SERVER['REQUEST_URI'];
-                $request_uri = explode('/public', $request_uri)[0];*/
                 $new_filename = $root.$filename;
             }
             else {
@@ -254,7 +260,7 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);*/
             /*echo "<pre>";
             print_r($response);
             die();*/
@@ -409,7 +415,7 @@ class PostController extends Controller
             
             /*$oauth_token = session()->get('twitter_oauth_token');
             $oauth_token_secret = session()->get('twitter_oauth_token_secret');*/
-            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
@@ -444,11 +450,17 @@ class PostController extends Controller
             date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $oauth_token = $username;
+            $oauth_token_secret = $password;
+
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
+
             // $new_filename = url($filename);
-            $root = $_SERVER['DOCUMENT_ROOT'];
+            /*$root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-                /*$request_uri = $_SERVER['REQUEST_URI'];
-                $request_uri = explode('/public', $request_uri)[0];*/
                 $new_filename = $root.$filename;
             }
             else {
@@ -473,7 +485,7 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);*/
             /*echo "<pre>";
             print_r($response);
             die();*/
@@ -1045,28 +1057,67 @@ class PostController extends Controller
             $post_date = $data->post_date;
 
             if(strtotime($post_date) == strtotime($current_time)){
-                
-                $postData = $this->post->find($post_id);
-                $title = $postData->title;
+                if($data->type_name == 'twitter') {
+                    
+                    $postData = $this->post->find($post_id);
+                    $title = $postData->title;
 
-                $oauth_token = $data->session;
-                $oauth_token_secret = $data->session_secret;
+                    $oauth_token = $data->session;
+                    $oauth_token_secret = $data->session_secret;
 
-                /* Direct POST */
-                $url = 'https://api.twitter.com/1.1/statuses/update.json';
-                $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
-                // $parameters = array('status' => $title);
-                $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
-                if(isset($result['errors'])) {
-                    echo "<pre>";
-                    print_r($result);
-                    echo "</pre>";
+                    $url = 'https://api.twitter.com/1.1/statuses/update.json';
+                    $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
+                    // $parameters = array('status' => $title);
+                    $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+                    if(isset($result['errors'])) {
+                        echo "<pre>";
+                        print_r($result);
+                        echo "</pre>";
+                    }
+                    
                 }
-                /* Direct POST */
+                else {
 
-                DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
-            }            
+                    $post = $this->post->find($post_id);
+                    $filename = $post->featured_image;
+                    $title = $post->title;
 
+                    $username = $data->session;
+                    $password = $data->session_secret;
+                    $schedule = $data->post_date;
+
+                    $root = $_SERVER['DOCUMENT_ROOT'];
+                    if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                        $new_filename = $root.$filename;
+                    }
+                    else {
+                        $request_uri = '/public/';
+                        $new_filename = $root.$request_uri.$filename;
+                    }
+
+                    $this->image_load($new_filename);
+                    $this->image_resize(480,600);
+                    $this->image_save($new_filename, IMAGETYPE_JPEG);
+
+                    $response = $this->insta_login($username, $password);
+
+                    if(strpos($response[1], "Sorry")) {
+                        echo "Request failed, there's a chance that this proxy/ip is blocked";
+                        print_r($response);
+                        exit();
+                    }         
+                    if(empty($response[1])) {
+                        echo "Empty response received from the server while trying to login";
+                        print_r($response); 
+                        exit(); 
+                    }
+
+                    $insta_post = $this->insta_post($new_filename, $title, $schedule);
+                }
+            }
+
+            
+            DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
         }
     }
 
