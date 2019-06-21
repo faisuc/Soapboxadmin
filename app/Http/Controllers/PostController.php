@@ -80,6 +80,7 @@ class PostController extends Controller
         }*/
         $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($facebook_account)) {
             if($facebook_account->facebook_token) {
                 $token = $facebook_account->facebook_token;
@@ -97,6 +98,9 @@ class PostController extends Controller
             if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
                 $data['twitter'] = true;
             }
+        }
+        if (!empty($instagram_account)) {
+            $data['instagram'] = true;
         }
         
         return view('pages.post-create', $data);
@@ -254,6 +258,7 @@ class PostController extends Controller
             }*/
             $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             if(!empty($facebook_account)) {
                 if($facebook_account->facebook_token) {
                     $token = $facebook_account->facebook_token;
@@ -272,11 +277,13 @@ class PostController extends Controller
                     $data['twitter'] = true;
                 }
             }
-            
-            if(session()->get('instagram')) {
-                // session()->forget('instagram');
+            if (!empty($instagram_account)) {
                 $data['instagram'] = true;
             }
+            
+            /*if(session()->get('instagram')) {
+                $data['instagram'] = true;
+            }*/
 
             return view('pages.post-edit', $data);
         }
@@ -376,8 +383,8 @@ class PostController extends Controller
             /* Schedule POST */
         }
 
-        if(session()->get('instagram') != '') {
-            $social_id = session()->get('instagram');
+        if($request->input('instagram_post') != '') {
+            // $social_id = session()->get('instagram');
             $insta_user = $request->input('insta_username');
             $insta_pass = $request->input('insta_password');
             $filename = $post->featured_image;
@@ -395,6 +402,7 @@ class PostController extends Controller
             $request_uri = explode('/public', $request_uri)[0];
             $new_filename = $root.$request_uri.$filename;
 
+            echo $new_filename; die();
             $this->image_load($new_filename);
             $this->image_resize(480,600);
             $this->image_save($new_filename, IMAGETYPE_JPEG);

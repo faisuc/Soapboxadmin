@@ -188,4 +188,20 @@ jQuery(document).ready(function($) {
     });
     /* Facebook Pages Display For Post */
 
+    /* Instagram Display For Post */
+    $(document).on('change','input[name="instagram_post"]',function() {
+        let check = $(this).prop('checked');
+        if(check) {
+            $('#instagram_user_pass').show();
+            $('#instagram_user_pass').find('input[name="insta_username"]').attr('required','required');
+            $('#instagram_user_pass').find('input[name="insta_password"]').attr('required','required');
+        }
+        else {
+            $('#instagram_user_pass').hide();
+            $('#instagram_user_pass').find('input[name="insta_username"]').removeAttr('required');
+            $('#instagram_user_pass').find('input[name="insta_password"]').removeAttr('required');
+        }
+    });
+    /* Instagram Display For Post */
+
 });
