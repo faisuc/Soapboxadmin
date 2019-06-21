@@ -397,11 +397,11 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
             // $new_filename = url($filename);
-            echo $filename.'<br>';
             $root = $_SERVER['DOCUMENT_ROOT'];
-            $request_uri = $_SERVER['REQUEST_URI'];
+            /*$request_uri = $_SERVER['REQUEST_URI'];
             $request_uri = explode('/public', $request_uri)[0];
-            $new_filename = $root.$request_uri.$filename;
+            $new_filename = $root.$request_uri.$filename;*/
+            $new_filename = $root.$filename;
 
             echo $new_filename; die();
             $this->image_load($new_filename);
