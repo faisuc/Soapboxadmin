@@ -75,7 +75,7 @@
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
                         </div>
                         <div class="form-group">
-                            <img src="{{ url($post->featuredimage) }}" class="img-responsive" style="width: 200px;">
+                            <img src="{{ $post->featuredimage }}" class="img-responsive" style="width: 200px;">
                         </div>
                         @if(isset($facebook))
                             @if(!empty($pages))
