@@ -403,7 +403,6 @@ class PostController extends Controller
             $new_filename = $root.$request_uri.$filename;*/
             $new_filename = $root.$filename;
 
-            echo $new_filename; die();
             $this->image_load($new_filename);
             $this->image_resize(480,600);
             $this->image_save($new_filename, IMAGETYPE_JPEG);
