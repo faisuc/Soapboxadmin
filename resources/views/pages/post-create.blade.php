@@ -109,7 +109,7 @@
                                 <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
                             </label>
                         </div>
-                        <div id="instagram_user_pass" style="display: none;">
+                        <?php /* ?><div id="instagram_user_pass" style="display: none;">
                             <div class="form-group">
                                 <label for="inputInstaUser">Instagram User</label>
                                 <input id="inputInstaUser" type="text" placeholder="Instagram Username/Email" name="insta_username" class="form-control">
@@ -118,7 +118,7 @@
                                 <label for="inputInstaPassword">Instagram Password</label>
                                 <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control">
                             </div>
-                        </div>
+                        </div><?php */ ?>
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">

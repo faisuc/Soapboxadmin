@@ -214,21 +214,26 @@ class PostController extends Controller
 
         if($request->input('instagram_post') != '') {
             // $social_id = session()->get('instagram');
-            $insta_user = $request->input('insta_username');
-            $insta_pass = $request->input('insta_password');
-            $filename = $post->featured_image;
-
+            
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $insta_user = $social_account->instagram_user;
+            $insta_pass = $social_account->instagram_password;
             $username = $insta_user;
             $password = $insta_pass;
+            $oauth_token = $username;
+            $oauth_token_secret = $password;
+            
+            /*$insta_user = $request->input('insta_username');
+            $insta_pass = $request->input('insta_password');*/
+
+            $filename = $post->featured_image;
+
             $caption = $title;
             $schedule = $schedule_date;
             date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
             // $new_filename = url($filename);
-            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-            $oauth_token = $username;
-            $oauth_token_secret = $password;
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
@@ -439,20 +444,25 @@ class PostController extends Controller
 
         if($request->input('instagram_post') != '') {
             // $social_id = session()->get('instagram');
-            $insta_user = $request->input('insta_username');
-            $insta_pass = $request->input('insta_password');
-            $filename = $post->featured_image;
-
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            
+            $insta_user = $social_account->instagram_user;
+            $insta_pass = $social_account->instagram_password;
             $username = $insta_user;
             $password = $insta_pass;
+            $oauth_token = $username;
+            $oauth_token_secret = $password;
+            
+            /*$insta_user = $request->input('insta_username');
+            $insta_pass = $request->input('insta_password');*/
+            
+            $filename = $post->featured_image;
+
             $caption = $title;
             $schedule = $schedule_date;
             date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
-            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-            $oauth_token = $username;
-            $oauth_token_secret = $password;
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);

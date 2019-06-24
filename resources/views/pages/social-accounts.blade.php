@@ -105,6 +105,16 @@
                       <label for="inputURL" class="col-form-label">URL:</label>
                       <input type="text" class="form-control" id="inputURL" name="url">
                     </div>
+                    <div id="instagram-acc" style="display: none;">
+                        <div class="form-group">
+                            <label for="inputInstaUser" class="col-form-label">Instagram Username:</label>
+                            <input type="text" class="form-control" id="inputInstaUser" name="insta_user" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputInstaPass" class="col-form-label">Instagram Password:</label>
+                            <input type="text" class="form-control" id="inputInstaPass" name="insta_pass" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

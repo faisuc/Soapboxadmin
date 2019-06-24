@@ -127,9 +127,13 @@ class SocialAccountController extends Controller
             return redirect()->away($twitter_url);
         }
         if($type_id == 5) {
-            if(session()->get('instagram') == '') {
+            /*if(session()->get('instagram') == '') {
                 session()->put('instagram',$social_id);
-            }
+            }*/
+            $social_new = $this->socialAccount->find($social_id);
+            $social_new->instagram_user = $request->input('insta_user');
+            $social_new->instagram_password = $request->input('insta_pass');
+            $social_new->save();
             return redirect()->back()->with('flash_message', 'Social account has been added.');
         }
 
