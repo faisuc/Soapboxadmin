@@ -188,7 +188,7 @@ jQuery(document).ready(function($) {
     });
     /* Facebook Pages Display For Post */
 
-    /* Instagram Display For Post */
+    /* Instagram Display For Post /
     $(document).on('change','input[name="instagram_post"]',function() {
         let check = $(this).prop('checked');
         if(check) {
@@ -203,5 +203,17 @@ jQuery(document).ready(function($) {
         }
     });
     /* Instagram Display For Post */
+
+    /* Instagram Account For Social Account */
+    $(document).on('change','select[name="social_account"]',function() {
+        let val = $(this).val();
+        if(val == '5') {
+            $('#instagram-acc').show();
+        }
+        else {
+            $('#instagram-acc').hide();
+        }
+    });
+    /* Instagram Account For Social Account */
 
 });
