@@ -214,6 +214,15 @@ jQuery(document).ready(function($) {
             $('#instagram-acc').hide();
         }
     });
+    $(document).on('mousedown',".reveal", function() {
+        $("#inputInstaPass").replaceWith($('#inputInstaPass').clone().attr('type', 'text'));
+    });
+    $(document).on('mouseup',".reveal",function() {
+        $("#inputInstaPass").replaceWith($('#inputInstaPass').clone().attr('type', 'password'));
+    })
+    $(document).on('mouseout',".reveal",function() {
+        $("#inputInstaPass").replaceWith($('#inputInstaPass').clone().attr('type', 'password'));
+    });
     /* Instagram Account For Social Account */
 
 });
