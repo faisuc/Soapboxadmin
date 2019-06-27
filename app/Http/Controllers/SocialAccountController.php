@@ -552,11 +552,17 @@ class SocialAccountController extends Controller
     /* Pinterest */
     public function pinterest_callback()
     {
-        echo "string"; die();
         if (isset($_GET["code"])) {
             $token = $pinterest->auth->getOAuthToken($_GET["code"]);
             $pinterest->auth->setOAuthToken($token->access_token);
-            setcookie("access_token", $token->access_token);
+            // setcookie("access_token", $token->access_token);
+
+            /**/
+            $social_id = $_GET['social_id'];
+            $social = $this->socialAccount->find($social_id);
+            $social->pinterest_token = $token;
+            $social->save();
+
         }
         else if (isset($_GET["access_token"])) {
             $pinterest->auth->setOAuthToken($_GET["access_token"]);
