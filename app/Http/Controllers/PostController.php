@@ -359,10 +359,6 @@ class PostController extends Controller
                         $boardsArr[$board_id] = $board->name;
                     }
 
-                    echo "<pre>";
-                    print_r($boardsArr);
-                    die();
-
                     $data['boards'] = $boardsArr;
                     $data['pinterest'] = true;
                 }

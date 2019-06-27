@@ -229,4 +229,16 @@ jQuery(document).ready(function($) {
     });
     /* Instagram Account For Social Account */
 
+    /* Pinterest Board Display For Post */
+    $(document).on('change','input[name="pinterest_post"]',function() {
+        let check = $(this).prop('checked');
+        if(check) {
+            $('#pinterest-boards').show();
+        }
+        else {
+            $('#pinterest-boards').hide();
+        }
+    });
+    /* Pinterest Board Display For Post */
+
 });
