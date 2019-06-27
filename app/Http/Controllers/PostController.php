@@ -524,6 +524,39 @@ class PostController extends Controller
             print_r($response);
             die();*/
         }
+
+        if ($request->input('pinterest_post') != '') {
+
+            $board_id = $request->input('pint_board');
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            
+            $token = $social_account->pinterest_token;
+
+            $image = $post->featured_image;
+
+            $app_id = getenv('PINTEREST_CLIENT_ID');
+            $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+            $callback_url = getenv('PINTEREST_REDIRECT');
+            $pinterest = new Pinterest($app_id, $app_secret);
+            $pinterest->auth->setOAuthToken($token);
+
+            $pin = $pinterest->pins->create(array(
+                "note"          => "Test board from API",
+                "image"     => $image,
+                "board"         => $board_id
+            ));
+            die();
+
+            $caption = $title;
+            $schedule = $schedule_date;
+            date_default_timezone_set('Asia/Kolkata');
+            $schedule = strtotime($schedule);
+
+
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
+        }
         
         return redirect()->back()->with('flash_message', 'Post has been updated.');
 
