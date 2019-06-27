@@ -566,7 +566,8 @@ class SocialAccountController extends Controller
             $social = $this->socialAccount->find($social_id);
             $social->pinterest_token = $token;
             $social->save();
-
+            
+            return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         }
         else if (isset($_GET["access_token"])) {
             $pinterest->auth->setOAuthToken($_GET["access_token"]);
