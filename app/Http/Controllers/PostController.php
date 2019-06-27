@@ -11,6 +11,7 @@ use Redirect;
 use URL;
 use DB;
 use Facebook\Exceptions\FacebookSDKException;
+use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
 
 class PostController extends Controller
@@ -318,6 +319,7 @@ class PostController extends Controller
             $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $pinterest_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             if(!empty($facebook_account)) {
                 if($facebook_account->facebook_token) {
                     $token = $facebook_account->facebook_token;
@@ -338,6 +340,29 @@ class PostController extends Controller
             }
             if (!empty($instagram_account)) {
                 $data['instagram'] = true;
+            }
+            if (!empty($pinterest_account)) {
+                if($pinterest_account->pinterest_token) {
+                    $token = $pinterest_account->pinterest_token;
+
+                    $app_id = getenv('PINTEREST_CLIENT_ID');
+                    $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+                    $callback_url = getenv('PINTEREST_REDIRECT');
+                    $pinterest = new Pinterest($app_id, $app_secret);
+
+                    /* Get User Boards */
+                    $boards = $pinterest->users->getMeBoards();
+                    echo "<pre>";
+                    print_r($boards);
+                    die();
+                    $boards = '';
+                    foreach ($boards as $board_key => $board) {
+                        $board_id = $board->id;
+                    }
+
+                    $data['boards'] = array();
+                    $data['pinterest'] = true;
+                }
             }
             
             /*if(session()->get('instagram')) {
