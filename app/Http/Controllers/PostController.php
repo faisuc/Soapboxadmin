@@ -531,8 +531,16 @@ class PostController extends Controller
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             
             $token = $social_account->pinterest_token;
-
-            $image = $post->featured_image;
+            echo $token.'<br>';
+            $filename = $post->featured_image;
+            $root = $_SERVER['DOCUMENT_ROOT'];
+            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                $image = $root.$filename;
+            }
+            else {
+                $request_uri = '/public/';
+                $image = $root.$request_uri.$filename;
+            }
 
             $app_id = getenv('PINTEREST_CLIENT_ID');
             $app_secret = getenv('PINTEREST_CLIENT_SECRET');
@@ -545,6 +553,9 @@ class PostController extends Controller
                 "image"     => $image,
                 "board"         => $board_id
             ));
+
+            echo "<pre>";
+            print_r($pin);
             die();
 
             $caption = $title;
