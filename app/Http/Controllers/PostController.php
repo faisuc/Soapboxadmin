@@ -353,15 +353,17 @@ class PostController extends Controller
 
                     /* Get User Boards */
                     $boards = $pinterest->users->getMeBoards();
-                    echo "<pre>";
-                    print_r($boards);
-                    die();
-                    $boards = '';
+                    $boardsArr = array();
                     foreach ($boards as $board_key => $board) {
                         $board_id = $board->id;
+                        $boardsArr[$board_id] = $board->name;
                     }
 
-                    $data['boards'] = array();
+                    echo "<pre>";
+                    print_r($boardsArr);
+                    die();
+
+                    $data['boards'] = $boardsArr;
                     $data['pinterest'] = true;
                 }
             }
