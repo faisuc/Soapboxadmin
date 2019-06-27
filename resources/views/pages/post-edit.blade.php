@@ -131,10 +131,12 @@
                                     <input class="custom-control-input" id="pinterest_post" type="checkbox" name="pinterest_post"><span class="custom-control-label">Post to Pinterest</span>
                                 </label>
                                 <div id="pinterest-boards" style="display: none;">
+                                    <?php $i = 0; ?>
                                     @foreach ($boards as $page_key => $page)
                                     <label class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" name="pint_board" value="{{ $page_key }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page }}</span>
+                                        <input class="custom-control-input" type="radio" name="pint_board" value="{{ $page_key }}" {{ ($i == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page }}</span>
                                     </label>
+                                    <?php $i++ ?>
                                     @endforeach
                                 </div>
                             @endif
