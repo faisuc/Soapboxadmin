@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="card-body">
                     <?php $temp = 1; ?>
-                    @if(isset($facebook) || isset($twitter) || isset($instagram))
+                    @if(isset($facebook) || isset($twitter) || isset($instagram) || isset($pinterest))
                         @if(isset($facebook))
                         <?php $temp = 0 ?>
                         @endif
@@ -18,6 +18,9 @@
                         <?php $temp = 0 ?>
                         @endif
                         @if(isset($instagram))
+                        <?php $temp = 0 ?>
+                        @endif
+                        @if(isset($pinterest))
                         <?php $temp = 0 ?>
                         @endif
                     @else
@@ -104,7 +107,7 @@
                         @if(isset($instagram))
                         <hr>
                         <div class="form-group">
-                            <label for="instagram_post">Instagram Pages</label>
+                            <label for="instagram_post">Instagram</label>
                             <label class="custom-control custom-checkbox">
                                 <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
                             </label>
@@ -119,6 +122,22 @@
                                 <input id="inputInstaPassword" type="password" placeholder="Instagram Password" name="insta_password" class="form-control">
                             </div>
                         </div><?php */ ?>
+                        @endif
+                        @if(isset($pinterest))
+                            @if(!empty($boards))
+                                <hr>
+                                <label for="pinterest_post">Pinterest</label>
+                                <label class="custom-control custom-checkbox">
+                                    <input class="custom-control-input" id="pinterest_post" type="checkbox" name="pinterest_post"><span class="custom-control-label">Post to Pinterest</span>
+                                </label>
+                                <div id="pinterest-boards" style="display: none;">
+                                    @foreach ($boards as $page_key => $page)
+                                    <label class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" name="pint_board" value="{{ $page_key }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            @endif
                         @endif
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
