@@ -9,6 +9,7 @@ use Session;
 use Redirect;
 use URL;
 use Facebook\Exceptions\FacebookSDKException;
+use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
 use Laravel\Socialite\Facades\Socialite;
 use Google_Client;
@@ -61,14 +62,14 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        $social = new $this->socialAccount;
+        /*$social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
         $social->url = $url;
-        $social->save();
+        $social->save();*/
 
-        $social_id = $social->id;
+        $social_id = '83';//$social->id;
         
         if( $type_id == 4 ) {
             return redirect('redirect_google');
@@ -135,6 +136,16 @@ class SocialAccountController extends Controller
             $social_new->instagram_password = $request->input('insta_pass');
             $social_new->save();
             return redirect()->back()->with('flash_message', 'Social account has been added.');
+        }
+        if($type_id == 6) {
+
+            $app_id = getenv('PINTEREST_CLIENT_ID');
+            $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+            $callback_url = getenv('PINTEREST_REDIRECT').'?social_id='.$social_id;
+            $pinterest = new Pinterest($app_id, $app_secret);
+            echo "<pre>";
+            print_r($pinterest);
+            die();
         }
 
     }

@@ -209,9 +209,13 @@ jQuery(document).ready(function($) {
         let val = $(this).val();
         if(val == '5') {
             $('#instagram-acc').show();
+            $('#instagram-acc').find('#inputInstaUser').attr('required','required');
+            $('#instagram-acc').find('#inputInstaPass').attr('required','required');
         }
         else {
             $('#instagram-acc').hide();
+            $('#instagram-acc').find('#inputInstaUser').removeAttr('required');
+            $('#instagram-acc').find('#inputInstaPass').removeAttr('required');
         }
     });
     $(document).on('mousedown',".reveal", function() {
