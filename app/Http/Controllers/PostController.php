@@ -82,6 +82,7 @@ class PostController extends Controller
         $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $pinterest_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($facebook_account)) {
             if($facebook_account->facebook_token) {
                 $token = $facebook_account->facebook_token;
@@ -102,6 +103,28 @@ class PostController extends Controller
         }
         if (!empty($instagram_account)) {
             $data['instagram'] = true;
+        }
+        if (!empty($pinterest_account)) {
+            if($pinterest_account->pinterest_token) {
+                $token = $pinterest_account->pinterest_token;
+
+                $app_id = getenv('PINTEREST_CLIENT_ID');
+                $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+                $callback_url = getenv('PINTEREST_REDIRECT');
+                $pinterest = new Pinterest($app_id, $app_secret);
+                $pinterest->auth->setOAuthToken($token);
+
+                /* Get User Boards */
+                $boards = $pinterest->users->getMeBoards();
+                $boardsArr = array();
+                foreach ($boards as $board_key => $board) {
+                    $board_id = $board->id;
+                    $boardsArr[$board_id] = $board->name;
+                }
+
+                $data['boards'] = $boardsArr;
+                $data['pinterest'] = true;
+            }
         }
         
         return view('pages.post-create', $data);
@@ -270,6 +293,21 @@ class PostController extends Controller
             /*echo "<pre>";
             print_r($response);
             die();*/
+        }
+        if ($request->input('pinterest_post') != '') {
+
+            $board_id = $request->input('pint_board');
+            $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            
+            $token = $social_account->pinterest_token;
+            
+            $schedule = $schedule_date;
+            date_default_timezone_set('Asia/Kolkata');
+            $schedule = strtotime($schedule);
+
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $data = array('post_id'=>$post_id,'type_name'=>'pinterest','session'=>$token,'session_secret'=>$board_id,'post_date'=>$post_date,'is_cron_run'=>0);
+            DB::table('cron_script')->insert($data);
         }
 
         return redirect()->back()->with('flash_message', 'New post has been created.');
@@ -1149,7 +1187,7 @@ class PostController extends Controller
                     }
                     
                 }
-                else {
+                else if($data->type_name == 'instagram') {
 
                     $post = $this->post->find($post_id);
                     $filename = $post->featured_image;
@@ -1186,6 +1224,39 @@ class PostController extends Controller
                     }
 
                     $insta_post = $this->insta_post($new_filename, $title, $schedule);
+                }
+                else if ($data->type_name == 'pinterest') {
+                    
+                    $post = $this->post->find($post_id);
+                    $filename = $post->featured_image;
+                    $title = $post->title;
+
+                    $filename = $post->featured_image;
+                    $root = $_SERVER['DOCUMENT_ROOT'];
+                    if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                        $image = $root.$filename;
+                    }
+                    else {
+                        $request_uri = '/public/';
+                        $image = $root.$request_uri.$filename;
+                    }
+
+                    $app_id = getenv('PINTEREST_CLIENT_ID');
+                    $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+                    $callback_url = getenv('PINTEREST_REDIRECT');
+
+                    $token = $data->session;
+                    $board_id = $data->session_secret;
+
+                    $pinterest = new Pinterest($app_id, $app_secret);
+                    $pinterest->auth->setOAuthToken($token);
+                    $caption = $title;
+
+                    $pin = $pinterest->pins->create(array(
+                        "note"          => $caption,
+                        "image"     => $image,
+                        "board"         => $board_id
+                    ));
                 }
             }
 
