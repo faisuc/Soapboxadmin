@@ -562,11 +562,12 @@ class SocialAccountController extends Controller
             // setcookie("access_token", $token->access_token);
 
             /**/
+            echo $token; die();
             $social_id = str_replace('social_id=','',$_GET['state']);
             $social = $this->socialAccount->find($social_id);
             $social->pinterest_token = $token;
             $social->save();
-            
+
             return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         }
         else if (isset($_GET["access_token"])) {
