@@ -142,8 +142,8 @@ class SocialAccountController extends Controller
 
             $app_id = getenv('PINTEREST_CLIENT_ID');
             $app_secret = getenv('PINTEREST_CLIENT_SECRET');
-            // $callback_url = getenv('PINTEREST_REDIRECT').'?social_id='.$social_id;
-            $callback_url = getenv('PINTEREST_REDIRECT');
+            $callback_url = getenv('PINTEREST_REDIRECT').'?social_id='.$social_id;
+            // $callback_url = getenv('PINTEREST_REDIRECT');
             $pinterest = new Pinterest($app_id, $app_secret);
             $pinterest_url = $pinterest->auth->getLoginUrl($callback_url, array('read_public', 'write_public'));
             return redirect()->away($pinterest_url);
