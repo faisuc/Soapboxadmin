@@ -54,6 +54,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('twitter_callback', 'SocialAccountController@twitter_callback');
     /* Twitter */
 
+    /* Twitter */
+    Route::get('pinterest_callback', 'SocialAccountController@pinterest_callback');
+    /* Twitter */
+
     /*Google*/
     Route::get('/redirect_google', 'SocialAccountController@redirectToProvider');
     Route::get('/callback/google', 'SocialAccountController@handleProviderCallback');
