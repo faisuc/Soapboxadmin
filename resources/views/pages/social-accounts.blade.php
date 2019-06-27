@@ -95,6 +95,7 @@
                         <option value="3">Twitter</option>
                         <option value="4">Google Business</option>
                         <option value="5">Instagram</option>
+                        <option value="6">Pinterest</option>
                       </select>
                     </div>
                     <div class="form-group">
