@@ -349,6 +349,7 @@ class PostController extends Controller
                     $app_secret = getenv('PINTEREST_CLIENT_SECRET');
                     $callback_url = getenv('PINTEREST_REDIRECT');
                     $pinterest = new Pinterest($app_id, $app_secret);
+                    $pinterest->auth->setOAuthToken($token);
 
                     /* Get User Boards */
                     $boards = $pinterest->users->getMeBoards();
