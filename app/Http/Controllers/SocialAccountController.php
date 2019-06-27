@@ -562,7 +562,7 @@ class SocialAccountController extends Controller
             // setcookie("access_token", $token->access_token);
 
             /**/
-            $social_id = str_replace('social_id=','',$_GET['social_id']);
+            $social_id = str_replace('social_id=','',$_GET['state']);
             $social = $this->socialAccount->find($social_id);
             $social->pinterest_token = $token;
             $social->save();
