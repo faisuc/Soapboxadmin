@@ -487,7 +487,7 @@ class PostController extends Controller
             $oauth_token_secret = $social_account->twitter_secret;
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
-            $data = array('post_id'=>$post_id,'session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+            $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
             
             /* Direct POST /
