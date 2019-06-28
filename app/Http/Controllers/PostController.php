@@ -777,6 +777,7 @@ class PostController extends Controller
 
         // $token = session()->get('fb_access_token');
         $token = $social_account->facebook_token;
+        $this->api->setAccessToken($token);
         $userdata = $this->api->get('/me', $token);
         $userdata = $userdata->getGraphUser();
         $user_id = $userdata['id'];
