@@ -109,13 +109,13 @@
                     <div id="instagram-acc" style="display: none;">
                         <div class="form-group">
                             <label for="inputInstaUser" class="col-form-label">Instagram Username:</label>
-                            <input type="text" class="form-control" id="inputInstaUser" name="insta_user" required>
+                            <input type="text" class="form-control" id="inputInstaUser" name="insta_user">
                         </div>
                         <div class="form-group">
                             <label for="inputInstaPass" class="col-form-label">Instagram Password:</label>
                             <!-- <input type="text" class="form-control" id="inputInstaPass" name="insta_pass" required> -->
                             <div class="input-group">
-                                <input type="password" class="form-control" id="inputInstaPass" name="insta_pass" required>
+                                <input type="password" class="form-control" id="inputInstaPass" name="insta_pass">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
                                 </span>          
