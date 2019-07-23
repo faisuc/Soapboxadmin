@@ -1213,9 +1213,9 @@ class PostController extends Controller
                     $this->image_save($new_filename, IMAGETYPE_JPEG);
 
                     $response = $this->insta_login($username, $password);
-                    echo "<pre>";
+                    /*echo "<pre>";
                     print_r($response);
-                    die();
+                    die();*/
 
                     if(strpos($response[1], "Sorry")) {
                         echo "Request failed, there's a chance that this proxy/ip is blocked";
@@ -1229,9 +1229,9 @@ class PostController extends Controller
                     }
 
                     $insta_post = $this->insta_post($new_filename, $title, $schedule);
-                    echo "<pre>";
+                    /*echo "<pre>";
                     print_r($insta_post);
-                    die();
+                    die();*/
                 }
                 else if ($data->type_name == 'pinterest') {
                     
