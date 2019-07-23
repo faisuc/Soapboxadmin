@@ -771,7 +771,8 @@ class PostController extends Controller
         $response = array();
         $this->setFacebookObject();
 
-        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+        // $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
 
         // $token = session()->get('fb_access_token');
         $token = $social_account->facebook_token;
