@@ -435,6 +435,7 @@ class PostController extends Controller
             else {
                 $filePath = '/storage/medias/images/' . $fileName;
                 $photo->storeAs('/storage/medias/images/', $fileName);
+                echo $filePath; die();
             }
             $data['photo'] = $fileName;
 
