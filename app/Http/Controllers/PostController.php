@@ -1212,8 +1212,10 @@ class PostController extends Controller
                     $this->image_resize(480,600);
                     $this->image_save($new_filename, IMAGETYPE_JPEG);
 
-                    echo "string"; die();
                     $response = $this->insta_login($username, $password);
+                    echo "<pre>";
+                    print_r($response);
+                    die();
 
                     if(strpos($response[1], "Sorry")) {
                         echo "Request failed, there's a chance that this proxy/ip is blocked";
