@@ -420,10 +420,6 @@ class PostController extends Controller
         $schedule_date = $request->input('schedule_date');
         $status = $request->input('status');
 
-        echo "<pre>";
-        print_r($_SERVER);
-        die();
-
         $data = [];
         $media_id = 0;
 
@@ -432,8 +428,15 @@ class PostController extends Controller
 
             $photo = $request->file('photo');
             $fileName = uniqid() . $photo->getClientOriginalName();
-            $filePath = '/public/medias/images/' . $fileName;
-            $photo->storeAs('/public/medias/images/', $fileName);
+            if($_SERVER['HTTP_HOST'] == '127.0.0.1') {
+                $filePath = '/public/medias/images/' . $fileName;
+                $photo->storeAs('/public/medias/images/', $fileName);
+            }
+            else {
+                $filePath = '/storage/medias/images/' . $fileName;
+                echo $filePath; die();
+                $photo->storeAs('/storage/medias/images/', $fileName);
+            }
             $data['photo'] = $fileName;
 
             $media = new $this->media;
