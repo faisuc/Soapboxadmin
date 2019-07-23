@@ -1190,7 +1190,7 @@ class PostController extends Controller
                     
                 }
                 else if($data->type_name == 'instagram') {
-
+                    
                     $post = $this->post->find($post_id);
                     $filename = $post->featured_image;
                     $title = $post->title;
@@ -1212,6 +1212,7 @@ class PostController extends Controller
                     $this->image_resize(480,600);
                     $this->image_save($new_filename, IMAGETYPE_JPEG);
 
+                    echo "string"; die();
                     $response = $this->insta_login($username, $password);
 
                     if(strpos($response[1], "Sorry")) {
