@@ -1092,6 +1092,9 @@ class PostController extends Controller
             $media_id = $obj['media_id'];       
             $response = $this->insta_postCaption($caption, $media_id);    
             return $response;
+        }
+        else {
+            return false;
         }       
     }
 
@@ -1223,6 +1226,9 @@ class PostController extends Controller
                     }
 
                     $insta_post = $this->insta_post($new_filename, $title, $schedule);
+                    echo "<pre>";
+                    print_r($insta_post);
+                    die();
                 }
                 else if ($data->type_name == 'pinterest') {
                     
