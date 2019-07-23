@@ -425,7 +425,6 @@ class PostController extends Controller
 
         if ($request->has('photo'))
         {
-
             $photo = $request->file('photo');
             $fileName = uniqid() . $photo->getClientOriginalName();
             $filePath = '/public/medias/images/' . $fileName;
