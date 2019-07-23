@@ -9,6 +9,7 @@ use Session;
 use Redirect;
 use URL;
 use Facebook\Exceptions\FacebookSDKException;
+use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
 use Laravel\Socialite\Facades\Socialite;
 use Google_Client;
@@ -135,6 +136,19 @@ class SocialAccountController extends Controller
             $social_new->instagram_password = $request->input('insta_pass');
             $social_new->save();
             return redirect()->back()->with('flash_message', 'Social account has been added.');
+            return redirect()->back()->with('flash_message', 'Social account has been added.');
+        }
+        if($type_id == 6) {
+
+            $app_id = getenv('PINTEREST_CLIENT_ID');
+            $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+            // $callback_url = getenv('PINTEREST_REDIRECT').'?social_id='.$social_id;
+            $callback_url = getenv('PINTEREST_REDIRECT');
+            $pinterest = new Pinterest($app_id, $app_secret);
+            $state = "social_id=".$social_id;
+            $pinterest->auth->setState($state);
+            $pinterest_url = $pinterest->auth->getLoginUrl($callback_url, array('read_public', 'write_public'));
+            return redirect()->away($pinterest_url);
         }
 
     }
@@ -534,4 +548,37 @@ class SocialAccountController extends Controller
         }
     }
     /* Twitter */
+
+    /* Pinterest */
+    public function pinterest_callback()
+    {
+        $app_id = getenv('PINTEREST_CLIENT_ID');
+        $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+        $pinterest = new Pinterest($app_id, $app_secret);
+
+        if (isset($_GET["code"])) {
+            $token = $pinterest->auth->getOAuthToken($_GET["code"]);
+            $pinterest->auth->setOAuthToken($token->access_token);
+            // setcookie("access_token", $token->access_token);
+
+            /**/
+            $pinterest_token = $token->access_token;
+            $social_id = str_replace('social_id=','',$_GET['state']);
+            $social = $this->socialAccount->find($social_id);
+            $social->pinterest_token = $pinterest_token;
+            $social->save();
+
+            return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
+        }
+        else if (isset($_GET["access_token"])) {
+            $pinterest->auth->setOAuthToken($_GET["access_token"]);
+        }
+        else if (isset($_COOKIE["access_token"])) {
+            $pinterest->auth->setOAuthToken($_COOKIE["access_token"]);
+        }
+        else {
+            // assert(false);
+        }
+    }
+    /* Pinterest */
 }

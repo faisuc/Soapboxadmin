@@ -209,9 +209,13 @@ jQuery(document).ready(function($) {
         let val = $(this).val();
         if(val == '5') {
             $('#instagram-acc').show();
+            $('#instagram-acc').find('#inputInstaUser').attr('required','required');
+            $('#instagram-acc').find('#inputInstaPass').attr('required','required');
         }
         else {
             $('#instagram-acc').hide();
+            $('#instagram-acc').find('#inputInstaUser').removeAttr('required');
+            $('#instagram-acc').find('#inputInstaPass').removeAttr('required');
         }
     });
     $(document).on('mousedown',".reveal", function() {
@@ -224,5 +228,17 @@ jQuery(document).ready(function($) {
         $("#inputInstaPass").replaceWith($('#inputInstaPass').clone().attr('type', 'password'));
     });
     /* Instagram Account For Social Account */
+
+    /* Pinterest Board Display For Post */
+    $(document).on('change','input[name="pinterest_post"]',function() {
+        let check = $(this).prop('checked');
+        if(check) {
+            $('#pinterest-boards').show();
+        }
+        else {
+            $('#pinterest-boards').hide();
+        }
+    });
+    /* Pinterest Board Display For Post */
 
 });
