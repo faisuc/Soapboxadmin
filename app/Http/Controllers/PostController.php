@@ -420,6 +420,10 @@ class PostController extends Controller
         $schedule_date = $request->input('schedule_date');
         $status = $request->input('status');
 
+        echo "<pre>";
+        print_r($_SERVER);
+        die();
+
         $data = [];
         $media_id = 0;
 
