@@ -1154,10 +1154,6 @@ class PostController extends Controller
     public function run_cron()
     {
 
-        $d = mail('kunalsoni3331@gmail.com', 'Cron Subject', 'Cron message');
-        var_dump($d);
-        die();
-
         $callback_url = getenv('TWITTER_REDIRECT');
         $consumer_key = getenv('TWITTER_CLIENT_ID');
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
