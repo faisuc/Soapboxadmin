@@ -47,9 +47,10 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
-	            // $parameters = array('screen_name' => 'KunalSo98628814');
-	            $parameters = array();
+	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            $url = 'https://api.twitter.com/1.1/users/show.json';
+	            $parameters = array('screen_name' => 'KunalSo98628814');
+	            // $parameters = array();
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
@@ -198,15 +199,6 @@ class DashboardController extends Controller
             /*$get_url = $url."?".http_build_query($the_param);
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
-
-            $oauth = array(
-			    'oauth_consumer_key' => $key,
-	            'oauth_nonce' => (string)mt_rand(),
-	            'oauth_signature_method' => 'HMAC-SHA1',
-	            'oauth_timestamp' => time(),
-	            'oauth_token' => $token,
-	            'oauth_version' => '1.0',
-			);
 
             $query = $parameters;
 
