@@ -57,9 +57,9 @@ class DashboardController extends Controller
 	            $data['twitter_follower'] = $result;
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
-	                echo "<pre>";
+	                /*echo "<pre>";
 	                print_r($result);
-	                die();
+	                die();*/
 	            }
         	}
         }
