@@ -47,12 +47,14 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
-	            // $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=KunalSo98628814';
+	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=KunalSo98628814';
 	            // $url = 'https://api.twitter.com/1.1/users/show.json';
 	            // $parameters = array('screen_name' => 'KunalSo98628814');
 	            $parameters = array();
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+	            $result = json_decode($result,true);
+	            $data['twitter_follower'] = $result;
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
 	                echo "<pre>";
