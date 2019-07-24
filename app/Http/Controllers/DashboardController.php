@@ -194,9 +194,36 @@ class DashboardController extends Controller
         }
 
         else{
-            $get_url = $url."?".http_build_query($the_param);
+            /*$get_url = $url."?".http_build_query($the_param);
             $result = file_get_contents($get_url);        
-            $json = json_decode($result, true);
+            $json = json_decode($result, true);*/
+            $ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+			$headers = array();
+			$param = array(
+	            'oauth_consumer_key' => $key,
+	            'oauth_nonce' => time(),
+	            'oauth_signature_method' => 'HMAC-SHA1',
+	            'oauth_timestamp' => time(),
+	            'oauth_token' => $token,
+	            'oauth_version' => '1.0',
+	        );
+			$headers[] = 'Authorization: OAuth oauth_consumer_key=\"$key\", 
+			  oauth_nonce=\"generated-nonce\", oauth_signature=\"generated-signature\", 
+			  oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"generated-timestamp\", 
+			  oauth_version=\"1.0\"';
+			echo "<pre>";
+			print_r($headers);
+			die();
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+			$result = curl_exec($ch);
+			if (curl_errno($ch)) {
+			    echo 'Error:' . curl_error($ch);
+			}
+			curl_close($ch);
             return $json;
         }
     }
