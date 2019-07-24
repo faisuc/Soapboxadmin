@@ -208,6 +208,9 @@ class DashboardController extends Controller
 			$headers[] = 'Content-Type: application/x-www-form-urlencoded\r\n';
 			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_token="'.$token.'", oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			echo "<pre>";
+			print_r($headers);
+			die();
 			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
