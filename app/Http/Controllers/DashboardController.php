@@ -47,8 +47,9 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            $url = 'https://api.twitter.com/1.1/statuses/show.json';
-	            $parameters = array('screen_name' => 'KunalSo98628814');
+	            $url = 'https://api.twitter.com/1.1/statuses/show.json?screen_name=KunalSo98628814';
+	            // $parameters = array('screen_name' => 'KunalSo98628814');
+	            $parameters = array();
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
@@ -198,18 +199,15 @@ class DashboardController extends Controller
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
 
-            $composite_key = $key_secret."&".$token_secret;
-        	$oauth_signature = base64_encode(hash_hmac('sha1', $base_string, $composite_key, true));
-            
             $ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
 			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", 
-			  oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", 
-			  oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", 
-			  oauth_version="1.0"';
+			  	oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", 
+			  	oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", 
+			  	oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
