@@ -48,7 +48,7 @@ class DashboardController extends Controller
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
 	            $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-	            $parameters = array('screen_name' => 'REPLACE_ME');
+	            $parameters = array('screen_name' => 'KunalSo98628814');
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
