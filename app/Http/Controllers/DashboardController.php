@@ -40,6 +40,10 @@ class DashboardController extends Controller
         if(!empty($twitter_account)) {
         	
         	if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
+
+        		$consumer_key = getenv('TWITTER_CLIENT_ID');
+            	$consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
