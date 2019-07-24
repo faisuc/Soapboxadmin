@@ -210,11 +210,7 @@ class DashboardController extends Controller
 			  oauth_nonce='.time().', oauth_signature='.$oauth_signature.', 
 			  oauth_signature_method=HMAC-SHA1, oauth_timestamp='.time().', 
 			  oauth_version=\"1.0\"';
-			echo "<pre>";
-			print_r($headers);
-			die();
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
 			$result = curl_exec($ch);
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
