@@ -199,23 +199,32 @@ class DashboardController extends Controller
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
 
-            $ch = curl_init();
+            $options = array('http' =>
+                array(
+                    'method'  => $get_method,
+                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+                    'content'  => http_build_query($the_param)
+                )
+            );
+            $context  = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            $json = json_decode($result, true);
+
+            return $json;
+
+            /*$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
-			/*$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", 
-			  	oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", 
-			  	oauth_signature_method="HMAC-SHA1", oauth_token="'.$token.'", oauth_timestamp="'.time().'", 
-			  	oauth_version="1.0"';*/
-		  	$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_version="1.0"';
+			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
 			}
 			curl_close($ch);
-            return $json;
+            return $json;*/
         }
     }
     /* Twitter */
