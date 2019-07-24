@@ -55,13 +55,12 @@ class DashboardController extends Controller
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
-	                echo "<pre>";
+	                /*echo "<pre>";
 	                print_r($result);
-	                die();
+	                die();*/
 	            }
         	}
         }
-
 
         return view('pages.dashboard', $data);
 
