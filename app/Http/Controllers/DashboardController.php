@@ -232,8 +232,11 @@ class DashboardController extends Controller
 			$oauth['oauth_signature'] = $signature;
 			ksort($oauth);
 
-			function add_quotes($str) { return '"'.$str.'"'; }
-			$oauth = array_map("add_quotes", $oauth);
+			// function add_quotes($str) { return '"'.$str.'"'; }
+			// $oauth = array_map("add_quotes", $oauth);
+			$oauth = array_map(function ($str) {
+			    return '"'.$str.'"';
+			}, $oauth);
 
 			$auth = "OAuth " . urldecode(http_build_query($oauth, '', ', '));
 
