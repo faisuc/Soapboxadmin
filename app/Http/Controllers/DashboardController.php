@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
 	            $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 	            $parameters = array('screen_name' => 'REPLACE_ME');
-	            $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
 	                echo "<pre>";
