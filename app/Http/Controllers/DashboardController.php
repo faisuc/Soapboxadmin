@@ -199,7 +199,64 @@ class DashboardController extends Controller
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
 
-            $ch = curl_init();
+            $oauth = array(
+			    'oauth_consumer_key' => $key,
+	            'oauth_nonce' => (string)mt_rand(),
+	            'oauth_signature_method' => 'HMAC-SHA1',
+	            'oauth_timestamp' => time(),
+	            'oauth_token' => $token,
+	            'oauth_version' => '1.0',
+			);
+
+            $query = $parameters;
+
+            $oauth = array_map("rawurlencode", $oauth);
+			$query = array_map("rawurlencode", $query);
+
+			$arr = array_merge($oauth, $query);
+
+			asort($arr);
+			ksort($arr);
+
+			$querystring = urldecode(http_build_query($arr, '', '&'));
+
+			$base_string = $method."&".rawurlencode($url)."&".rawurlencode($querystring);
+
+			$key = rawurlencode($key_secret)."&".rawurlencode($token_secret);
+
+			$signature = rawurlencode(base64_encode(hash_hmac('sha1', $base_string, $key, true)));
+
+			$url .= "?".http_build_query($query);
+			$url=str_replace("&amp;","&",$url);
+
+			$oauth['oauth_signature'] = $signature;
+			ksort($oauth);
+
+			function add_quotes($str) { return '"'.$str.'"'; }
+			$oauth = array_map("add_quotes", $oauth);
+
+			$auth = "OAuth " . urldecode(http_build_query($oauth, '', ', '));
+
+			$options = array( CURLOPT_HTTPHEADER => array("Authorization: $auth"),
+          		//CURLOPT_POSTFIELDS => $postfields,
+          		CURLOPT_HEADER => false,
+          		CURLOPT_URL => $url,
+          		CURLOPT_RETURNTRANSFER => true,
+          		CURLOPT_SSL_VERIFYPEER => false
+          	);
+			
+			$ch = curl_init();
+			curl_setopt_array($ch, $options);
+			$json = curl_exec($ch);
+			curl_close($ch);
+
+			$twitter_data = json_decode($json);
+			echo "<pre>";
+			print_r($twitter_data);
+			die();
+
+
+            /*$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -214,7 +271,7 @@ class DashboardController extends Controller
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
 			}
-			curl_close($ch);
+			curl_close($ch);*/
             return $json;
         }
     }
