@@ -195,7 +195,6 @@ class DashboardController extends Controller
 
         else{
             $get_url = $url."?".http_build_query($the_param);
-            echo $get_url; die();
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);
             return $json;
