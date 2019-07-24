@@ -211,7 +211,7 @@ class DashboardController extends Controller
 			  oauth_signature_method=HMAC-SHA1, oauth_timestamp='.time().', 
 			  oauth_version=\"1.0\"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-			$result = curl_exec($ch);
+			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
 			}
