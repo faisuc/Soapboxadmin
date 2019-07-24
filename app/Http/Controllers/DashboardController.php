@@ -47,10 +47,10 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
-	            $url = 'https://api.twitter.com/1.1/users/show.json';
-	            $parameters = array('screen_name' => 'KunalSo98628814');
-	            // $parameters = array();
+	            $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            // $url = 'https://api.twitter.com/1.1/users/show.json';
+	            // $parameters = array('screen_name' => 'KunalSo98628814');
+	            $parameters = array();
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
 	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
@@ -200,82 +200,19 @@ class DashboardController extends Controller
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
 
-            $oauth = array(
-			    'oauth_consumer_key' => $key,
-	            'oauth_nonce' => (string)mt_rand(),
-	            'oauth_signature_method' => 'HMAC-SHA1',
-	            'oauth_timestamp' => time(),
-	            'oauth_token' => $token,
-	            'oauth_version' => '1.0',
-			);
-
-            $query = $parameters;
-
-            $oauth = array_map("rawurlencode", $oauth);
-			$query = array_map("rawurlencode", $query);
-
-			$arr = array_merge($oauth, $query);
-
-			asort($arr);
-			ksort($arr);
-
-			$querystring = urldecode(http_build_query($arr, '', '&'));
-
-			$base_string = $method."&".rawurlencode($url)."&".rawurlencode($querystring);
-
-			$key = rawurlencode($key_secret)."&".rawurlencode($token_secret);
-
-			$signature = rawurlencode(base64_encode(hash_hmac('sha1', $base_string, $key, true)));
-
-			$url .= "?".http_build_query($query);
-			$url=str_replace("&amp;","&",$url);
-
-			$oauth['oauth_signature'] = $signature;
-			ksort($oauth);
-
-			// function add_quotes($str) { return '"'.$str.'"'; }
-			// $oauth = array_map("add_quotes", $oauth);
-			$oauth = array_map(function ($str) {
-			    return '"'.$str.'"';
-			}, $oauth);
-
-			$auth = "OAuth " . urldecode(http_build_query($oauth, '', ', '));
-
-			$options = array( CURLOPT_HTTPHEADER => array("Authorization: $auth"),
-          		//CURLOPT_POSTFIELDS => $postfields,
-          		CURLOPT_HEADER => false,
-          		CURLOPT_URL => $url,
-          		CURLOPT_RETURNTRANSFER => true,
-          		CURLOPT_SSL_VERIFYPEER => false
-          	);
-			
-			$ch = curl_init();
-			curl_setopt_array($ch, $options);
-			$json = curl_exec($ch);
-			curl_close($ch);
-
-			$twitter_data = json_decode($json);
-			echo "<pre>";
-			print_r($twitter_data);
-			die();
-
-
-            /*$ch = curl_init();
+            $ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
 			$headers[] = 'Content-Type: application/x-www-form-urlencoded\r\n';
-			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_version="'.$token.'", oauth_version="1.0"';
-			echo "<pre>";
-			print_r($headers);
-			die();
+			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_token="'.$token.'", oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
 			    echo 'Error:' . curl_error($ch);
 			}
-			curl_close($ch);*/
+			curl_close($ch);
             return $json;
         }
     }
