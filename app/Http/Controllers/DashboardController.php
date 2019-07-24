@@ -206,10 +206,10 @@ class DashboardController extends Controller
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
-			$headers[] = 'Authorization: OAuth oauth_consumer_key='.$key.', 
-			  oauth_nonce='.time().', oauth_signature='.$oauth_signature.', 
-			  oauth_signature_method=HMAC-SHA1, oauth_timestamp='.time().', 
-			  oauth_version=\"1.0\"';
+			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", 
+			  oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", 
+			  oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", 
+			  oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			$json = curl_exec($ch);
 			if (curl_errno($ch)) {
