@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         	if($facebook_account->facebook_token) {
                 $token = $facebook_account->facebook_token;
-                $userdata = $this->api->get('/me', $token);
+                $userdata = $this->api->get('/me/subscribers', $token);
                 if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
 	                echo "<pre>";
 	                print_r($userdata);
