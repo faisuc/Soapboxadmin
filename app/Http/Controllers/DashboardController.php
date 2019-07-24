@@ -47,7 +47,8 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_name=KunalSo98628814';
 	            // $url = 'https://api.twitter.com/1.1/users/show.json';
 	            // $parameters = array('screen_name' => 'KunalSo98628814');
 	            $parameters = array();
@@ -205,6 +206,19 @@ class DashboardController extends Controller
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			$json = curl_exec($ch);
+			if (curl_errno($ch)) {
+			    echo 'Error:' . curl_error($ch);
+			}
+			curl_close($ch);
+            return $json;
+
+            /*$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+			$headers = array();
 			$headers[] = 'Content-Type: application/x-www-form-urlencoded\r\n';
 			$headers[] = 'Authorization: OAuth oauth_consumer_key="'.$key.'", oauth_nonce="'.time().'", oauth_signature="'.$oauth_signature.'", oauth_signature_method="HMAC-SHA1", oauth_timestamp="'.time().'", oauth_token="'.$token.'", oauth_version="1.0"';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -216,7 +230,7 @@ class DashboardController extends Controller
 			    echo 'Error:' . curl_error($ch);
 			}
 			curl_close($ch);
-            return $json;
+            return $json;*/
         }
     }
     /* Twitter */
