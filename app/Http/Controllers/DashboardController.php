@@ -200,6 +200,15 @@ class DashboardController extends Controller
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
 
+            $oauth = array(
+			    'oauth_consumer_key' => $key,
+	            'oauth_nonce' => (string)mt_rand(),
+	            'oauth_signature_method' => 'HMAC-SHA1',
+	            'oauth_timestamp' => time(),
+	            'oauth_token' => $token,
+	            'oauth_version' => '1.0',
+			);
+
             $query = $parameters;
 
             $oauth = array_map("rawurlencode", $oauth);
