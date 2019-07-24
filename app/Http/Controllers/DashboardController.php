@@ -197,22 +197,18 @@ class DashboardController extends Controller
             /*$get_url = $url."?".http_build_query($the_param);
             $result = file_get_contents($get_url);        
             $json = json_decode($result, true);*/
+
+            $composite_key = $key_secret."&".$token_secret;
+        	$oauth_signature = base64_encode(hash_hmac('sha1', $base_string, $composite_key, true));
+            
             $ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 			$headers = array();
-			$param = array(
-	            'oauth_consumer_key' => $key,
-	            'oauth_nonce' => time(),
-	            'oauth_signature_method' => 'HMAC-SHA1',
-	            'oauth_timestamp' => time(),
-	            'oauth_token' => $token,
-	            'oauth_version' => '1.0',
-	        );
-			$headers[] = 'Authorization: OAuth oauth_consumer_key=\"$key\", 
-			  oauth_nonce=\"generated-nonce\", oauth_signature=\"generated-signature\", 
-			  oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"generated-timestamp\", 
+			$headers[] = 'Authorization: OAuth oauth_consumer_key='.$key.', 
+			  oauth_nonce='.time().', oauth_signature='.$oauth_signature.', 
+			  oauth_signature_method=HMAC-SHA1, oauth_timestamp='.time().', 
 			  oauth_version=\"1.0\"';
 			echo "<pre>";
 			print_r($headers);
