@@ -39,9 +39,9 @@ class DashboardController extends Controller
         $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($twitter_account)) {
         	
-        	if($social_account->twitter_session && $social_account->twitter_secret) {
-	        	$oauth_token = $social_account->twitter_session;
-	            $oauth_token_secret = $social_account->twitter_secret;
+        	if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
+	        	$oauth_token = $twitter_account->twitter_session;
+	            $oauth_token_secret = $twitter_account->twitter_secret;
 
 	            $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 	            $parameters = array('screen_name' => 'REPLACE_ME');
