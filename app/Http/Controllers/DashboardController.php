@@ -47,8 +47,8 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
-	            $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=KunalSo98628814';
+	            $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
+	            // $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=KunalSo98628814';
 	            // $url = 'https://api.twitter.com/1.1/users/show.json';
 	            // $parameters = array('screen_name' => 'KunalSo98628814');
 	            $parameters = array();
