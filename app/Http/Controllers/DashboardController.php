@@ -47,7 +47,7 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+	            $url = 'https://api.twitter.com/1.1/statuses/show.json';
 	            $parameters = array('screen_name' => 'KunalSo98628814');
 	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
 
