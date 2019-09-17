@@ -142,9 +142,9 @@ class DashboardController extends Controller
             $response = curl_exec($curl);
             curl_close($curl);
             $response = json_decode($response,true);
-            /*echo "<pre>";
+            echo "<pre>";
             print_r($response);
-            echo "</pre>";exit;*/
+            echo "</pre>";exit;
             $data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
             $data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
             $data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
