@@ -425,7 +425,6 @@ class PostController extends Controller
 
         if ($request->has('photo'))
         {
-
             $photo = $request->file('photo');
             $fileName = uniqid() . $photo->getClientOriginalName();
             $filePath = '/public/medias/images/' . $fileName;
@@ -772,7 +771,8 @@ class PostController extends Controller
         $response = array();
         $this->setFacebookObject();
 
-        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+        // $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get()->first();
+        $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
 
         // $token = session()->get('fb_access_token');
         $token = $social_account->facebook_token;
@@ -1093,6 +1093,9 @@ class PostController extends Controller
             $media_id = $obj['media_id'];       
             $response = $this->insta_postCaption($caption, $media_id);    
             return $response;
+        }
+        else {
+            return false;
         }       
     }
 
@@ -1188,7 +1191,7 @@ class PostController extends Controller
                     
                 }
                 else if($data->type_name == 'instagram') {
-
+                    
                     $post = $this->post->find($post_id);
                     $filename = $post->featured_image;
                     $title = $post->title;
@@ -1211,6 +1214,9 @@ class PostController extends Controller
                     $this->image_save($new_filename, IMAGETYPE_JPEG);
 
                     $response = $this->insta_login($username, $password);
+                    /*echo "<pre>";
+                    print_r($response);
+                    die();*/
 
                     if(strpos($response[1], "Sorry")) {
                         echo "Request failed, there's a chance that this proxy/ip is blocked";
@@ -1224,6 +1230,9 @@ class PostController extends Controller
                     }
 
                     $insta_post = $this->insta_post($new_filename, $title, $schedule);
+                    /*echo "<pre>";
+                    print_r($insta_post);
+                    die();*/
                 }
                 else if ($data->type_name == 'pinterest') {
                     

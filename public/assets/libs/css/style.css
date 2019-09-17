@@ -1951,6 +1951,54 @@ Container / Wrapper
     padding: 30px 30px 60px 30px;
 }
 
+/*-----------------------
+Social Cards
+-------------------------*/
+.social_card {
+    /*border: #ccc solid 1px;*/
+    border-radius: 10px;
+    padding: 20px;
+    background: #fff;
+}
+.social_card .card_header {
+    border-bottom: #ccc solid 1px;
+    margin-bottom: 10px;
+}
+.social_card .card_header h3, .social_card .card_header p {
+    margin-bottom: 10px;
+}
+.social_card .card_section {
+    border-bottom: #ccc solid 1px;
+    margin-bottom: 10px;
+}
+.social_card .card_section .main {
+    margin-right: 5px;
+}
+
+.social_card .card_section .main-title {
+    position: relative;    
+    min-height: 40px;
+    color: #000;
+}
+.social_card .card_section .main-title .up-down-price b{
+
+}
+.social_card .card_section .main-title .up-down-price{
+    font-size: 20px;
+    position: absolute;
+    right: 0px;
+    top: -5px;
+}
+.social_card .card_section .main-title .up-down-price .prise-down-up{
+    width: 70px;
+    color: #666;
+    display: inline-block;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
 
 /*-----------------------
 Splash Container / Wrapper
@@ -2065,6 +2113,8 @@ Pageheader
     background-color: #fff;
     width: 100%;
     /*position: absolute; bottom: 0;*/
+    position: fixed;
+    bottom: 0;
 }
 
 .footer-links {}

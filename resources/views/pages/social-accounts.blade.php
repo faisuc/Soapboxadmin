@@ -108,7 +108,11 @@
                     </div>
                     <div id="instagram-acc" style="display: none;">
                         <div class="form-group">
-                            <label for="inputInstaUser" class="col-form-label">Instagram Username:</label>
+                            <label for="inputInstaUsername" class="col-form-label">Instagram Username:</label>
+                            <input type="text" class="form-control" id="inputInstaUsername" name="insta_username">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputInstaUser" class="col-form-label">Instagram Email:</label>
                             <input type="text" class="form-control" id="inputInstaUser" name="insta_user">
                         </div>
                         <div class="form-group">
