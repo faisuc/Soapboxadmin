@@ -132,7 +132,6 @@ class DashboardController extends Controller
         if(!empty($instagram_account)) {
             /*$email = $instagram_account->instagram_user;
             $password = $instagram_account->instagram_password;*/
-            // $username = 'misalbhimani';
             $username = $instagram_account->instagram_username;
             $apiurl = 'https://www.instagram.com/'.$username.'/?__a=1';
             $curl = curl_init();

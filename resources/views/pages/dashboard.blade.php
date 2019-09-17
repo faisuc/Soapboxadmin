@@ -138,7 +138,7 @@
 	            				<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $insta_total_fans; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
 		            		</div>
 		            		<div class="card_section">
-		            			<p class="main-title">Total Following1: <span class="up-down-price"><?php echo $insta_total_following; ?> <!-- span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
+		            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $insta_total_following; ?> <!-- span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
 		            		</div>
 		            		<div class="card_section">
 		            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $insta_total_likes; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
