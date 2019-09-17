@@ -54,7 +54,8 @@
 		            			$fb_talking_about_count = $talking_about_count;
 		            			$fb_fan_count = $fan_count;
 		            			$fb_rating_count = $rating_count;
-		            			$fb_new_like_count = $new_like_count;
+		            			// $fb_new_like_count = $new_like_count;
+		            			$fb_published_posts_count = $published_posts_count;
 		            		}
 		            		?>
 		            		<div class="card_section">		            			
@@ -67,7 +68,7 @@
 	            				<p class="main-title">Total Rating Count: <span class="up-down-price"><?php echo $fb_rating_count; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
 		            		</div>
 		            		<div class="card_section">
-	            				<p class="main-title">Total New Likes: <span class="up-down-price"><?php echo $fb_new_like_count; ?> <!--span class="text-danger"><i class="fa fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+	            				<p class="main-title">Total Posts Summary: <span class="up-down-price"><?php echo $fb_published_posts_count; ?> <!--span class="text-danger"><i class="fa fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
 		            		</div>		            		
 	            		</div>
 

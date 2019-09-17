@@ -42,7 +42,8 @@ class DashboardController extends Controller
                 // $fandata = $fb->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count',$page_token);
                 $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
                 $fandata = $fandata->getDecodedBody();
-                
+
+                // echo $fandata['published_posts']['summary']['total_count'];exit;
                 /*echo '<pre>';
                 print_r($fandata);exit;*/
 
@@ -51,7 +52,7 @@ class DashboardController extends Controller
                 $data['fan_count'] = $fandata['fan_count'];
                 $data['rating_count'] = $fandata['rating_count'];
                 // $data['new_like_count'] = $fandata['new_like_count'];
-                $data['new_like_count'] = $fandata['new_like_count'];
+                $data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
                 $data['facebook_follower'] = true;
              
                 // $userdata = $this->api->get('/me/subscribers', $token);
