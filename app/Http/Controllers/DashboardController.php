@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sentinel;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
+use App\Http\Controllers\TwitterAPIExchange;
 
 class DashboardController extends Controller
 {
@@ -17,14 +18,42 @@ class DashboardController extends Controller
 
         $data = [];
 
-        /* Facebook Page */
+        /* Facebook Page Info start */
         $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($facebook_account)) {
         	
-        	$this->setFacebookObject();
+            $this->setFacebookObject();
 
         	if($facebook_account->facebook_token) {
                 $token = $facebook_account->facebook_token;
+                /*echo '<pre>';
+                print_r($facebook_account);exit;*/
+
+                // $accounts = $fb->get('me/accounts',$token);
+                $accounts = $this->api->get('me/accounts',$token);
+                $userData2 = $accounts->getDecodedBody();
+                /*echo '<pre>';
+                print_r($userData2);exit;*/
+
+                $page_id = $userData2['data'][0]['id'];
+                $page_token = $userData2['data'][0]['access_token'];
+                // echo 'new_'.$page_token;exit;
+
+                // $fandata = $fb->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count',$page_token);
+                $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
+                $fandata = $fandata->getDecodedBody();
+                
+                /*echo '<pre>';
+                print_r($fandata);exit;*/
+
+
+                $data['talking_about_count'] = $fandata['talking_about_count'];
+                $data['fan_count'] = $fandata['fan_count'];
+                $data['rating_count'] = $fandata['rating_count'];
+                // $data['new_like_count'] = $fandata['new_like_count'];
+                $data['new_like_count'] = $fandata['new_like_count'];
+                $data['facebook_follower'] = true;
+             
                 // $userdata = $this->api->get('/me/subscribers', $token);
                 if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
 	                /*echo "<pre>";
@@ -34,12 +63,15 @@ class DashboardController extends Controller
             }
 
         }
-        /* Facebook Page */
-        /* Twitter */
+        /* Facebook Page Info End */
+
+        /* Twitter Info start */
         $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($twitter_account)) {
         	
-        	if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
+            // echo $twitter_account->twitter_session.'==>'.$twitter_account->twitter_secret;exit;
+
+            if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
 
         		$consumer_key = getenv('TWITTER_CLIENT_ID');
             	$consumer_secret = getenv('TWITTER_CLIENT_SECRET');
@@ -47,22 +79,79 @@ class DashboardController extends Controller
 	        	$oauth_token = $twitter_account->twitter_session;
 	            $oauth_token_secret = $twitter_account->twitter_secret;
 
-	            // $url = 'https://api.twitter.com/1.1/users/show.json?screen_name=KunalSo98628814';
-	            $url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=KunalSo98628814';
-	            // $url = 'https://api.twitter.com/1.1/users/show.json';
-	            // $parameters = array('screen_name' => 'KunalSo98628814');
-	            $parameters = array();
-	            $result = $this->Request($url, 'get', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
-	            $result = json_decode($result,true);
-	            $data['twitter_follower'] = $result;
+                $settings = array(
+                    'oauth_access_token' => $oauth_token,
+                    'oauth_access_token_secret' => $oauth_token_secret,
+                    'consumer_key' => $consumer_key,
+                    'consumer_secret' => $consumer_secret
+                );
 
-	            if($_SERVER['REMOTE_ADDR'] == '103.90.44.199') {
-	                /*echo "<pre>";
-	                print_r($result);
-	                die();*/
-	            }
+                /*$url = "https://api.twitter.com/1.1/statuses/home_timeline.json";
+                // $url = "https://api.twitter.com/1.1/followers/list.json";
+                $requestMethod = "GET";
+                $getfield = '';*/
+                $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+                $requestMethod = "GET";
+                $getfield = '?tweet_mode=extended';
+
+                $twitter = new TwitterAPIExchange($settings);
+                $string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+
+
+                if(!empty($string)) {
+                    foreach($string as $tweets) {
+                        $user_id = $tweets['user']['id_str'];
+                        $name = $tweets['user']['name'];
+                        $screen_name = $tweets['user']['screen_name'];
+                        $followers = $tweets['user']['followers_count'];
+                        $friends = $tweets['user']['friends_count'];
+                        $likes = $tweets['user']['favourites_count'];
+                        $statuses = $tweets['user']['statuses_count'];
+                    }
+
+                    $data['name'] = $name;
+                    $data['screen_name'] = $screen_name;
+                    $data['followers'] = $followers;
+                    $data['friends'] = $friends;
+                    $data['likes'] = $likes;
+                    $data['statuses'] = $statuses;
+                    $data['twitter_follower'] = true;
+
+                    /**************************************************/
+                    /*echo "<pre>";
+                    print_r($data);
+                    die();*/
+                }
         	}
         }
+        /* Twitter Info End*/
+
+        /* Instagram Info Start*/
+        $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        if(!empty($instagram_account)) {
+            /*$email = $instagram_account->instagram_user;
+            $password = $instagram_account->instagram_password;*/
+            // $username = 'misalbhimani';
+            $username = $instagram_account->instagram_username;
+            $apiurl = 'https://www.instagram.com/'.$username.'/?__a=1';
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $apiurl);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $response = json_decode($response,true);
+            /*echo "<pre>";
+            print_r($response);
+            echo "</pre>";exit;*/
+            $data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
+            $data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
+            $data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
+            $data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
+            $data['instagram_follower'] = true;
+        }
+        /* Instagram Info End*/
 
         return view('pages.dashboard', $data);
 

@@ -134,8 +134,9 @@ class SocialAccountController extends Controller
             $social_new = $this->socialAccount->find($social_id);
             $social_new->instagram_user = $request->input('insta_user');
             $social_new->instagram_password = $request->input('insta_pass');
+            $social_new->instagram_username = $request->input('insta_username');
             $social_new->save();
-            return redirect()->back()->with('flash_message', 'Social account has been added.');
+
             return redirect()->back()->with('flash_message', 'Social account has been added.');
         }
         if($type_id == 6) {
