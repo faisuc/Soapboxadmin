@@ -142,14 +142,16 @@ class DashboardController extends Controller
             $response = curl_exec($curl);
             curl_close($curl);
             $response = json_decode($response,true);
-            echo "<pre>";
+            /*echo "<pre>";
             print_r($response);
-            echo "</pre>";exit;
-            $data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
-            $data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
-            $data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
-            $data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
-            $data['instagram_follower'] = true;
+            echo "</pre>";exit;*/
+            if(isset($response['graphql'])) {
+                $data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
+                $data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
+                $data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
+                $data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
+                $data['instagram_follower'] = true;
+            }
         }
         /* Instagram Info End*/
 
