@@ -201,13 +201,14 @@ class DashboardController extends Controller
         // $wh = ['field' => 'value', 'another_field' => 'another_value', ...];
         // $wh = ['user_id' => $user_id, 'created_at' => $seven];
 
-        // $data['info'] = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
-        $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
+        
+        $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id]])->orderBy('id', 'DESC')->limit(1)->get();
+        // $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
         
         
         /*echo '<pre>';
         print_r($data['past_info']);exit;*/
-        $data['hi'] = "this istest";
+        // $data['hi'] = "this istest";
         
         return view('pages.dashboard', $data);
 

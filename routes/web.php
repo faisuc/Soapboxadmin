@@ -65,11 +65,13 @@ Route::middleware(['auth'])->group(function() {
     /*Google*/
 
     /* Social Cell */
-    // Route::get('socialcell/{user_id?}', 'SocialCellController@index');
-    // Route::get('/redirect_google', 'SocialAccountController@redirectToProvider');
+    Route::get('socialcell/{cell_id?}', 'SocialCellController@index');
     Route::get('socialcell', 'SocialCellController@index');
     Route::get('socialcell/add', 'SocialCellController@add_social_cell');
     Route::post('socialcell/store', 'SocialCellController@store');
+    Route::get('socialcell/edit/{cell_id}', 'SocialCellController@edit');
+    Route::post('socialcell/update/{cell_id}', 'SocialCellController@update');
+    Route::get('socialcell/delete/{cell_id}', 'SocialCellController@delete');
     /* Social Cell */
 
 
