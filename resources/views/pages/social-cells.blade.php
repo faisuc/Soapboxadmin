@@ -42,7 +42,7 @@
                                 <p class="card-text">Owner Mail : {{ $socialcell->email_owner }} </p>
                                 <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer }} </p>
                                 <p class="card-text">Client Mail : {{ $socialcell->email_client }} </p>
-                                <p class="card-text">Payment Status : {{ ($socialcell->payment_status == '1' ? 'Awaiting' : 'Done') }} </p>
+                                <p class="card-text">Payment Status : {{ ($socialcell->payment_status == '1' ? 'Waiting Payment' : 'Done') }} </p>
                                 <!-- <a href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a> -->
                                 <!-- <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a> -->
                             </div>
