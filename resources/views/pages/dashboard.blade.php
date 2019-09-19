@@ -127,7 +127,7 @@
 		            	</div>
 		            <?php } */ ?>
 
-					<?php if(isset($twitter_follower)) {?>
+					<?php /*if(isset($twitter_follower)) {?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">
 			            		<div class="card_header">
@@ -211,9 +211,9 @@
 		            		</div>
 
 		            	</div>
-		            <?php }?>
+		            <?php }*/ ?>
 
-					<?php if(isset($instagram_follower)) {?>
+					<?php /*if(isset($instagram_follower)) {?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">	
 			            		<div class="card_header">
@@ -296,7 +296,7 @@
 		            		</div>
 
 		            	</div>
-		            <?php }?>
+		            <?php }*/ ?>
 
 	            </div>
 
