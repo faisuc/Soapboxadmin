@@ -201,17 +201,8 @@ class DashboardController extends Controller
         // $wh = ['field' => 'value', 'another_field' => 'another_value', ...];
         // $wh = ['user_id' => $user_id, 'created_at' => $seven];
 
-        
         $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id]])->orderBy('id', 'DESC')->limit(1)->get();
         // $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
-        
-        // $data['past_info_count'] = count($data['past_info']);
-        echo '<pre>';
-        print_r($data['past_info']);
-        echo '</pre>';
-        echo 'total'.count($data['past_info']);
-        exit;
-        // $data['hi'] = "this istest";
         
         return view('pages.dashboard', $data);
 
