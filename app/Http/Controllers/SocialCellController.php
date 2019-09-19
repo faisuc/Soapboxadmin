@@ -88,9 +88,9 @@ class SocialCellController extends Controller
     {
         $validatedData = $request->validate([
             'cellname' => 'required|min:4',
-            'email_owner' => 'required|email|unique:social_cell,email_owner,$cell_id',
+            /*'email_owner' => 'required|email|unique:social_cell,email_owner,$cell_id',
             'email_marketer' => 'required|email|unique:social_cell,email_marketer,$cell_id',
-            'email_client' => 'required|email|unique:social_cell,email_client,$cell_id'
+            'email_client' => 'required|email|unique:social_cell,email_client,$cell_id'*/
         ]);
 
         $cellname = $request->input('cellname');
@@ -106,7 +106,7 @@ class SocialCellController extends Controller
         $socialcell->payment_status = '1';
         $socialcell->save();
 
-        return redirect('socialcell')->with('flash_message', 'Social Cell has been Updated.');
+        return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
 
     }
 
