@@ -35,8 +35,14 @@
 
             <div class="social_cards_wrapper container">
 	            <div class="row">
+			            		
+			            		<?php
+			            		echo "<pre>";
+			            		print_r($past_info);
+			            		echo "</pre>";
+			            		?>
 	            	
-	            	<?php if(isset($facebook_follower)) { ?>
+	            	<?php /*if(isset($facebook_follower)) { ?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">
 			            		<div class="card_header">
@@ -48,6 +54,7 @@
 					            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
 			            		</div>
 			            		<?php
+
 				            		$fb_talking_about_count = $fb_fan_count = $fb_rating_count = $fb_published_posts_count = '';
 			            			$fb_talking_about_count = $talking_about_count;
 			            			$fb_fan_count = $fan_count;
@@ -118,7 +125,7 @@
 		            		</div>
 
 		            	</div>
-		            <?php } ?>
+		            <?php } */ ?>
 
 					<?php if(isset($twitter_follower)) {?>
 		            	<div class="col-md-4">
