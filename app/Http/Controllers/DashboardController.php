@@ -24,6 +24,10 @@ class DashboardController extends Controller
         	
             $this->setFacebookObject();
 
+            
+            $user_id = Sentinel::getUser()->id;
+            
+
         	if($facebook_account->facebook_token) {
                 $token = $facebook_account->facebook_token;
                 /*echo '<pre>';
@@ -155,6 +159,56 @@ class DashboardController extends Controller
         }
         /* Instagram Info End*/
 
+        /* insert facebook,twitter,instagram info to table start */
+        /*
+        $current_date =  date('Y-m-d');
+        $user_id = Sentinel::getUser()->id;
+
+        $social = new $this->socialAccountInfo;
+        $social->user_id = $user_id;
+        $social->type_id = '0';
+        $social->social_id = '0';
+        $social->name = '0';
+        
+        $social->fb_talking_about_count = $data['talking_about_count'];
+        $social->fb_fan_count = $data['fan_count'];
+        $social->fb_rating_count = $data['rating_count'];
+        $social->fb_published_posts_count = $data['published_posts_count'];
+        
+        $social->twt_followers_count = $data['followers'];
+        $social->twt_following_count = $data['friends'];
+        $social->twt_likes_count = $data['likes'];
+        $social->twt_posts_count = $data['statuses'];
+
+        $social->insta_followers_count = $data['total_fans'];
+        $social->insta_following_count = $data['total_following'];
+        $social->insta_likes_count = $data['total_likes'];
+        $social->insta_posts_count = $data['total_posts'];
+        
+        $social->social_info_date = $current_date;
+
+        $social->save(); */
+
+        /* insert facebook info to table end */
+        $user_id = Sentinel::getUser()->id;
+        // echo date('Y-m-d').'<br>';exit;
+        // echo date('Y-m-d', strtotime('-7 days'));exit;
+        // $seven =  date('Y-m-d', strtotime('-7 days'));
+        $seven =  date('Y-m-d');
+        // echo $seven =  date('Y-m-d').'<br>';
+        // echo $seven =  date('Y-m-d');exit;
+
+        // $wh = ['field' => 'value', 'another_field' => 'another_value', ...];
+        // $wh = ['user_id' => $user_id, 'created_at' => $seven];
+
+        // $data['info'] = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+        $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
+        
+        
+        /*echo '<pre>';
+        print_r($data['past_info']);exit;*/
+        $data['hi'] = "this istest";
+        
         return view('pages.dashboard', $data);
 
     }

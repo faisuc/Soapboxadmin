@@ -63,6 +63,16 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/callback/google', 'SocialAccountController@handleProviderCallback');
     Route::get('/create-google-post', 'SocialAccountController@create_google_post');
     /*Google*/
+
+    /* Social Cell */
+    // Route::get('socialcell/{user_id?}', 'SocialCellController@index');
+    // Route::get('/redirect_google', 'SocialAccountController@redirectToProvider');
+    Route::get('socialcell', 'SocialCellController@index');
+    Route::get('socialcell/add', 'SocialCellController@add_social_cell');
+    Route::post('socialcell/store', 'SocialCellController@store');
+    /* Social Cell */
+
+
     Route::prefix('post')->group(function() {
         Route::get('add/{user_id?}', 'PostController@create');
         Route::post('store', 'PostController@store');

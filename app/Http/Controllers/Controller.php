@@ -18,6 +18,8 @@ use Sentinel;
 use DB;
 use Request;
 use App\SocialAccount;
+use App\SocialAccountInfo;
+use App\SocialCell;
 
 class Controller extends BaseController
 {
@@ -31,8 +33,9 @@ class Controller extends BaseController
     protected $imageRepo;
     protected $textRepo;
     protected $socialAccount;
+    protected $socialAccountInfo;
 
-    public function __construct(User $user, Client $client, Media $media, Post $post, PostNotes $postNotes, ImageRepository $imageRepo, TextRepository $textRepo, SocialAccount $socialAccount)
+    public function __construct(User $user, Client $client, Media $media, Post $post, PostNotes $postNotes, ImageRepository $imageRepo, TextRepository $textRepo, SocialAccount $socialAccount, SocialAccountInfo $socialAccountInfo, SocialCell $socialCell)
     {
 
         $this->user = $user;
@@ -43,6 +46,8 @@ class Controller extends BaseController
         $this->imageRepo = $imageRepo;
         $this->textRepo = $textRepo;
         $this->socialAccount = $socialAccount;
+        $this->socialAccountInfo = $socialAccountInfo;
+        $this->socialCell = $socialCell;
 
     }
 

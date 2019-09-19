@@ -36,7 +36,7 @@
             <div class="social_cards_wrapper container">
 	            <div class="row">
 	            	
-	            	<?php if(isset($facebook_follower)) { ?>
+	            	<?php /*if(isset($facebook_follower)) { ?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">
 			            		<div class="card_header">
@@ -48,9 +48,9 @@
 					            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
 			            		</div>
 			            		<?php
-			            		$twt_total_fans= $twt_total_following = $twt_total_likes= $twt_total_posts= '';
+			            		
 
-			            		$fb_talking_about_count = $twt_total_following = $twt_total_likes = $twt_total_posts = '';
+			            		$fb_talking_about_count = $fb_fan_count = $fb_rating_count = $fb_published_posts_count = '';
 			            		// if(isset($facebook_follower)) {
 			            			$fb_talking_about_count = $talking_about_count;
 			            			$fb_fan_count = $fan_count;
@@ -59,98 +59,146 @@
 			            			$fb_published_posts_count = $published_posts_count;
 			            		// }
 			            		?>
-			            		<div class="card_section">		            			
-	            					<p class="main-title">Total Talking About Count: <span class="up-down-price"><?php echo $fb_talking_about_count; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		<div class="card_section">
+				            		<?php
+				            			if($fb_talking_about_count > $past_info[0]->fb_talking_about_count) {
+				            				$circle = 'fa fa-arrow-circle-up';
+				            				$color = 'text-success';
+				            			}else if($fb_talking_about_count < $past_info[0]->fb_talking_about_count) {
+											$circle = 'fa fa-arrow-circle-down';
+											$color = 'text-danger';
+				            			}else{
+											$circle = 'fa fa-minus-circle';
+											$color = 'text-gray';
+				            			}
+				            		?>		            			
+	            					<p class="main-title">Total Talking About Count: <span class="up-down-price"><?php echo $fb_talking_about_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->fb_talking_about_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
-			            			<p class="main-title">Total Friends: <span class="up-down-price"><?php echo $fb_fan_count; ?> <!-- span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            			<?php
+				            			if($fb_fan_count > $past_info[0]->fb_fan_count) {
+				            				$circle = 'fa fa-arrow-circle-up';
+				            				$color = 'text-success';
+				            			}else if($fb_fan_count < $past_info[0]->fb_fan_count) {
+											$circle = 'fa fa-arrow-circle-down';
+											$color = 'text-danger';
+				            			}else{
+											$circle = 'fa fa-minus-circle';
+											$color = 'text-gray';
+				            			}
+				            		?>
+			            			<p class="main-title">Total Friends: <span class="up-down-price"><?php echo $fb_fan_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->fb_fan_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
-		            				<p class="main-title">Total Rating Count: <span class="up-down-price"><?php echo $fb_rating_count; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            			<?php
+				            			if($fb_rating_count > $past_info[0]->fb_rating_count) {
+				            				$circle = 'fa fa-arrow-circle-up';
+				            				$color = 'text-success';
+				            			}else if($fb_rating_count < $past_info[0]->fb_rating_count) {
+											$circle = 'fa fa-arrow-circle-down';
+											$color = 'text-danger';
+				            			}else{
+											$circle = 'fa fa-minus-circle';
+											$color = 'text-gray';
+				            			}
+				            		?>
+		            				<p class="main-title">Total Rating Count: <span class="up-down-price"><?php echo $fb_rating_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->fb_rating_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
-		            				<p class="main-title">Total Posts Summary: <span class="up-down-price"><?php echo $fb_published_posts_count; ?> <!--span class="text-danger"><i class="fa fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            			<?php
+				            			if($fb_published_posts_count > $past_info[0]->fb_published_posts_count) {
+				            				$circle = 'fa fa-arrow-circle-up';
+				            				$color = 'text-success';
+				            			}else if($fb_published_posts_count < $past_info[0]->fb_published_posts_count) {
+											$circle = 'fa fa-arrow-circle-down';
+											$color = 'text-danger';
+				            			}else{
+											$circle = 'fa fa-minus-circle';
+											$color = 'text-gray';
+				            			}
+				            		?>
+		            				<p class="main-title">Total Posts Summary: <span class="up-down-price"><?php echo $fb_published_posts_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->fb_published_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>		            		
 		            		</div>
 
 		            	</div>
-		            <?php } ?>
+		            <?php } */ ?>
 
 					<?php if(isset($twitter_follower)) {?>
-	            	<div class="col-md-4">
-	            		<div class="social_card">
-		            		<div class="card_header">
-			            		<h3>
-			            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
-			            			<i class="fab fa-twitter"></i>
-				            		Twitter
-				            	</h3>
-				            	<!-- p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
+		            	<div class="col-md-4">
+		            		<div class="social_card">
+			            		<div class="card_header">
+				            		<h3>
+				            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
+				            			<i class="fab fa-twitter"></i>
+					            		Twitter
+					            	</h3>
+					            	<!-- p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
+			            		</div>
+			            		<?php
+			            		$twt_total_fans= $twt_total_following = $twt_total_likes= $twt_total_posts= '';
+			            		
+			            			$twt_total_fans = $followers;
+			            			$twt_total_following = $friends;
+			            			$twt_total_likes = $likes;
+			            			$twt_total_posts = $statuses;
+			            		
+			            		?>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $twt_total_fans; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $twt_total_following; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $twt_total_likes; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Tweets: <span class="up-down-price"><?php echo $twt_total_posts; ?> <!--span class="text-danger"><i class="fa fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		</div>
+			            		
 		            		</div>
-		            		<?php
-		            		$twt_total_fans= $twt_total_following = $twt_total_likes= $twt_total_posts= '';
-		            		
-		            			$twt_total_fans = $followers;
-		            			$twt_total_following = $friends;
-		            			$twt_total_likes = $likes;
-		            			$twt_total_posts = $statuses;
-		            		
-		            		?>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $twt_total_fans; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $twt_total_following; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $twt_total_likes; ?> <!--span class="text-success"><i class="fa fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Tweets: <span class="up-down-price"><?php echo $twt_total_posts; ?> <!--span class="text-danger"><i class="fa fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
-		            		</div>
-		            		
-	            		</div>
 
-	            	</div>
-	            <?php }?>
+		            	</div>
+		            <?php }?>
 
-				<?php if(isset($instagram_follower)) {?>
-	            	<div class="col-md-4">
-	            		<div class="social_card">	
-		            		<div class="card_header">
-			            		<h3>
-			            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
-			            			<i class="fab fa-instagram"></i>
-				            		Instagram
-				            	</h3>
-				            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
+					<?php if(isset($instagram_follower)) {?>
+		            	<div class="col-md-4">
+		            		<div class="social_card">	
+			            		<div class="card_header">
+				            		<h3>
+				            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
+				            			<i class="fab fa-instagram"></i>
+					            		Instagram
+					            	</h3>
+					            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
+			            		</div>
+			            		<?php
+			            		$insta_total_fans= $insta_total_following = $insta_total_likes= $insta_total_posts= '';
+			            		
+			            			$insta_total_fans = $total_fans;
+			            			$insta_total_following = $total_following;
+			            			$insta_total_likes = $total_likes;
+			            			$insta_total_posts = $total_posts;
+			            		
+			            		?>
+			            		<div class="card_section">
+		            				<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $insta_total_fans; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $insta_total_following; ?> <!-- span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $insta_total_likes; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<p class="main-title">Total Posts: <span class="up-down-price"><?php echo $insta_total_posts; ?> <!--span class="text-danger"><i class="fa 	fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
+			            		</div>
+			            		
 		            		</div>
-		            		<?php
-		            		$insta_total_fans= $insta_total_following = $insta_total_likes= $insta_total_posts= '';
-		            		
-		            			$insta_total_fans = $total_fans;
-		            			$insta_total_following = $total_following;
-		            			$insta_total_likes = $total_likes;
-		            			$insta_total_posts = $total_posts;
-		            		
-		            		?>
-		            		<div class="card_section">
-	            				<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $insta_total_fans; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $insta_total_following; ?> <!-- span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $insta_total_likes; ?> <!--span class="text-success"><i class="fa 	fa-arrow-circle-up"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span --> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<p class="main-title">Total Posts: <span class="up-down-price"><?php echo $insta_total_posts; ?> <!--span class="text-danger"><i class="fa 	fa-arrow-circle-down"></i></span>  <span class="prise-down-up"><b>1,175,199</b> Prev 7 Days</span> </span--> </p>
-		            		</div>
-		            		
-	            		</div>
 
-	            	</div>
-	            <?php }?>
+		            	</div>
+		            <?php }?>
 
 	            </div>
 
