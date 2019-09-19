@@ -66,8 +66,8 @@ Route::middleware(['auth'])->group(function() {
 
     /* Social Cell */
     Route::get('socialcell/add', 'SocialCellController@add_social_cell');
-    Route::get('socialcell/{cell_id?}', 'SocialCellController@index');
     Route::get('socialcell', 'SocialCellController@index');
+    Route::get('socialcell/{cell_id?}', 'SocialCellController@social_cell_accounts');
     Route::post('socialcell/store', 'SocialCellController@store');
     Route::get('socialcell/edit/{cell_id}', 'SocialCellController@edit');
     Route::post('socialcell/update/{cell_id}', 'SocialCellController@update');

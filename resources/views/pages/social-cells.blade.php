@@ -51,7 +51,7 @@
                                     <!-- <a href="#" data-post-id="{{ $socialcell->id }}" class="btn" data-toggle="modal" data-target=".postnotes-modal"><i class="fas fa-sticky-note"></i></a> -->
                                     <a href="/socialcell/edit/{{ $socialcell->id }}" class="btn"><i class="fas fa-edit"></i></a>
                                     <a href="/socialcell/delete/{{ $socialcell->id }}" class="btn confirmDeleteButton"><i class="fas fa-trash-alt"></i></a>
-                                    <a href="/socialcell/{{ $socialcell->id}}" class="btn btn-info float-right">View</a>
+                                    <a href="/socialcell/{{ $socialcell->id }}" class="btn btn-info float-right">View</a>
                                     <!-- <input type="button" value="Generate" class="btn btn-info generate" > -->
                                 </div>
                             </div>

@@ -17,22 +17,12 @@ use Google_Client;
 
 class SocialCellController extends Controller
 {
-    public function index($cell_id = null)
+    public function index()
     {
     	$this->_loadSharedViews();
 
         $data = [];
         
-        if ($cell_id == null) {
-
-        }
-        else {
-
-        }
-
-        // $user_id = $user_id ? $user_id : Sentinel::getUser()->id;
-        // echo $cell_id;exit;
-
         $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         
         return view('pages.social-cells', $data);
@@ -126,6 +116,19 @@ class SocialCellController extends Controller
         return redirect()->back()->with('flash_message', 'Social Cell has been deleted.');
 
     }
+
+    public function social_cell_accounts($cell_id)
+    {
+        $this->_loadSharedViews();
+        
+        $data = [];
+
+        $social_cell = $this->socialCell->where('id',$cell_id)->get();
+        $data['social_cell'] = $social_cell[0];
+        $data['social_accounts'] = $this->socialAccount->where('social_cell_id',$cell_id)->get();
+        
+        return view('pages.cell-account-create', $data);
+    } 
 
 
 }

@@ -12,9 +12,9 @@
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="/dashboard"><i class="fa fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                            <a class="nav-link" href="{{ url('/socialcell') }}"><i class="fas fa-share-square"></i>Social Cell</a>
                             <a class="nav-link" href="/queues"><i class="fa fa-fw fa-clock"></i>Content QUEUE</a>
                             <a class="nav-link" href="/contentbank"><i class="fa fa-fw fa-piggy-bank"></i>Content Bank</a>
-                            <a class="nav-link" href="{{ url('/socialcell') }}"><i class="fas fa-share-square"></i>Social Cell</a>
                             <a class="nav-link" href="{{ url('/socialaccounts') }}"><i class="fas fa-share-square"></i>Social Accounts</a>
                             <a class="nav-link" href="/messages"><i class="fa fa-fw fa-comment"></i>Messages</a>
                             <a class="nav-link" href="/profile"><i class="fa fa-fw fa-user-circle"></i>My Profile</a>
