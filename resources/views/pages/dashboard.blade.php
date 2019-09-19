@@ -36,12 +36,7 @@
             <div class="social_cards_wrapper container">
 	            <div class="row">
 			            		
-			            		<?php
-			            		echo "<pre>";
-			            		print_r($past_info);
-			            		echo "</pre>";
-			            		?>
-	            	
+
 	            	<?php /*if(isset($facebook_follower)) { ?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">

@@ -24,8 +24,10 @@ class SocialCellController extends Controller
         $data = [];
         
         if ($cell_id == null) {
+
         }
         else {
+
         }
 
         // $user_id = $user_id ? $user_id : Sentinel::getUser()->id;
@@ -34,11 +36,11 @@ class SocialCellController extends Controller
         $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         
         return view('pages.social-cells', $data);
+        // return view('pages.social-cells', $data);
     }
 
     public function add_social_cell($id='')
     {
-
     	$this->_loadSharedViews();
     	
     	$data = [];
