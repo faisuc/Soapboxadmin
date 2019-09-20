@@ -51,7 +51,7 @@
 		            		</div>
 		            		<?php
 		            			$fb_talking_about_count = $fb_fan_count = $fb_rating_count = $fb_published_posts_count = '';
-		            			$fb_talking_about_count = $talking_about_count;
+		            			$fb_talking_about_count = $fb_data['talking_about_count'];
 		            			$fb_fan_count = $fan_count;
 		            			$fb_rating_count = $rating_count;
 		            			// $fb_new_like_count = $new_like_count;
