@@ -21,11 +21,14 @@ class DashboardController extends Controller
         /* Facebook Page Info start */
         $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($facebook_account)) {
-        	
-            $this->setFacebookObject();
+        	// echo Sentinel::getUser()->id;exit;
 
+            $this->setFacebookObject();
             
             $user_id = Sentinel::getUser()->id;
+
+            /*social id*/
+            // echo $facebook_account->id;exit;
             
 
         	if($facebook_account->facebook_token) {
@@ -201,7 +204,7 @@ class DashboardController extends Controller
         // $wh = ['field' => 'value', 'another_field' => 'another_value', ...];
         // $wh = ['user_id' => $user_id, 'created_at' => $seven];
 
-        $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id]])->orderBy('id', 'DESC')->limit(1)->get();
+        $data['past_info'] = $this->socialAccountInfo->where('user_id',$user_id)->orderBy('id', 'DESC')->limit(1)->get();
         // $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
         
         return view('pages.dashboard', $data);

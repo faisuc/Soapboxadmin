@@ -33,26 +33,35 @@
                         <div class="form-group">
                             <label for="cellName">Cell Name</label>
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
-                            <input id="cellName" type="text" placeholder="Cell Name" value="{{ old('cellname') }}" name="cellname" class="form-control">
+                            <input id="cellName" type="text" placeholder="Cell Name" value="{{ old('cellname') }}" name="cellname" class="form-control" >
                         </div>
 
                         <div class="form-group">
                             <label for="ownerEmail">Owner Email</label>
-                            <input id="ownerEmail" type="text" placeholder="Owner Email" value="{{ old('email_owner') }}" name="email_owner" class="form-control">
+                            <input id="ownerEmail" type="text" value="{{ old('email_owner') }}" name="email_owner" class="form-control" data-role="tagsinput">
                         </div>
 
                         <div class="form-group">
                             <label for="marketerEmail">Marketer Email</label>
-                            <input id="marketerEmail" type="text" placeholder="Marketer Email" value="{{ old('email_marketer') }}" name="email_marketer" class="form-control">
+                            <input id="marketerEmail" type="text" value="{{ old('email_marketer') }}" name="email_marketer" class="form-control" data-role="tagsinput">
                         </div>
 
                         <div class="form-group">
                             <label for="clientEmail">Client Email</label>
-                            <input id="clientEmail" type="text" placeholder="Client Email" value="{{ old('email_client') }}" name="email_client" class="form-control">
+                            <input id="clientEmail" type="text" value="{{ old('email_client') }}" name="email_client" class="form-control" data-role="tagsinput">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputStatus">Payment Status</label>                            
+                            <select id="inputStatus" name="payment_status" class="form-control user">                            
+                                <option value="1">Waiting Payment</option>
+                                <option value="2">Active</option>
+                                <option value="3">Cancelled</option>
+                                <option value="4">On Hold</option>
+                            </select>
                         </div>
 
-
                         <?php /*
+                        Active, Waiting Payment, Cancelled, On Hold
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                 <label for="cellemail">Email</label>
@@ -74,8 +83,7 @@
                         </div> */?>
                                                    
                         <div class="form-group">
-                            <input type="submit" value="SAVE" class="btn btn-primary">
-                            <input type="button" value="Generate" class="btn btn-info generate" style="display: none">&nbsp;
+                            <input type="submit" value="SAVE" class="btn btn-primary">                            
                         </div>
                     </form>
                 </div>
@@ -85,9 +93,10 @@
     <script type="text/javascript">
         
         $(document).ready(function(){
+            
+            $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
 
             $('.user').on('change', function(e){
-                // $(this).closest('form').submit();
                 if($(this).val() == '1') {
                     $('.generate').show();
                 }else{

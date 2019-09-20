@@ -30,8 +30,8 @@
             <div class="row">
                 @forelse ($socialcells as $socialcell)
                     <div class="col-md-3">
-                        <div class="card" style="border: 5px solid " >
-                            <div class="card-body">
+                        <div class="card" style="border: 5px solid;" >
+                            <div class="card-body" style="height: 400px; overflow: auto;">
                                 <p class="card-text">
                                     <h3>{{ $socialcell->cell_name }}</h3>
                                     <div class="tools">
@@ -39,10 +39,20 @@
                                     </div>
                                     <!-- {{ $socialcell->description }} -->
                                 </p>
-                                <p class="card-text">Owner Mail : {{ $socialcell->email_owner }} </p>
-                                <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer }} </p>
-                                <p class="card-text">Client Mail : {{ $socialcell->email_client }} </p>
-                                <p class="card-text">Payment Status : {{ ($socialcell->payment_status == '1' ? 'Waiting Payment' : 'Done') }} </p>
+                                <p class="card-text">Owner Mail : {{ $socialcell->email_owner ? $socialcell->email_owner: 'N/A'}} </p>
+                                <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer ? $socialcell->email_marketer : 'N/A' }} </p>
+                                <p class="card-text">Client Mail : {{ $socialcell->email_client ? $socialcell->email_client : 'N/A' }} </p>
+                                <p class="card-text">Payment Status : 
+                                    @if($socialcell->payment_status == '1')
+                                         Waiting Payment
+                                    @elseif ($socialcell->payment_status == '2')                                    
+                                         Active 
+                                    @elseif ($socialcell->payment_status == '3')
+                                        Cancelled
+                                    @elseif ($socialcell->payment_status == '4')
+                                        On Hold                                   
+                                    @endif
+                                </p>
                                 <!-- <a href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a> -->
                                 <!-- <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a> -->
                             </div>
@@ -57,15 +67,16 @@
                             </div>
                         </div>
                     </div>
-
-                    @empty
+                @empty
                     <div class="col-md-12">
-                        No Cells Added.
+                        <div class="social_card">
+                            <div class="card_header text-center">
+                                <h3> No Cells Added</h3>
+                            </div>
+                        </div>
                     </div>
                 @endforelse    
             </div>
-
         </div>
     </div>
-
 @endsection

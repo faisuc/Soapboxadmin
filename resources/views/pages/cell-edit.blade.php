@@ -39,25 +39,32 @@
                         <div class="form-group">
                             <label for="ownerEmail">Owner Email</label>
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
-                            <input id="ownerEmail" type="text" placeholder="Owner Email" value="{{ $socialcell->email_owner }}" name="email_owner" class="form-control">
+                            <input id="ownerEmail" type="text" value="{{ $socialcell->email_owner }}" name="email_owner" class="form-control"  data-role="tagsinput">
                         </div>
 
                         <div class="form-group">
                             <label for="marketerEmail">Marketer Email</label>
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
-                            <input id="marketerEmail" type="text" placeholder="Marketer Email" value="{{ $socialcell->email_marketer }}" name="email_marketer" class="form-control">
+                            <input id="marketerEmail" type="text" value="{{ $socialcell->email_marketer }}" name="email_marketer" class="form-control"  data-role="tagsinput">
                         </div>
 
                         <div class="form-group">
                             <label for="clientEmail">Client Email</label>
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
-                            <input id="clientEmail" type="text" placeholder="Client Email" value="{{ $socialcell->email_client }}" name="email_client" class="form-control">
+                            <input id="clientEmail" type="text" value="{{ $socialcell->email_client }}" name="email_client" class="form-control"  data-role="tagsinput">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputStatus">Payment Status</label>                            
+                            <select id="inputStatus" name="payment_status" class="form-control user">                            
+                                <option value="1" {{ $socialcell->payment_status == 1 ? 'selected' : '' }}>Waiting Payment</option>
+                                <option value="2" {{ $socialcell->payment_status == 2 ? 'selected' : '' }}>Active</option>
+                                <option value="3" {{ $socialcell->payment_status == 3 ? 'selected' : '' }}>Cancelled</option>
+                                <option value="4" {{ $socialcell->payment_status == 4 ? 'selected' : '' }}>On Hold</option>
+                            </select>
                         </div>
                     
-
                         <div class="form-group">
-                            <input type="submit" value="SAVE" class="btn btn-primary">
-                            <input type="button" value="Generate" class="btn btn-info generate" style="display: none">&nbsp;
+                            <input type="submit" value="SAVE" class="btn btn-primary">                            
                         </div>
                     </form>
                 </div>
@@ -68,14 +75,8 @@
         
         $(document).ready(function(){
 
-            $('.user').on('change', function(e){
-                // $(this).closest('form').submit();
-                if($(this).val() == '1') {
-                    $('.generate').show();
-                }else{
-                    $('.generate').hide();
-                }
-            });
+            $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
+           
         });
     </script>
 @endsection

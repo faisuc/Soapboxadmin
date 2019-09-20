@@ -419,9 +419,11 @@ class SocialAccountController extends Controller
             $array = explode("&", $get_data);
             
             $social_id = $_GET['social_id'];
+            $social = $this->socialAccount->find($social_id);
+            
             $twitter_session = str_replace("oauth_token=", NULL, $array[0]);
             $twitter_secret = str_replace("oauth_token_secret=", NULL, $array[1]);
-            $social = $this->socialAccount->find($social_id);
+            
             $social->twitter_session = $twitter_session;
             $social->twitter_secret = $twitter_secret;
             $social->save();

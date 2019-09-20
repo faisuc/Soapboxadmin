@@ -285,10 +285,8 @@
 					            			}
 					            		?>
 				            			<p class="main-title">Total Posts: <span class="up-down-price"><?php echo $insta_total_posts; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->insta_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
-				            		</div>
-				            		
+				            		</div>				            		
 			            		</div>
-
 			            	</div>
 			            <?php } ?>
 			        @else

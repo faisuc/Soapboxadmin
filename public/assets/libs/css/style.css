@@ -4533,6 +4533,14 @@ Pills vertical
 4.6.  Multiupload
 --------------------*/
 
+.bootstrap-tagsinput {
+    display: block;
+}
+.bootstrap-tagsinput .tag {
+    padding: 5px 5px;
+    background: #5969ff;
+}
+
 
 /* ==========================================================================
  5. Table
