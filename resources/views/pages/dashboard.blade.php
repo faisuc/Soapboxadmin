@@ -35,7 +35,7 @@
 
             <div class="social_cards_wrapper container">
 	            <div class="row">
-					
+					@if(count($past_info) > 0) 
 		            	<?php if(isset($facebook_follower) ) { ?>
 			            	<div class="col-md-4">
 			            		<div class="social_card">
@@ -289,7 +289,15 @@
 			            		</div>
 			            	</div>
 			            <?php } ?>
-			        
+			        @else
+			        	<div class="col-md-12">
+							<div class="social_card">
+								<div class="card_header text-center">
+			            			<h3>No Record Found</h3>
+			            		</div>
+							</div>
+			        	</div>
+			        @endif
 	            </div>
 
 	            <?php /* fb, twitter, insta row backup
