@@ -74,7 +74,7 @@ class DashboardController extends Controller
             // $check_fb = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             // $seven =  date('Y-m-d', strtotime('-2 days'));
             // echo $seven = ''
-            $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',95)->orderBy('id', 'DESC')->limit(1)->get()->first();
+            $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
             
             $today = date('Y-m-d');
 
@@ -100,14 +100,14 @@ class DashboardController extends Controller
                     $social_fb->fb_fan_count = $data['fan_count'];
                     $social_fb->fb_rating_count = $data['rating_count'];
                     $social_fb->fb_published_posts_count = $data['published_posts_count'];
-
-                    //$social_fb->save();
+                    $social_fb->social_info_date = $today;
+                    $social_fb->save();
                     $social_info_id = $social_fb->id;
                 }
 
                 // get social info id data
-                /*$data['fb_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
-                echo "<pre>";
+                $data['fb_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                /*echo "ee<pre>";
                 print_r($data['fb_data']);
                 die();*/
             }
@@ -176,14 +176,14 @@ class DashboardController extends Controller
         	}
 
             /*check twitter info*/
-            // echo 'socialid'.$twitter_account->id;exit; 95
+            // echo 'social_id'.$twitter_account->id;exit; 95
             // $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',95)->orderBy('id', 'DESC')->limit(1)->get()->first();
-            $check_twt_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',95)->orderBy('id', 'DESC')->limit(1)->get()->first();
+            $check_twt_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$twitter_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
             
             $today = date('Y-m-d');
 
             if(!empty($check_twt_info)) {
-                $social_date = $check_fb_info->social_info_date;
+                $social_date = $check_twt_info->social_info_date;
                 $today = date('Y-m-d');
                 
                 $datetime1 = new DateTime($social_date);
@@ -192,27 +192,27 @@ class DashboardController extends Controller
                 $days = $interval->format('%a');
                 
                 if($days < 7) {
-                    $social_info_id = $check_fb_info->id;
+                    $social_info_id = $check_twt_info->id;
                 }
                 else {
                     // insert data into social account info                    
-                    $social_fb = new $this->socialAccountInfo;
-                    $social_fb->user_id = $user_id;
-                    $social_fb->type_id = '1';
-                    $social_fb->social_id = $facebook_account->id;
-                    $social_fb->fb_talking_about_count = $data['talking_about_count'];
-                    $social_fb->fb_fan_count = $data['fan_count'];
-                    $social_fb->fb_rating_count = $data['rating_count'];
-                    $social_fb->fb_published_posts_count = $data['published_posts_count'];
-
-                    //$social_fb->save();
-                    $social_info_id = $social_fb->id;
+                    $social_twt = new $this->socialAccountInfo;
+                    $social_twt->user_id = $user_id;
+                    $social_twt->type_id = '3';
+                    $social_twt->social_id = $twitter_account->id;
+                    $social_twt->twt_followers_count = $data['followers'];
+                    $social_twt->twt_following_count = $data['friends'];
+                    $social_twt->twt_likes_count = $data['likes'];
+                    $social_twt->twt_posts_count = $data['statuses'];
+                    $social_twt->social_info_date = $today;
+                    $social_twt->save();
+                    $social_info_id = $social_twt->id;
                 }
 
                 // get social info id data
-                /*$data['fb_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
-                echo "<pre>";
-                print_r($data['fb_data']);
+                $data['twt_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                /*echo "<pre>";
+                print_r($data['twt_data']);
                 die();*/
             }
 
@@ -246,6 +246,53 @@ class DashboardController extends Controller
                 $data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
                 $data['instagram_follower'] = true;
             }
+
+
+            /*check insta info*/
+            // echo 'social_id'.$instagram_account->id;exit; 95
+            // $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',95)->orderBy('id', 'DESC')->limit(1)->get()->first();
+            $check_insta_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$instagram_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
+            
+            $today = date('Y-m-d');
+
+            if(!empty($check_insta_info)) {
+                $social_date = $check_insta_info->social_info_date;
+                $today = date('Y-m-d');
+                
+                $datetime1 = new DateTime($social_date);
+                $datetime2 = new DateTime($today);
+                $interval = $datetime1->diff($datetime2);
+                $days = $interval->format('%a');
+                
+                if($days < 7) {
+                    $social_info_id = $check_insta_info->id;
+                }
+                else {
+                    // insert data into social account info                    
+                    $social_insta = new $this->socialAccountInfo;
+                    $social_insta->user_id = $user_id;
+                    $social_insta->type_id = '5';
+                    $social_insta->social_id = $instagram_account->id;
+        
+                    $social_insta->insta_followers_count = $data['total_fans'];
+                    $social_insta->insta_following_count = $data['total_following'];
+                    $social_insta->insta_likes_count = $data['total_likes'];
+                    $social_insta->insta_posts_count = $data['total_posts'];
+                    
+                    $social_insta->social_info_date = $today;
+                    
+                    $social_insta->save();
+                    $social_info_id = $social_insta->id;
+                }
+
+                // get social info id data
+                $data['insta_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                /*echo "<pre>";
+                print_r($data['insta_data']);
+                die();*/
+            }
+
+
         }
         /* Instagram Info End*/
 
@@ -291,7 +338,7 @@ class DashboardController extends Controller
         // $wh = ['field' => 'value', 'another_field' => 'another_value', ...];
         // $wh = ['user_id' => $user_id, 'created_at' => $seven];
 
-        $data['past_info'] = $this->socialAccountInfo->where('user_id',$user_id)->orderBy('id', 'DESC')->limit(1)->get();
+        // $data['past_info'] = $this->socialAccountInfo->where('user_id',$user_id)->orderBy('id', 'DESC')->limit(1)->get();
         // $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
         
         /*echo 'ee<pre>';
