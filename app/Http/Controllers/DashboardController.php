@@ -27,7 +27,7 @@ class DashboardController extends Controller
             
             $user_id = Sentinel::getUser()->id;
 
-        	/*if($facebook_account->facebook_token) {
+        	if($facebook_account->facebook_token) {
                 
                 $token = $facebook_account->facebook_token;
                 
@@ -41,19 +41,13 @@ class DashboardController extends Controller
                 $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
                 $fandata = $fandata->getDecodedBody();
 
-                $data['talking_about_count'] = $fandata['talking_about_count'];
-                $data['fan_count'] = $fandata['fan_count'];
-                $data['rating_count'] = $fandata['rating_count'];
-                // $data['new_like_count'] = $fandata['new_like_count'];
-                $data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
+                $fb_data['talking_about_count'] = $fandata['talking_about_count'];
+                $fb_data['fan_count'] = $fandata['fan_count'];
+                $fb_data['rating_count'] = $fandata['rating_count'];
+                $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
                 $data['facebook_follower'] = true;
-            
-            }*/
-            $fb_data['talking_about_count'] = 'talking_about_count';
-            $fb_data['fan_count'] = 'fan_count';
-            $fb_data['rating_count'] = 'rating_count';
-            $fb_data['published_posts_count'] = 'published_posts_count';
-            $data['facebook_follower'] = true;
+
+            }
             
             $today = date('Y-m-d');
 
