@@ -294,8 +294,8 @@ class DashboardController extends Controller
         $data['past_info'] = $this->socialAccountInfo->where('user_id',$user_id)->orderBy('id', 'DESC')->limit(1)->get();
         // $data['past_info'] = $this->socialAccountInfo->where([['user_id','=',$user_id],['social_info_date','=',$seven ]])->orderBy('id', 'DESC')->limit(1)->get();
         
-        echo 'ee<pre>';
-        print_r($data['past_info']);exit;
+        /*echo 'ee<pre>';
+        print_r($data['past_info']);exit;*/
 
         return view('pages.dashboard', $data);
 
