@@ -73,6 +73,8 @@ Route::middleware(['auth'])->group(function() {
     Route::post('socialcell/update/{cell_id}', 'SocialCellController@update');
     Route::get('socialcell/delete/{cell_id}', 'SocialCellController@delete');
     Route::post('socialcellaccount/add', 'SocialCellController@add_social_cell_account');
+    Route::get('fb_cell_connect_app/{cell_id}', 'SocialCellController@fb_cell_connect_app');
+    Route::get('fb_cell_callback', 'SocialCellController@fb_cell_callback');
     /* Social Cell */
 
 
