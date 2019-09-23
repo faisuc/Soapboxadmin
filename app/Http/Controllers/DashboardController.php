@@ -35,38 +35,56 @@ class DashboardController extends Controller
                 $accounts = $this->api->get('me/accounts',$token);
                 $userData2 = $accounts->getDecodedBody();
                 
-                $page_id = $userData2['data'][0]['id'];
-                $page_token = $userData2['data'][0]['access_token'];
-                
-                // $fandata = $fb->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count',$page_token);
-                $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
-                $fandata = $fandata->getDecodedBody();
+                if(!empty($userData2)) {
+                    $page_id = $userData2['data'][0]['id'];
+                    $page_token = $userData2['data'][0]['access_token'];
+                    
+                    // $fandata = $fb->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count',$page_token);
+                    $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
+                    $fandata = $fandata->getDecodedBody();
 
-                $fb_data['talking_about_count'] = $fandata['talking_about_count'];
-                $fb_data['fan_count'] = $fandata['fan_count'];
-                $fb_data['rating_count'] = $fandata['rating_count'];
-                $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
-                $data['facebook_follower'] = true;
+                    $fb_data['talking_about_count'] = $fandata['talking_about_count'];
+                    $fb_data['fan_count'] = $fandata['fan_count'];
+                    $fb_data['rating_count'] = $fandata['rating_count'];
+                    $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
+                    $data['facebook_follower'] = true;
 
-                $today = date('Y-m-d');
-                $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->offset(1)->limit(1)->get()->first();
-                
-
-                if(!empty($check_fb_info)) {
-                    $social_date = $check_fb_info->social_info_date;
                     $today = date('Y-m-d');
+                    $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->offset(1)->limit(1)->get()->first();
                     
-                    $datetime1 = new DateTime($social_date);
-                    $datetime2 = new DateTime($today);
-                    $interval = $datetime1->diff($datetime2);
-                    $days = $interval->format('%a');
-                    
-                    if($days < 7) {
-                        $social_info_id = $check_fb_info->id;
+
+                    if(!empty($check_fb_info)) {
+                        $social_date = $check_fb_info->social_info_date;
+                        $today = date('Y-m-d');
+                        
+                        $datetime1 = new DateTime($social_date);
+                        $datetime2 = new DateTime($today);
+                        $interval = $datetime1->diff($datetime2);
+                        $days = $interval->format('%a');
+                        
+                        if($days < 7) {
+                            $social_info_id = $check_fb_info->id;
+                        }
+                        else {
+                            
+                            // insert data into social account info                    
+                            $social_fb = new $this->socialAccountInfo;
+                            $social_fb->user_id = $user_id;
+                            $social_fb->type_id = '1';
+                            $social_fb->social_id = $facebook_account->id;
+                            $social_fb->fb_talking_about_count = $fb_data['talking_about_count'];
+                            $social_fb->fb_fan_count = $fb_data['fan_count'];
+                            $social_fb->fb_rating_count = $fb_data['rating_count'];
+                            $social_fb->fb_published_posts_count = $fb_data['published_posts_count'];
+                            $social_fb->social_info_date = $today;
+                            $social_fb->save();
+                            // $social_info_id = $social_fb->id;
+                            $social_info_id = $check_fb_info->id;
+                        }
+
                     }
                     else {
-                        
-                        // insert data into social account info                    
+
                         $social_fb = new $this->socialAccountInfo;
                         $social_fb->user_id = $user_id;
                         $social_fb->type_id = '1';
@@ -77,30 +95,14 @@ class DashboardController extends Controller
                         $social_fb->fb_published_posts_count = $fb_data['published_posts_count'];
                         $social_fb->social_info_date = $today;
                         $social_fb->save();
-                        // $social_info_id = $social_fb->id;
-                        $social_info_id = $check_fb_info->id;
+
+                        $social_info_id = $social_fb->id;
+
                     }
-
+                    
+                    $data['fb_data'] = $fb_data;
+                    $data['fbpastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
                 }
-                else {
-
-                    $social_fb = new $this->socialAccountInfo;
-                    $social_fb->user_id = $user_id;
-                    $social_fb->type_id = '1';
-                    $social_fb->social_id = $facebook_account->id;
-                    $social_fb->fb_talking_about_count = $fb_data['talking_about_count'];
-                    $social_fb->fb_fan_count = $fb_data['fan_count'];
-                    $social_fb->fb_rating_count = $fb_data['rating_count'];
-                    $social_fb->fb_published_posts_count = $fb_data['published_posts_count'];
-                    $social_fb->social_info_date = $today;
-                    $social_fb->save();
-
-                    $social_info_id = $social_fb->id;
-
-                }
-                
-                $data['fb_data'] = $fb_data;
-                $data['fbpastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
 
             }
             
@@ -207,7 +209,7 @@ class DashboardController extends Controller
                     // get social info id data
                     $data['twt_data'] = $twt_data;
                     $data['twtpastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
-                    
+
                 }
                 
         	}
