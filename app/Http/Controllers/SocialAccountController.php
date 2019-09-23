@@ -433,8 +433,15 @@ class SocialAccountController extends Controller
             session()->put('twitter_user_id', str_replace("user_id=", NULL, $array[2]));
             session()->put('twitter_screen_name', str_replace("screen_name=", NULL, $array[3]));
             session()->put('twitter_logged_in', 1);*/
+
+            if($social->social_cell_id) {
+                $cell_id = $social->social_cell_id;
+                return redirect('/socialcell/'.$cell_id)->with('flash_message', 'Social account has been added.');
+            }
+            else {
+                return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
+            }
             
-            return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         }else{
             return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
         }
@@ -571,7 +578,14 @@ class SocialAccountController extends Controller
             $social->pinterest_token = $pinterest_token;
             $social->save();
 
-            return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
+            if($social->social_cell_id) {
+                $cell_id = $social->social_cell_id;
+                return redirect('/socialcell/'.$cell_id)->with('flash_message', 'Social account has been added.');
+            }
+            else {
+                return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
+            }
+
         }
         else if (isset($_GET["access_token"])) {
             $pinterest->auth->setOAuthToken($_GET["access_token"]);

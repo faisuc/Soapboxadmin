@@ -166,7 +166,6 @@ class SocialCellController extends Controller
             $permissions = ['email','user_posts','manage_pages','publish_pages'];
             $helper->getPersistentDataHandler()->set('state', 'social_id='.$social_id);
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/fb_cell_callback', $permissions);
-            echo $loginUrl; die();
             return redirect()->away($loginUrl);
             /*if(session()->get('fb_access_token') == '')
             {
