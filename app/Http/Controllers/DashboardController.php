@@ -242,7 +242,7 @@ class DashboardController extends Controller
                 $insta_data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
                 $insta_data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
                 $insta_data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
-                $insta_data['instagram_follower'] = true;
+                $data['instagram_follower'] = true;
                 
                 $check_insta_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$instagram_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
                 

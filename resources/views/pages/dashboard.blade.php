@@ -210,7 +210,7 @@
 		            	</div>
 		            <?php } ?>
 
-					<?php /* if(isset($instagram_follower)) {?>
+					<?php if(isset($instagram_follower)) {?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">	
 			            		<div class="card_header">
@@ -224,17 +224,17 @@
 			            		<?php
 			            			$insta_total_fans = $insta_total_following = $insta_total_likes = $insta_total_posts = '';
 			            		
-			            			$insta_total_fans = $total_fans;
-			            			$insta_total_following = $total_following;
-			            			$insta_total_likes = $total_likes;
-			            			$insta_total_posts = $total_posts;
+			            			$insta_total_fans = $insta_data['total_fans'];
+			            			$insta_total_following = $insta_data['total_following'];
+			            			$insta_total_likes = $insta_data['total_likes'];
+			            			$insta_total_posts = $insta_data['total_posts'];
 			            		?>
 			            		<div class="card_section">
 			            			<?php
-				            			if($insta_total_fans > $past_info[0]->insta_followers_count) {
+				            			if($insta_total_fans > $instapastinfo->insta_followers_count) {
 				            				$circle = 'fa fa-arrow-circle-up';
 				            				$color = 'text-success';
-				            			}else if($insta_total_fans < $past_info[0]->insta_followers_count) {
+				            			}else if($insta_total_fans < $instapastinfo->insta_followers_count) {
 											$circle = 'fa fa-arrow-circle-down';
 											$color = 'text-danger';
 				            			}else{
@@ -242,14 +242,14 @@
 											$color = 'text-gray';
 				            			}
 				            		?>
-		            				<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $insta_total_fans; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->insta_followers_count }}</b><br> Prev 7 Days</span> </span> </p>
+		            				<p class="main-title">Total Followers: <span class="up-down-price"><?php echo $insta_total_fans; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $instapastinfo->insta_followers_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
 			            			<?php
-				            			if($insta_total_following > $past_info[0]->insta_following_count) {
+				            			if($insta_total_following > $instapastinfo->insta_following_count) {
 				            				$circle = 'fa fa-arrow-circle-up';
 				            				$color = 'text-success';
-				            			}else if($insta_total_following < $past_info[0]->insta_following_count) {
+				            			}else if($insta_total_following < $instapastinfo->insta_following_count) {
 											$circle = 'fa fa-arrow-circle-down';
 											$color = 'text-danger';
 				            			}else{
@@ -257,14 +257,14 @@
 											$color = 'text-gray';
 				            			}
 				            		?>
-			            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $insta_total_following; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->insta_following_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            			<p class="main-title">Total Following: <span class="up-down-price"><?php echo $insta_total_following; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $instapastinfo->insta_following_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
 			            			<?php
-				            			if($insta_total_likes > $past_info[0]->insta_likes_count) {
+				            			if($insta_total_likes > $instapastinfo->insta_likes_count) {
 				            				$circle = 'fa fa-arrow-circle-up';
 				            				$color = 'text-success';
-				            			}else if($insta_total_likes < $past_info[0]->insta_likes_count) {
+				            			}else if($insta_total_likes < $instapastinfo->insta_likes_count) {
 											$circle = 'fa fa-arrow-circle-down';
 											$color = 'text-danger';
 				            			}else{
@@ -272,14 +272,14 @@
 											$color = 'text-gray';
 				            			}
 				            		?>
-			            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $insta_total_likes; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->insta_likes_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            			<p class="main-title">Total Likes: <span class="up-down-price"><?php echo $insta_total_likes; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $instapastinfo->insta_likes_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>
 			            		<div class="card_section">
 			            			<?php
-				            			if($insta_total_posts > $past_info[0]->insta_posts_count) {
+				            			if($insta_total_posts > $instapastinfo->insta_posts_count) {
 				            				$circle = 'fa fa-arrow-circle-up';
 				            				$color = 'text-success';
-				            			}else if($insta_total_posts < $past_info[0]->insta_posts_count) {
+				            			}else if($insta_total_posts < $instapastinfo->insta_posts_count) {
 											$circle = 'fa fa-arrow-circle-down';
 											$color = 'text-danger';
 				            			}else{
@@ -287,11 +287,11 @@
 											$color = 'text-gray';
 				            			}
 				            		?>
-			            			<p class="main-title">Total Posts: <span class="up-down-price"><?php echo $insta_total_posts; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $past_info[0]->insta_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            			<p class="main-title">Total Posts: <span class="up-down-price"><?php echo $insta_total_posts; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $instapastinfo->insta_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
 			            		</div>				            		
 		            		</div>
 		            	</div>
-		            <?php } */ ?>
+		            <?php } ?>
 	            </div>
 
 	            <?php /* fb, twitter, insta row backup
