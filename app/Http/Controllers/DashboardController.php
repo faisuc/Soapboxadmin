@@ -21,9 +21,6 @@ class DashboardController extends Controller
 
         /* Facebook Page Info start */
         $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-        echo "<pre>";
-        print_r($facebook_account);
-        die();
         if(!empty($facebook_account)) {
 
             $this->setFacebookObject();
