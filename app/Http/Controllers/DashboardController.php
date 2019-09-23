@@ -238,49 +238,68 @@ class DashboardController extends Controller
             curl_close($curl);
             $response = json_decode($response,true);
             if(isset($response['graphql'])) {
-                $data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
-                $data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
-                $data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
-                $data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
-                $data['instagram_follower'] = true;
-            }
-
-            $check_insta_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$instagram_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
-            
-            $today = date('Y-m-d');
-
-            if(!empty($check_insta_info)) {
-                $social_date = $check_insta_info->social_info_date;
+                $insta_data['total_fans'] = $response['graphql']['user']['edge_followed_by']['count'];
+                $insta_data['total_following'] = $response['graphql']['user']['edge_follow']['count'];
+                $insta_data['total_likes'] = $response['graphql']['user']['edge_saved_media']['count'];
+                $insta_data['total_posts'] = $response['graphql']['user']['edge_owner_to_timeline_media']['count'];
+                $insta_data['instagram_follower'] = true;
+                
+                $check_insta_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$instagram_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
+                
                 $today = date('Y-m-d');
-                
-                $datetime1 = new DateTime($social_date);
-                $datetime2 = new DateTime($today);
-                $interval = $datetime1->diff($datetime2);
-                $days = $interval->format('%a');
-                
-                if($days < 7) {
-                    $social_info_id = $check_insta_info->id;
+
+                if(!empty($check_insta_info)) {
+                    $social_date = $check_insta_info->social_info_date;
+                    $today = date('Y-m-d');
+                    
+                    $datetime1 = new DateTime($social_date);
+                    $datetime2 = new DateTime($today);
+                    $interval = $datetime1->diff($datetime2);
+                    $days = $interval->format('%a');
+                    
+                    if($days < 7) {
+                        $social_info_id = $check_insta_info->id;
+                    }
+                    else {
+                        // insert insta_data into social account info                    
+                        $social_insta = new $this->socialAccountInfo;
+                        $social_insta->user_id = $user_id;
+                        $social_insta->type_id = '5';
+                        $social_insta->social_id = $instagram_account->id;
+            
+                        $social_insta->insta_followers_count = $insta_data['total_fans'];
+                        $social_insta->insta_following_count = $insta_data['total_following'];
+                        $social_insta->insta_likes_count = $insta_data['total_likes'];
+                        $social_insta->insta_posts_count = $insta_data['total_posts'];
+                        
+                        $social_insta->social_info_date = $today;
+                        
+                        $social_insta->save();
+                        // $social_info_id = $social_insta->id;
+                        $social_info_id = $check_insta_info->id;
+                    }
+
                 }
                 else {
-                    // insert data into social account info                    
+                    
                     $social_insta = new $this->socialAccountInfo;
                     $social_insta->user_id = $user_id;
                     $social_insta->type_id = '5';
                     $social_insta->social_id = $instagram_account->id;
         
-                    $social_insta->insta_followers_count = $data['total_fans'];
-                    $social_insta->insta_following_count = $data['total_following'];
-                    $social_insta->insta_likes_count = $data['total_likes'];
-                    $social_insta->insta_posts_count = $data['total_posts'];
+                    $social_insta->insta_followers_count = $insta_data['total_fans'];
+                    $social_insta->insta_following_count = $insta_data['total_following'];
+                    $social_insta->insta_likes_count = $insta_data['total_likes'];
+                    $social_insta->insta_posts_count = $insta_data['total_posts'];
                     
                     $social_insta->social_info_date = $today;
                     
                     $social_insta->save();
                     $social_info_id = $social_insta->id;
                 }
-
-                // get social info id data
-                $data['insta_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                
+                $data['insta_data'] = $insta_data;
+                $data['instapastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
             }
 
         }
