@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Mail\Mailable;
 use Sentinel;
+use Mail;
+use URL;
+use Illuminate\Support\Facades\Input;
+use Cartalyst\Sentinel\Laravel\Facades\Activation;
 
 class ProfileController extends Controller
 {
@@ -223,6 +228,71 @@ class ProfileController extends Controller
 
         return view('pages.my-clients', $data);
 
+    }
+
+    public function register()
+    {
+        $data = array();
+        return view('pages.signup', $data);
+    }
+
+    public function create_user(Request $request)
+    {
+        $user = $this->user;
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->email = $request->input('email');
+        $user->phone_number = $request->input('phone');
+        $user->password = $this->hash($request->input('password'));
+        $user->save();
+
+        $role = Sentinel::findRoleBySlug($request->input('roles'));
+        $role->users()->attach($user);
+
+        $activation = Activation::create($user);
+        $activation_code = $activation->code;
+        
+        $name = $user->first_name.' '.$user->last_name;
+        $verify_link = URL::to('/').'/verify_register_user?user_id='.$user->id.'&code='.$activation_code;
+        $html = 'Hi '.$name.',<br>'.'You are registered successfully. <a href="'.$verify_link.'">Click here</a> to verify';
+        $user->html = $html;
+        Mail::send([], [], function ($message) use ($user) { 
+            $name = $user->first_name.' '.$user->last_name;
+            $html = $user->html;
+            $message->to($user->email, $name)->subject('subject')->setBody($html, 'text/html'); 
+        });
+        
+        return redirect()->back()->with('flash_message', 'Registered Successfully.');
+        // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
+    }
+
+    public function verify_register_user()
+    {
+        $code = Input::get('code');
+        $id = Input::get('user_id');
+        $user = Sentinel::findById($id);
+        if (!Activation::complete($user, $code)) {
+            return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
+        }
+        else {
+            return redirect()->back()->with('flash_message', 'Please Login..');
+        }
+    }
+
+    public function hash($string)
+    {
+        // Usually caused by an old PHP environment, see
+        // https://github.com/cartalyst/sentry/issues/98#issuecomment-12974603
+        // and https://github.com/ircmaxell/password_compat/issues/10
+        if (!function_exists('password_hash')) {
+            throw new \RuntimeException('The function password_hash() does not exist, your PHP environment is probably incompatible. Try running [vendor/ircmaxell/password-compat/version-test.php] to check compatibility or use an alternative hashing strategy.');
+        }
+
+        if (($hash = password_hash($string, PASSWORD_DEFAULT)) === false) {
+            throw new \RuntimeException('Error generating hash from string, your PHP environment is probably incompatible. Try running [vendor/ircmaxell/password-compat/version-test.php] to check compatibility or use an alternative hashing strategy.');
+        }
+
+        return $hash;
     }
 
 }

@@ -29,12 +29,15 @@ class LoginController extends Controller
                 return $this->redirectWhenLoggedIn();
             }
 
-            return redirect()->back()->withInput($request->except('password'))->withErrors('Invalid credentials provided');
+            // return redirect()->back()->withInput($request->except('password'))->withErrors('Invalid credentials provided');
+            return redirect()->back()->withErrors(['Invalid credentials provided']);
 
         } catch (\Cartalyst\Sentinel\Checkpoints\NotActivatedException $e) {
-            return redirect()->back()->withInput()->withErrorMessage('User not activated.');
+            // return redirect()->back()->withInput()->withErrorMessage('User not activated.');
+            return redirect()->back()->withErrors(['User not activated.']);
         } catch (\Cartalyst\Sentinel\Checkpoints\ThrottlingException $e) {
-            return redirect()->back()->withInput()->withErrorMessage($e->getMessage());
+            // return redirect()->back()->withInput()->withErrorMessage($e->getMessage());
+            return redirect()->back()->withErrors($e->getMessage());
         }
 
     }

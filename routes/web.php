@@ -15,6 +15,12 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
+/**/
+Route::get('signup', 'ProfileController@register');
+Route::get('verify_register_user', 'ProfileController@verify_register_user');
+Route::post('guestuser/create', 'ProfileController@create_user');
+/**/
+
 Route::group(['middleware' => 'guest'], function() {
 
     Route::post('/register', 'RegistrationController@postRegister');
