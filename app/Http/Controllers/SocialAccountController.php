@@ -301,7 +301,15 @@ class SocialAccountController extends Controller
         // session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
         // header('Location: http://127.0.0.1:3000/fb_connect_app');
-        $fb_connect_url = URL::to('/').'/fb_connect_app';
+
+        if($social->social_cell_id) {
+            $cell_id = $social->social_cell_id;
+            $fb_connect_url = URL::to('/').'/fb_cell_connect_app/'.$cell_id;
+        }
+        else {
+            $fb_connect_url = URL::to('/').'/fb_connect_app';
+        }
+
         return redirect()->away($fb_connect_url);
     }
 
