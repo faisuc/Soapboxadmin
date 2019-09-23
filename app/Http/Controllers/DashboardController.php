@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Sentinel;
 use DateTime;
+use DB;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use App\Http\Controllers\TwitterAPIExchange;
@@ -47,47 +48,62 @@ class DashboardController extends Controller
                 $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
                 $data['facebook_follower'] = true;
 
-            }
-            
-            $today = date('Y-m-d');
-
-            $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
-            
-            if(!empty($check_fb_info)) {
-                $social_date = $check_fb_info->social_info_date;
                 $today = date('Y-m-d');
+                $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->offset(1)->limit(1)->get()->first();
                 
-                $datetime1 = new DateTime($social_date);
-                $datetime2 = new DateTime($today);
-                $interval = $datetime1->diff($datetime2);
-                $days = $interval->format('%a');
-                
-                if($days < 7) {
-                    $social_info_id = $check_fb_info->id;
+
+                if(!empty($check_fb_info)) {
+                    $social_date = $check_fb_info->social_info_date;
+                    $today = date('Y-m-d');
+                    
+                    $datetime1 = new DateTime($social_date);
+                    $datetime2 = new DateTime($today);
+                    $interval = $datetime1->diff($datetime2);
+                    $days = $interval->format('%a');
+                    
+                    if($days < 7) {
+                        $social_info_id = $check_fb_info->id;
+                    }
+                    else {
+                        
+                        // insert data into social account info                    
+                        $social_fb = new $this->socialAccountInfo;
+                        $social_fb->user_id = $user_id;
+                        $social_fb->type_id = '1';
+                        $social_fb->social_id = $facebook_account->id;
+                        $social_fb->fb_talking_about_count = $fb_data['talking_about_count'];
+                        $social_fb->fb_fan_count = $fb_data['fan_count'];
+                        $social_fb->fb_rating_count = $fb_data['rating_count'];
+                        $social_fb->fb_published_posts_count = $fb_data['published_posts_count'];
+                        $social_fb->social_info_date = $today;
+                        $social_fb->save();
+                        // $social_info_id = $social_fb->id;
+                        $social_info_id = $check_fb_info->id;
+                    }
+
                 }
                 else {
-                    
-                    // insert data into social account info                    
+
                     $social_fb = new $this->socialAccountInfo;
                     $social_fb->user_id = $user_id;
                     $social_fb->type_id = '1';
                     $social_fb->social_id = $facebook_account->id;
-                    $social_fb->fb_talking_about_count = $data['talking_about_count'];
-                    $social_fb->fb_fan_count = $data['fan_count'];
-                    $social_fb->fb_rating_count = $data['rating_count'];
-                    $social_fb->fb_published_posts_count = $data['published_posts_count'];
+                    $social_fb->fb_talking_about_count = $fb_data['talking_about_count'];
+                    $social_fb->fb_fan_count = $fb_data['fan_count'];
+                    $social_fb->fb_rating_count = $fb_data['rating_count'];
+                    $social_fb->fb_published_posts_count = $fb_data['published_posts_count'];
                     $social_fb->social_info_date = $today;
                     $social_fb->save();
+
                     $social_info_id = $social_fb->id;
+
                 }
-
-                // get social info id data
-                $data['fb_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
-            }
-            else {
-
+                
                 $data['fb_data'] = $fb_data;
+                $data['fbpastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+
             }
+            
 
         }
         /* Facebook Page Info End */
@@ -98,7 +114,7 @@ class DashboardController extends Controller
         	
             if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
 
-        		$consumer_key = getenv('TWITTER_CLIENT_ID');
+                $consumer_key = getenv('TWITTER_CLIENT_ID');
             	$consumer_secret = getenv('TWITTER_CLIENT_SECRET');
 
 	        	$oauth_token = $twitter_account->twitter_session;
@@ -116,10 +132,10 @@ class DashboardController extends Controller
                 $getfield = '?tweet_mode=extended';
 
                 $twitter = new TwitterAPIExchange($settings);
-                $string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-
-                if(!empty($string)) {
-                    foreach($string as $tweets) {
+                $user_timeline = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+                
+                if(!empty($user_timeline)) {
+                    foreach($user_timeline as $tweets) {
                         $user_id = $tweets['user']['id_str'];
                         $name = $tweets['user']['name'];
                         $screen_name = $tweets['user']['screen_name'];
@@ -129,49 +145,71 @@ class DashboardController extends Controller
                         $statuses = $tweets['user']['statuses_count'];
                     }
 
-                    $data['name'] = $name;
-                    $data['screen_name'] = $screen_name;
-                    $data['followers'] = $followers;
-                    $data['friends'] = $friends;
-                    $data['likes'] = $likes;
-                    $data['statuses'] = $statuses;
+                    $twt_data['name'] = $name;
+                    $twt_data['screen_name'] = $screen_name;
+                    $twt_data['followers'] = $followers;
+                    $twt_data['friends'] = $friends;
+                    $twt_data['likes'] = $likes;
+                    $twt_data['statuses'] = $statuses;
                     $data['twitter_follower'] = true;
-                }
-                
-                $check_twt_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$twitter_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
-                
-                $today = date('Y-m-d');
-
-                if(!empty($check_twt_info)) {
-                    $social_date = $check_twt_info->social_info_date;
+                    
+                    $check_twt_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$twitter_account->id)->orderBy('id', 'DESC')->limit(1)->get()->first();
+                    
                     $today = date('Y-m-d');
-                    
-                    $datetime1 = new DateTime($social_date);
-                    $datetime2 = new DateTime($today);
-                    $interval = $datetime1->diff($datetime2);
-                    $days = $interval->format('%a');
-                    
-                    if($days < 7) {
-                        $social_info_id = $check_twt_info->id;
+                    $user_id = Sentinel::getUser()->id;
+
+                    if(!empty($check_twt_info)) {
+                        $social_date = $check_twt_info->social_info_date;
+                        $today = date('Y-m-d');
+                        
+                        $datetime1 = new DateTime($social_date);
+                        $datetime2 = new DateTime($today);
+                        $interval = $datetime1->diff($datetime2);
+                        $days = $interval->format('%a');
+                        
+                        if($days < 7) {
+                            $social_info_id = $check_twt_info->id;
+                        }
+                        else {
+                            // insert data into social account info                    
+                            $social_twt = new $this->socialAccountInfo;
+                            $social_twt->user_id = $user_id;
+                            $social_twt->type_id = '3';
+                            $social_twt->social_id = $twitter_account->id;
+                            $social_twt->twt_followers_count = $twt_data['followers'];
+                            $social_twt->twt_following_count = $twt_data['friends'];
+                            $social_twt->twt_likes_count = $twt_data['likes'];
+                            $social_twt->twt_posts_count = $twt_data['statuses'];
+                            $social_twt->social_info_date = $today;
+                            $social_twt->save();
+                            // $social_info_id = $social_twt->id;
+                            $social_info_id = $check_twt_info->id;
+                        }
+
                     }
                     else {
+
                         // insert data into social account info                    
                         $social_twt = new $this->socialAccountInfo;
                         $social_twt->user_id = $user_id;
                         $social_twt->type_id = '3';
                         $social_twt->social_id = $twitter_account->id;
-                        $social_twt->twt_followers_count = $data['followers'];
-                        $social_twt->twt_following_count = $data['friends'];
-                        $social_twt->twt_likes_count = $data['likes'];
-                        $social_twt->twt_posts_count = $data['statuses'];
+                        $social_twt->twt_followers_count = $twt_data['followers'];
+                        $social_twt->twt_following_count = $twt_data['friends'];
+                        $social_twt->twt_likes_count = $twt_data['likes'];
+                        $social_twt->twt_posts_count = $twt_data['statuses'];
                         $social_twt->social_info_date = $today;
                         $social_twt->save();
+                        
                         $social_info_id = $social_twt->id;
                     }
-
+                    
                     // get social info id data
-                    $data['twt_data'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                    $data['twt_data'] = $twt_data;
+                    $data['twtpastinfo'] = $this->socialAccountInfo->where('id', $social_info_id)->get()->first();
+                    
                 }
+                
         	}
 
         }
