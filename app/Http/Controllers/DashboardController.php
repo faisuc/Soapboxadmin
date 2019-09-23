@@ -46,6 +46,7 @@ class DashboardController extends Controller
                     $fb_data['fan_count'] = $fandata['fan_count'];
                     $fb_data['rating_count'] = $fandata['rating_count'];
                     $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
+                    $data['facebook_follower'] = true;
                 }
                 else {
                     $fb_data['talking_about_count'] = 0;
@@ -54,7 +55,6 @@ class DashboardController extends Controller
                     $fb_data['published_posts_count'] = 0;
                 }
                 
-                $data['facebook_follower'] = true;
 
                 $today = date('Y-m-d');
                 $check_fb_info = $this->socialAccountInfo->where('user_id', Sentinel::getUser()->id)->where('social_id',$facebook_account->id)->orderBy('id', 'DESC')->offset(1)->limit(1)->get()->first();
