@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label for="cellName">Cell Name</label>
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
-                            <input id="cellName" type="text" placeholder="Cell Name" value="{{ $socialcell->cell_name }}" name="cellname" class="form-control">
+                            <input id="cellName" type="text" placeholder="Cell Name" value="{{ $socialcell->cell_name }}" name="cellname" readonly class="form-control">
                         </div>
 
                         <div class="form-group">
