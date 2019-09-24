@@ -262,7 +262,8 @@ class ProfileController extends Controller
             $message->to($user->email, $name)->subject('subject')->setBody($html, 'text/html'); 
         });
         
-        return redirect()->back()->with('flash_message', 'Registered Successfully.');
+        // return redirect()->back()->with('flash_message', 'Registered Successfully.');
+        return redirect('/signup')->with('flash_message', 'Registered Successfully. Please Check your email to verfiy your account and login.');
         // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
     }
 
@@ -272,10 +273,12 @@ class ProfileController extends Controller
         $id = Input::get('user_id');
         $user = Sentinel::findById($id);
         if (!Activation::complete($user, $code)) {
-            return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
+            // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
+            return redirect('/login')->withErrors(['Something went wrong.. Please try again later.']);
         }
         else {
-            return redirect()->back()->with('flash_message', 'Please Login..');
+            // return redirect()->back()->with('flash_message', 'Please Login..');
+            return redirect('/login')->with('flash_message', 'User Activated. You can login now.');    
         }
     }
 
