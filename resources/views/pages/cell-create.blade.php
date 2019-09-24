@@ -50,7 +50,7 @@
                             <label for="clientEmail">Client Email</label>
                             <input id="clientEmail" type="text" value="{{ old('email_client') }}" name="email_client" class="form-control" data-role="tagsinput">
                         </div>
-                        <div class="form-group">
+                        <?php /* <div class="form-group">
                             <label for="inputStatus">Payment Status</label>                            
                             <select id="inputStatus" name="payment_status" class="form-control">                            
                                 <option value="1">Waiting Payment</option>
@@ -58,7 +58,7 @@
                                 <option value="3">Cancelled</option>
                                 <option value="4">On Hold</option>
                             </select>
-                        </div>
+                        </div> */ ?>
 
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
@@ -74,13 +74,13 @@
             
             $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
 
-            $('#inputStatus').on('change', function(e){
+            /*$('#inputStatus').on('change', function(e){
                 if($(this).val() == '2') {
                     $('.generate').show();
                 }else{
                     $('.generate').hide();
                 }
-            });
+            });*/
 
             $('#ownerEmail').on('change',function() {
                 if($(this).val() != '') {

@@ -53,7 +53,7 @@
                             <!-- <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control"> -->
                             <input id="clientEmail" type="text" value="{{ $socialcell->email_client }}" name="email_client" class="form-control"  data-role="tagsinput">
                         </div>
-                        <div class="form-group">
+                        <?php /* <div class="form-group">
                             <label for="inputStatus">Payment Status</label>                            
                             <select id="inputStatus" name="payment_status" class="form-control user">                            
                                 <option value="1" {{ $socialcell->payment_status == 1 ? 'selected' : '' }}>Waiting Payment</option>
@@ -61,7 +61,7 @@
                                 <option value="3" {{ $socialcell->payment_status == 3 ? 'selected' : '' }}>Cancelled</option>
                                 <option value="4" {{ $socialcell->payment_status == 4 ? 'selected' : '' }}>On Hold</option>
                             </select>
-                        </div>
+                        </div> */ ?>
                     
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
@@ -83,16 +83,16 @@
             <?php
             if($socialcell->payment_status != 2) {
             ?>
-            $('#inputStatus').on('change', function(e){
+            /*$('#inputStatus').on('change', function(e){
                 if( $('#ownerEmail').val() != '' || $(this).val() == '1') {
                     $('.generate').show();
                 }else{
                     $('.generate').hide();
                 }
-            });
+            });*/
 
             $('#ownerEmail').on('change',function() {
-                if( $('#inputStatus').val() == '1' || $(this).val() != '') {
+                if($(this).val() != '') {
                     $('.generate').show();
                 }
                 else {
