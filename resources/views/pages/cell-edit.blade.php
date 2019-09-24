@@ -65,7 +65,9 @@
                     
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">
+                            @if($socialcell->payment_status != 2)
                             <input type="submit" name="payment" value="Generate Payment" class="btn btn-primary generate" style="display: none;">
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -78,6 +80,9 @@
 
             $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
 
+            <?php
+            if($socialcell->payment_status != 2) {
+            ?>
             $('#inputStatus').on('change', function(e){
                 if( $('#ownerEmail').val() != '' || $(this).val() == '1') {
                     $('.generate').show();
@@ -99,6 +104,9 @@
                 $('#inputStatus').change();
                 $('#ownerEmail').change();
             },1000);
+            <?php
+            }
+            ?>
            
         });
     </script>
