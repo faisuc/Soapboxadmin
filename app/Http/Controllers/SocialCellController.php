@@ -84,6 +84,7 @@ class SocialCellController extends Controller
             $socialcell->save();
 
     		if($request->input('payment') != '') {
+                $cell_id = $socialcell->id;
                 return redirect('generate_payment/'.$cell_id);
             }
             else {
