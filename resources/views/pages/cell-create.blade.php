@@ -75,7 +75,7 @@
             $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
 
             $('#inputStatus').on('change', function(e){
-                if($(this).val() == '1') {
+                if($(this).val() == '2') {
                     $('.generate').show();
                 }else{
                     $('.generate').hide();
