@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group">
                             <label for="inputStatus">Payment Status</label>                            
-                            <select id="inputStatus" name="payment_status" class="form-control user">                            
+                            <select id="inputStatus" name="payment_status" class="form-control">                            
                                 <option value="1">Waiting Payment</option>
                                 <option value="2">Active</option>
                                 <option value="3">Cancelled</option>
@@ -60,30 +60,9 @@
                             </select>
                         </div>
 
-                        <?php /*
-                        Active, Waiting Payment, Cancelled, On Hold
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                <label for="cellemail">Email</label>
-                                <div class="form-group">
-                                    <input id="cellemail" type="text" placeholder="Email" value="{{ old('title') }}" name="cellemail1" class="form-control">
-                                </div>
-                            </div>                            
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                <label for="cllemail">&nbsp;</label>
-                                <div class="form-group">
-                                    <select id="inputStatus" name="ownerstatus" class="form-control user">
-                                        <option value=''>select user</option>
-                                        <option value="1">Owner</option>
-                                        <!-- <option value="2">Marketer</option>
-                                        <option value="3">Clients</option> -->
-                                    </select>
-                                </div>
-                            </div>
-                        </div> */?>
-                                                   
                         <div class="form-group">
-                            <input type="submit" value="SAVE" class="btn btn-primary">                            
+                            <input type="submit" value="SAVE" class="btn btn-primary">
+                            <input type="submit" name="payment" value="Generate Payment" class="btn btn-primary generate" style="display: none;">
                         </div>
                     </form>
                 </div>
@@ -91,18 +70,27 @@
         </div>
     </div>
     <script type="text/javascript">
-        
         $(document).ready(function(){
             
             $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
 
-            $('.user').on('change', function(e){
+            $('#inputStatus').on('change', function(e){
                 if($(this).val() == '1') {
                     $('.generate').show();
                 }else{
                     $('.generate').hide();
                 }
             });
+
+            $('#ownerEmail').on('change',function() {
+                if($(this).val() != '') {
+                    $('.generate').show();
+                }
+                else {
+                    $('.generate').hide();
+                }
+            });
+
         });
     </script>
 @endsection

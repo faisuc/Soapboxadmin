@@ -64,7 +64,8 @@
                         </div>
                     
                         <div class="form-group">
-                            <input type="submit" value="SAVE" class="btn btn-primary">                            
+                            <input type="submit" value="SAVE" class="btn btn-primary">
+                            <input type="submit" name="payment" value="Generate Payment" class="btn btn-primary generate" style="display: none;">
                         </div>
                     </form>
                 </div>
@@ -76,6 +77,28 @@
         $(document).ready(function(){
 
             $('#ownerEmail,#marketerEmail,#clientEmail').tagsinput();
+
+            $('#inputStatus').on('change', function(e){
+                if( $('#ownerEmail').val() != '' || $(this).val() == '1') {
+                    $('.generate').show();
+                }else{
+                    $('.generate').hide();
+                }
+            });
+
+            $('#ownerEmail').on('change',function() {
+                if( $('#inputStatus').val() == '1' || $(this).val() != '') {
+                    $('.generate').show();
+                }
+                else {
+                    $('.generate').hide();
+                }
+            });
+
+            setTimeout(function() {
+                $('#inputStatus').change();
+                $('#ownerEmail').change();
+            },1000);
            
         });
     </script>

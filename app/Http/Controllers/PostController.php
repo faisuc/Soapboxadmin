@@ -25,7 +25,7 @@ class PostController extends Controller
     private $instaSignature ='25eace5393646842f0d0c3fb2ac7d3cfa15c052436ee86b5406a8433f54d24a5';
     private $instagramUrl = 'https://i.instagram.com/api/v1/';
 
-    public function index($user_id = null)
+    public function index($cell_id = null)
     {
 
         $this->_loadSharedViews();
@@ -33,29 +33,30 @@ class PostController extends Controller
         $data = [];
         $data['posts'] = [];
 
-        if ($user_id == null)
+        if ($cell_id == null)
         {
-            $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->where('social_cell_id','!=', 0)->orderBy('created_at', 'DESC')->get();
         }
         else
         {
-            $data['posts'] = $this->post->where('user_id', $user_id)->get();
+            $data['posts'] = $this->post->where('user_id', Sentinel::getUser()->id)->where('social_cell_id', $cell_id)->get();
+            $data['cell_id'] = $cell_id;
         }
 
         if (is_admin())
         {
-            $data['managedClients'] = Sentinel::getUserRepository()->with('roles')->where('id', '<>', Sentinel::getUser()->id)->get();
+            $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         }
         else
         {
-            $data['managedClients'] = $this->user->find(Sentinel::getUser()->id)->clients();
+            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
         }
 
         return view('pages.queues', $data);
 
     }
 
-    public function create()
+    public function create($cell_id = null)
     {
 
         $this->_loadSharedViews();
@@ -79,53 +80,60 @@ class PostController extends Controller
         /*if(session()->get('twitter_logged_in') != '') {
             $data['twitter'] = true;
         }*/
-        $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-        $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-        $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-        $pinterest_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-        if(!empty($facebook_account)) {
-            if($facebook_account->facebook_token) {
-                $token = $facebook_account->facebook_token;
-                $userdata = $this->api->get('/me', $token);
-                $userdata = $userdata->getGraphUser();
-                $user_id = $userdata['id'];
-                $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
-                
-                $accounts = $accounts->getDecodedBody();
-                $data['pages'] = $accounts['data'];
-                $data['facebook'] = true;
-            }
-        }
-        if (!empty($twitter_account)) {
-            if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
-                $data['twitter'] = true;
-            }
-        }
-        if (!empty($instagram_account)) {
-            $data['instagram'] = true;
-        }
-        if (!empty($pinterest_account)) {
-            if($pinterest_account->pinterest_token) {
-                $token = $pinterest_account->pinterest_token;
 
-                $app_id = getenv('PINTEREST_CLIENT_ID');
-                $app_secret = getenv('PINTEREST_CLIENT_SECRET');
-                $callback_url = getenv('PINTEREST_REDIRECT');
-                $pinterest = new Pinterest($app_id, $app_secret);
-                $pinterest->auth->setOAuthToken($token);
-
-                /* Get User Boards */
-                $boards = $pinterest->users->getMeBoards();
-                $boardsArr = array();
-                foreach ($boards as $board_key => $board) {
-                    $board_id = $board->id;
-                    $boardsArr[$board_id] = $board->name;
+        $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        if ($cell_id != null) {
+            $data['cell_id'] = $cell_id;
+            
+            $facebook_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $twitter_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $instagram_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $pinterest_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            if(!empty($facebook_account)) {
+                if($facebook_account->facebook_token) {
+                    $token = $facebook_account->facebook_token;
+                    $userdata = $this->api->get('/me', $token);
+                    $userdata = $userdata->getGraphUser();
+                    $user_id = $userdata['id'];
+                    $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+                    
+                    $accounts = $accounts->getDecodedBody();
+                    $data['pages'] = $accounts['data'];
+                    $data['facebook'] = true;
                 }
+            }
+            if (!empty($twitter_account)) {
+                if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
+                    $data['twitter'] = true;
+                }
+            }
+            if (!empty($instagram_account)) {
+                $data['instagram'] = true;
+            }
+            if (!empty($pinterest_account)) {
+                if($pinterest_account->pinterest_token) {
+                    $token = $pinterest_account->pinterest_token;
 
-                $data['boards'] = $boardsArr;
-                $data['pinterest'] = true;
+                    $app_id = getenv('PINTEREST_CLIENT_ID');
+                    $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+                    $callback_url = getenv('PINTEREST_REDIRECT');
+                    $pinterest = new Pinterest($app_id, $app_secret);
+                    $pinterest->auth->setOAuthToken($token);
+
+                    /* Get User Boards */
+                    $boards = $pinterest->users->getMeBoards();
+                    $boardsArr = array();
+                    foreach ($boards as $board_key => $board) {
+                        $board_id = $board->id;
+                        $boardsArr[$board_id] = $board->name;
+                    }
+
+                    $data['boards'] = $boardsArr;
+                    $data['pinterest'] = true;
+                }
             }
         }
+        
         
         return view('pages.post-create', $data);
 
@@ -139,6 +147,7 @@ class PostController extends Controller
         $link = $request->input('link');
         $schedule_date = $request->input('schedule_date');
         $user_id = $request->input('user_id');
+        $cell_id = $request->input('cell_id');
         $status = $request->input('status');
 
         if (!$user_id) {
@@ -170,6 +179,7 @@ class PostController extends Controller
 
         $post = new $this->post;
         $post->user_id = $user_id;
+        $post->social_cell_id = $cell_id;
         $post->title = $title;
         $post->description = $description;
 
@@ -334,6 +344,7 @@ class PostController extends Controller
 
             }
 
+            $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
             $data['post'] = $this->post->find($post_id);
             $this->setFacebookObject();
             
@@ -354,10 +365,12 @@ class PostController extends Controller
             /*if(session()->get('twitter_logged_in') != '') {
                 $data['twitter'] = true;
             }*/
-            $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-            $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-            $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-            $pinterest_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+
+            $cell_id = $data['post']->social_cell_id;
+            $facebook_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $twitter_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $instagram_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+            $pinterest_account = $this->socialAccount->where('social_cell_id', $cell_id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             if(!empty($facebook_account)) {
                 if($facebook_account->facebook_token) {
                     $token = $facebook_account->facebook_token;
@@ -419,6 +432,7 @@ class PostController extends Controller
         $link = $request->input('link');
         $schedule_date = $request->input('schedule_date');
         $status = $request->input('status');
+        $cell_id = $request->input('cell_id');
 
         $data = [];
         $media_id = 0;
@@ -446,6 +460,7 @@ class PostController extends Controller
         $post->title = $title;
         $post->description = $description;
         $post->status = $status;
+        $post->social_cell_id = $cell_id;
 
         if ($media_id != 0)
         {
@@ -1170,107 +1185,119 @@ class PostController extends Controller
             $post_id = $data->post_id;
             $post_date = $data->post_date;
 
-            if(strtotime($post_date) == strtotime($current_time)){
-                if($data->type_name == 'twitter') {
+            $postData = $this->post->find($post_id);
+            $cell_id = $postData->social_cell_id;
+
+            if($cell_id) {
+                $cellData = $this->socialCell->find($cell_id);
+                
+                $payment_status = $cellData->payment_status;
+                if($payment_status == 1) {
                     
-                    $postData = $this->post->find($post_id);
-                    $title = $postData->title;
+                    if(strtotime($post_date) == strtotime($current_time)){
+                        if($data->type_name == 'twitter') {
+                            
+                            $postData = $this->post->find($post_id);
+                            $title = $postData->title;
 
-                    $oauth_token = $data->session;
-                    $oauth_token_secret = $data->session_secret;
+                            $oauth_token = $data->session;
+                            $oauth_token_secret = $data->session_secret;
 
-                    $url = 'https://api.twitter.com/1.1/statuses/update.json';
-                    $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
-                    // $parameters = array('status' => $title);
-                    $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
-                    if(isset($result['errors'])) {
-                        echo "<pre>";
-                        print_r($result);
-                        echo "</pre>";
+                            $url = 'https://api.twitter.com/1.1/statuses/update.json';
+                            $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
+                            // $parameters = array('status' => $title);
+                            $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+                            if(isset($result['errors'])) {
+                                echo "<pre>";
+                                print_r($result);
+                                echo "</pre>";
+                            }
+                            
+                        }
+                        else if($data->type_name == 'instagram') {
+                            
+                            $post = $this->post->find($post_id);
+                            $filename = $post->featured_image;
+                            $title = $post->title;
+
+                            $username = $data->session;
+                            $password = $data->session_secret;
+                            $schedule = $data->post_date;
+
+                            $root = $_SERVER['DOCUMENT_ROOT'];
+                            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                                $new_filename = $root.$filename;
+                            }
+                            else {
+                                $request_uri = '/public/';
+                                $new_filename = $root.$request_uri.$filename;
+                            }
+
+                            $this->image_load($new_filename);
+                            $this->image_resize(480,600);
+                            $this->image_save($new_filename, IMAGETYPE_JPEG);
+
+                            $response = $this->insta_login($username, $password);
+                            /*echo "<pre>";
+                            print_r($response);
+                            die();*/
+
+                            if(strpos($response[1], "Sorry")) {
+                                echo "Request failed, there's a chance that this proxy/ip is blocked";
+                                print_r($response);
+                                exit();
+                            }         
+                            if(empty($response[1])) {
+                                echo "Empty response received from the server while trying to login";
+                                print_r($response); 
+                                exit(); 
+                            }
+
+                            $insta_post = $this->insta_post($new_filename, $title, $schedule);
+                            /*echo "<pre>";
+                            print_r($insta_post);
+                            die();*/
+                        }
+                        else if ($data->type_name == 'pinterest') {
+                            
+                            $post = $this->post->find($post_id);
+                            $filename = $post->featured_image;
+                            $title = $post->title;
+
+                            $filename = $post->featured_image;
+                            $root = $_SERVER['DOCUMENT_ROOT'];
+                            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                                $image = $root.$filename;
+                            }
+                            else {
+                                $request_uri = '/public/';
+                                $image = $root.$request_uri.$filename;
+                            }
+
+                            $app_id = getenv('PINTEREST_CLIENT_ID');
+                            $app_secret = getenv('PINTEREST_CLIENT_SECRET');
+                            $callback_url = getenv('PINTEREST_REDIRECT');
+
+                            $token = $data->session;
+                            $board_id = $data->session_secret;
+
+                            $pinterest = new Pinterest($app_id, $app_secret);
+                            $pinterest->auth->setOAuthToken($token);
+                            $caption = $title;
+
+                            $pin = $pinterest->pins->create(array(
+                                "note"          => $caption,
+                                "image"     => $image,
+                                "board"         => $board_id
+                            ));
+                        }
                     }
+
                     
-                }
-                else if($data->type_name == 'instagram') {
-                    
-                    $post = $this->post->find($post_id);
-                    $filename = $post->featured_image;
-                    $title = $post->title;
-
-                    $username = $data->session;
-                    $password = $data->session_secret;
-                    $schedule = $data->post_date;
-
-                    $root = $_SERVER['DOCUMENT_ROOT'];
-                    if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-                        $new_filename = $root.$filename;
-                    }
-                    else {
-                        $request_uri = '/public/';
-                        $new_filename = $root.$request_uri.$filename;
-                    }
-
-                    $this->image_load($new_filename);
-                    $this->image_resize(480,600);
-                    $this->image_save($new_filename, IMAGETYPE_JPEG);
-
-                    $response = $this->insta_login($username, $password);
-                    /*echo "<pre>";
-                    print_r($response);
-                    die();*/
-
-                    if(strpos($response[1], "Sorry")) {
-                        echo "Request failed, there's a chance that this proxy/ip is blocked";
-                        print_r($response);
-                        exit();
-                    }         
-                    if(empty($response[1])) {
-                        echo "Empty response received from the server while trying to login";
-                        print_r($response); 
-                        exit(); 
-                    }
-
-                    $insta_post = $this->insta_post($new_filename, $title, $schedule);
-                    /*echo "<pre>";
-                    print_r($insta_post);
-                    die();*/
-                }
-                else if ($data->type_name == 'pinterest') {
-                    
-                    $post = $this->post->find($post_id);
-                    $filename = $post->featured_image;
-                    $title = $post->title;
-
-                    $filename = $post->featured_image;
-                    $root = $_SERVER['DOCUMENT_ROOT'];
-                    if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-                        $image = $root.$filename;
-                    }
-                    else {
-                        $request_uri = '/public/';
-                        $image = $root.$request_uri.$filename;
-                    }
-
-                    $app_id = getenv('PINTEREST_CLIENT_ID');
-                    $app_secret = getenv('PINTEREST_CLIENT_SECRET');
-                    $callback_url = getenv('PINTEREST_REDIRECT');
-
-                    $token = $data->session;
-                    $board_id = $data->session_secret;
-
-                    $pinterest = new Pinterest($app_id, $app_secret);
-                    $pinterest->auth->setOAuthToken($token);
-                    $caption = $title;
-
-                    $pin = $pinterest->pins->create(array(
-                        "note"          => $caption,
-                        "image"     => $image,
-                        "board"         => $board_id
-                    ));
+                    DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
                 }
             }
 
-            
-            DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
         }
     }
 

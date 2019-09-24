@@ -28,7 +28,8 @@
                     @endif
                     @if($temp > 0)
                     <div class="alert alert-danger">
-                        <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
+                        <!-- <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p> -->
+                        <p>Please Connect Social Account By Clicking <a href="/socialcell/{{ $cell_id }}">Here</a></p>
                     </div>
                     @endif
                     <!-- <form action="/post/store" method="post" enctype="multipart/form-data"> -->
@@ -53,24 +54,39 @@
                         @endif
 
                         <div class="form-group">
+                            <label for="inputCell">Social Cell</label>
+                            <select id="inputCell" name="cell_id" class="form-control" onchange="(window.location = '/post/add/' + this.options[this.selectedIndex].value);" required>
+                                <option value="">All Cells</option>
+                                @foreach ($socialCells as $socialCell)
+                                    <option value="{{ $socialCell->id }}" {{ (isset($cell_id) && $cell_id == $socialCell->id) ? 'selected' : '' }} >{{ $socialCell->cell_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        @if(isset($cell_id))
+                            <?php $disabled = ''; ?>
+                        @else
+                            <?php $disabled = 'disabled'; ?>
+                        @endif
+                        <div class="form-group">
                             <label for="inputTitle">Title</label>
-                            <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control">
+                            <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control" <?php echo $disabled; ?>>
                         </div>
                         <div class="form-group">
                             <label for="inputTextContent">Text Content</label>
-                            <textarea id="inputTextContent" type="text" placeholder="Text Content" name="description" class="form-control">{{ old('description') }}</textarea>
+                            <textarea id="inputTextContent" type="text" placeholder="Text Content" name="description" class="form-control" <?php echo $disabled; ?>>{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="inputURL">URL/Link</label>
-                            <input id="inputURL" type="text" placeholder="URL/Link" value="{{ old('link') }}" name="link" class="form-control">
+                            <input id="inputURL" type="text" placeholder="URL/Link" value="{{ old('link') }}" name="link" class="form-control" <?php echo $disabled; ?>>
                         </div>
                         <div class="form-group">
                             <label for="inputScheduleDate">Schedule Post</label>
-                            <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required>
+                            <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required <?php echo $disabled; ?>>
                         </div>
                         <div class="form-group">
                             <label for="inputStatus">Status</label>
-                            <select id="inputStatus" name="status" class="form-control">
+                            <select id="inputStatus" name="status" class="form-control" <?php echo $disabled; ?>>
                                 @foreach ($post_statuses as $key => $status)
                                     <option value="{{ $key }}">{{ $status }}</option>
                                 @endforeach
@@ -78,13 +94,13 @@
                         </div>
                         <div class="form-group">
                             <label for="inputPhoto">Photo</label>
-                            <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">
+                            <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control" <?php echo $disabled; ?>>
                         </div>
                         @if(isset($facebook))
                             @if(!empty($pages))
                                 <label for="facebook_post">Facebook Pages</label>
                                 <label class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" id="facebook_post" type="checkbox" name="facebook_post"><span class="custom-control-label">Post to Facebook</span>
+                                    <input class="custom-control-input" id="facebook_post" type="checkbox" name="facebook_post"><span class="custom-control-label" <?php echo $disabled; ?>>Post to Facebook</span>
                                 </label>
                                 <div id="facebook-pages" style="display: none;">
                                     @foreach ($pages as $page_key => $page)
@@ -100,7 +116,7 @@
                         <div class="form-group">
                             <label for="twitter_post">Twitter Post</label>
                             <label class="custom-control custom-checkbox">
-                                <input class="custom-control-input" id="twitter_post" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
+                                <input class="custom-control-input" id="twitter_post" type="checkbox" name="twitter_post" <?php echo $disabled; ?>><span class="custom-control-label">Post to Twitter</span>
                             </label>
                         </div>
                         @endif
@@ -109,7 +125,7 @@
                         <div class="form-group">
                             <label for="instagram_post">Instagram Pages</label>
                             <label class="custom-control custom-checkbox">
-                                <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
+                                <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post" <?php echo $disabled; ?>><span class="custom-control-label">Post to instagram</span>
                             </label>
                         </div>
                         <?php /* ?><div id="instagram_user_pass" style="display: none;">
@@ -128,7 +144,7 @@
                                 <hr>
                                 <label for="pinterest_post">Pinterest</label>
                                 <label class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" id="pinterest_post" type="checkbox" name="pinterest_post"><span class="custom-control-label">Post to Pinterest</span>
+                                    <input class="custom-control-input" id="pinterest_post" type="checkbox" name="pinterest_post" <?php echo $disabled; ?>><span class="custom-control-label">Post to Pinterest</span>
                                 </label>
                                 <div id="pinterest-boards" style="display: none;">
                                     <?php $i = 0; ?>
@@ -142,7 +158,7 @@
                             @endif
                         @endif
                         <div class="form-group">
-                            <input type="submit" value="SAVE" class="btn btn-primary">
+                            <input type="submit" value="SAVE" class="btn btn-primary" <?php echo $disabled; ?>>
                         </div>
                     </form>
                 </div>

@@ -15,6 +15,12 @@ use Facebook\Facebook;
 use Laravel\Socialite\Facades\Socialite;
 use Google_Client;
 
+use Validator;
+use Stripe;
+// use App\Http\Controllers\Stripe;
+// use Stripe\Stripe;
+// use Stripe\Charge;
+
 class SocialCellController extends Controller
 {
     private $api;
@@ -24,7 +30,15 @@ class SocialCellController extends Controller
 
         $data = [];
         
-        $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        if (is_admin())
+        {
+            $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        }
+        else
+        {
+            $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+        }
+        // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         
         return view('pages.social-cells', $data);
         // return view('pages.social-cells', $data);
@@ -42,14 +56,8 @@ class SocialCellController extends Controller
 
     public function store(Request $request)
     {
-    	/*echo '<pre>';
-    	print_r($request->input());
-    	exit;*/
-        $validatedData = $request->validate([
+    	$validatedData = $request->validate([
             'cellname' => 'required|min:4',
-            /*'email_owner' => 'required|email|unique:social_cell,email_owner',
-            'email_marketer' => 'required|email|unique:social_cell,email_marketer',
-            'email_client' => 'required|email|unique:social_cell,email_client'*/
         ]);
 
         $cellname = $request->input('cellname');
@@ -58,15 +66,25 @@ class SocialCellController extends Controller
         $email_client = $request->input('email_client');
         $payment_status = $request->input('payment_status');
 
-        $socialcell = new $this->socialCell;
-        $socialcell->cell_name = $cellname;
-        $socialcell->email_owner = $email_owner;
-        $socialcell->email_marketer	= $email_marketer;
-        $socialcell->email_client = $email_client;
-        $socialcell->payment_status = $payment_status;
-        $socialcell->save();
+        $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('user_id', Sentinel::getUser()->id)->get();
+        
+        if(count($checkCellName) > 0) {
+            
+            return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
+        }
+        else {
 
-		return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
+            $socialcell = new $this->socialCell;
+            $socialcell->user_id = Sentinel::getUser()->id;
+            $socialcell->cell_name = $cellname;
+            $socialcell->email_owner = $email_owner;
+            $socialcell->email_marketer	= $email_marketer;
+            $socialcell->email_client = $email_client;
+            $socialcell->payment_status = $payment_status;
+            $socialcell->save();
+
+    		return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
+        }
         // return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
      
     }
@@ -90,9 +108,6 @@ class SocialCellController extends Controller
     {
         $validatedData = $request->validate([
             'cellname' => 'required|min:4',
-            /*'email_owner' => 'required|email|unique:social_cell,email_owner,$cell_id',
-            'email_marketer' => 'required|email|unique:social_cell,email_marketer,$cell_id',
-            'email_client' => 'required|email|unique:social_cell,email_client,$cell_id'*/
         ]);
 
         $cellname = $request->input('cellname');
@@ -101,15 +116,31 @@ class SocialCellController extends Controller
         $email_client = $request->input('email_client');
         $payment_status = $request->input('payment_status');
 
-        $socialcell = $this->socialCell->find($cell_id);
-        $socialcell->cell_name = $cellname;
-        $socialcell->email_owner = $email_owner;
-        $socialcell->email_marketer = $email_marketer;
-        $socialcell->email_client = $email_client;
-        $socialcell->payment_status = $payment_status;
-        $socialcell->save();
+        $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
 
-        return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+        if(count($checkCellName) > 0) {
+
+            return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
+        }
+        else {
+            
+            $socialcell = $this->socialCell->find($cell_id);
+            $socialcell->cell_name = $cellname;
+            $socialcell->email_owner = $email_owner;
+            $socialcell->email_marketer = $email_marketer;
+            $socialcell->email_client = $email_client;
+            $socialcell->payment_status = $payment_status;
+            $socialcell->save();
+
+            if($request->input('payment') != '') {
+                return redirect('generate_payment/'.$cell_id);
+            }
+            else {
+
+                return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+            }
+
+        }
 
     }
 
@@ -117,7 +148,103 @@ class SocialCellController extends Controller
     {
         $this->socialCell->find($cell_id)->delete();
         return redirect()->back()->with('flash_message', 'Social Cell has been deleted.');
+    }
 
+    public function generate_payment($cell_id)
+    {
+        $this->_loadSharedViews();
+
+        $data['cell_id'] = $cell_id;
+        $cells = $this->socialCell->find($cell_id);
+        $data['cell_name'] = $cells->cell_name;
+        return view('pages.stripe-form', $data);
+    }
+
+    public function postPaymentStripe(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'card_no' => 'required',
+            'ccExpiryMonth' => 'required',
+            'ccExpiryYear' => 'required',
+            'cvvNumber' => 'required',
+        ]);
+
+
+        $input = $request->all();
+        if ($validator->passes()) { 
+            $input = array_except($input,array('_token'));
+            
+            // require_once(APP_PATH.'vendor/stripe/stripe-php/init.php');
+
+            $stripe_sandbox = getenv('STRIPE_SANDBOX');
+            $stripe_test_key = getenv('STRIPE_TEST_KEY');
+            $stripe_test_secret = getenv('STRIPE_TEST_SECRET');
+            $stripe_live_key = getenv('STRIPE_PUBLIC_KEY');
+            $stripe_live_secret = getenv('STRIPE_PUBLIC_SECRET');
+            $cell_id = $request->input('cell_id');
+
+            if($stripe_sandbox) {
+
+                \Stripe\Stripe::setApiKey($stripe_test_secret);
+            }
+            else {
+                \Stripe\Stripe::setApiKey($stripe_live_secret);
+            }
+            
+            try {
+                
+                // echo $request->input('cvvNumber'); die();
+                $token = \Stripe\Token::create([
+                    'card' => [
+                        'number' => $request->input('card_no'),
+                        'exp_month' => $request->input('ccExpiryMonth'),
+                        'exp_year' => $request->input('ccExpiryYear'),
+                        'cvc' => $request->input('cvvNumber'),
+                    ],
+                ]);
+
+                if (!isset($token['id'])) {
+                    
+                    return redirect('/generate_payment/'.$cell_id)->withErrors(['Token Not Generated.']);
+                }
+
+                $amount = $request->input('amount');
+                $amount = (int)($amount * 100);
+
+                $charge = \Stripe\Charge::create([
+                    // 'card' => $token['id'],
+                    'currency' => 'USD',
+                    'amount' => $amount,
+                    // 'description' => 'wallet',
+                    'source' => $token
+                ]);
+     
+                if($charge['status'] == 'succeeded') {
+                    
+                    $socialcell = $this->socialCell->find($cell_id);
+                    $socialcell->payment_status = '2';
+                    $socialcell->save();
+                    
+                    return redirect('/socialcell/edit/'.$cell_id)->with('flash_message','Payment Generated Successfully..');
+                    
+                } else {
+                    
+                    return redirect('/generate_payment/'.$cell_id)->withErrors(['Money not add in wallet!!']);
+                }
+            }
+            catch (Exception $e) {
+                
+                return redirect('/generate_payment/'.$cell_id)->withErrors([$e->getMessage()]);
+            }
+            catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
+                
+                return redirect('/generate_payment/'.$cell_id)->withErrors([$e->getMessage()]);
+            }
+            catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
+
+                return redirect('/generate_payment/'.$cell_id)->withErrors([$e->getMessage()]);
+            }
+        }
     }
 
     public function social_cell_accounts($cell_id)

@@ -28,7 +28,8 @@
                     @endif
                     @if($temp > 0)
                     <div class="alert alert-danger">
-                        <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p>
+                        <!-- <p>Please Connect Social Account By Clicking <a href="/socialaccounts">Here</a></p> -->
+                        <p>Please Connect Social Account By Clicking <a href="/socialcell/{{ $post->social_cell_id }}">Here</a></p>
                     </div>
                     @endif
                     <!-- <form action="/post/update/{{ $post->id }}" method="post" enctype="multipart/form-data"> -->
@@ -49,6 +50,14 @@
                             </div>
                         @endif
 
+                        <div class="form-group">
+                            <label for="inputCell">Social Cell</label>
+                            <select id="inputCell" name="cell_id" class="form-control">
+                                @foreach ($socialCells as $socialCell)
+                                    <option value="{{ $socialCell->id }}" {{ ($post->social_cell_id == $socialCell->id) ? 'selected' : '' }} >{{ $socialCell->cell_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="inputTitle">Title</label>
                             <input id="inputTitle" type="text" placeholder="Title" value="{{ $post->title }}" name="title" class="form-control">

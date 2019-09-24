@@ -69,11 +69,7 @@
                     </div>
                 @empty
                     <div class="col-md-12">
-                        <div class="social_card">
-                            <div class="card_header text-center">
-                                <h3> No Cells Added</h3>
-                            </div>
-                        </div>
+                        <h3>No Social Cells.</h3>
                     </div>
                 @endforelse    
             </div>

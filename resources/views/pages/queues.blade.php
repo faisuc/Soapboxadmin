@@ -6,21 +6,25 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="/post/add{{ Request::route('user_id') ? '/' . Request::route('user_id') : '' }}" class="btn btn-primary">NEW POST</a>
+                    <a href="/post/add{{ (isset($cell_id)) ? '/' . $cell_id : '' }}" class="btn btn-primary">NEW POST</a>
                 </div>
-                @if (is_admin() || is_accountManager())
+                <?php /* @if (is_admin() || is_accountManager()) */ ?>
                     <div class="col-md-5 text-right">
-                        <b>Select Client: </b>
+                        <b>Select Social Cell: </b>
                     </div>
                     <div class="col-md-4">
-                        <select class="form-control" name="client" onchange="(window.location = '/queues/' + this.options[this.selectedIndex].value);">
-                            <option value="">My Posts</option>
-                            @foreach ($managedClients as $client)
-                                <option {{ Request::route('user_id') && Request::route('user_id') == $client->id ? 'selected' : '' }} value="{{ $client->id }}">{{ $client->fullname }}</option>
+                        @if(count($socialCells) > 0)
+                        <select class="form-control" name="socialcell" onchange="(window.location = '/queues/' + this.options[this.selectedIndex].value);">
+                            <option value="">All Social Cells</option>
+                            @foreach ($socialCells as $socialCell)
+                                <option {{ (isset($cell_id) && $cell_id == $socialCell->id) ? 'selected' : '' }} value="{{ $socialCell->id }}">{{ $socialCell->cell_name }}</option>
                             @endforeach
                         </select>
+                        @else
+                        <span class="text-danger">Please Create Social Cell for Create Post</span>
+                        @endif
                     </div>
-                @endif
+                <?php /* @endif */ ?>
             </div>
             <hr />
             <div class="row">
