@@ -81,7 +81,16 @@ class PostController extends Controller
             $data['twitter'] = true;
         }*/
 
-        $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        // $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        if (is_admin())
+        {
+            $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        }
+        else
+        {
+            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+        }
+
         if ($cell_id != null) {
             $data['cell_id'] = $cell_id;
             
@@ -344,7 +353,16 @@ class PostController extends Controller
 
             }
 
-            $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            // $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            if (is_admin())
+            {
+                $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            }
+            else
+            {
+                $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            }
+
             $data['post'] = $this->post->find($post_id);
             $this->setFacebookObject();
             
