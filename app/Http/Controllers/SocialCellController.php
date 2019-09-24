@@ -83,9 +83,15 @@ class SocialCellController extends Controller
             $socialcell->payment_status = $payment_status;
             $socialcell->save();
 
-    		return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
+    		if($request->input('payment') != '') {
+                return redirect('generate_payment/'.$cell_id);
+            }
+            else {
+
+                return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+            }
+            // return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
         }
-        // return redirect('/socialaccounts')->with('flash_message', 'Social account has been added.');
      
     }
 
