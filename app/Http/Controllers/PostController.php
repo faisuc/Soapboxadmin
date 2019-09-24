@@ -633,7 +633,7 @@ class PostController extends Controller
             DB::table('cron_script')->insert($data);
         }
         
-        return redirect()->back()->with('flash_message', 'Post has been updated.');
+        return redirect('/post/edit/'.$post->id)->back()->with('flash_message', 'Post has been updated.');
 
     }
 
