@@ -1201,7 +1201,7 @@ class PostController extends Controller
         echo "<pre>";
         print_r($cronData);
 
-        echo "<br>===============================<br>"
+        echo "<br>===============================<br>";
       
         exit;
         foreach ($cronData as $data) {
