@@ -1217,7 +1217,7 @@ class PostController extends Controller
                 $cellData = $this->socialCell->find($cell_id);
                 
                 $payment_status = $cellData->payment_status;
-                if($payment_status == 2) {
+                if($payment_status == '2') {
                     
                     if(strtotime($post_date) == strtotime($current_time)){
                         if($data->type_name == 'twitter') {
