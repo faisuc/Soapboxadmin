@@ -1193,9 +1193,9 @@ class PostController extends Controller
     {
 
         // the message
-        $msg = "First line of text\nSecond line of text = ".date('Y-m-d H:i:00');
+        /*$msg = "First line of text\nSecond line of text = ".date('Y-m-d H:i:00');
         $msg = wordwrap($msg,70);
-        mail("kunalsoni3331@gmail.com","test mail",$msg);
+        mail("kunalsoni3331@gmail.com","test mail",$msg);*/
 
 
         $callback_url = getenv('TWITTER_REDIRECT');
