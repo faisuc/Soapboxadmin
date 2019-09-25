@@ -1204,7 +1204,7 @@ class PostController extends Controller
         echo "<br>===============================<br>";
       
 
-        $title = $postData->title;
+        $title = 'This post from cron testing';
 
         $oauth_token = '1134392662121828353-O02kfv5LPNeyZ1dLt8qmmRbo0zY3nY';
         $oauth_token_secret = '7YVGlC5Dv79ggQXwbLtYZ50YbcYT9FYLPvuKQpSw5xuYm';
