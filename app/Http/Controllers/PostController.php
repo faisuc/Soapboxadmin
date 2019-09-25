@@ -45,6 +45,7 @@ class PostController extends Controller
 
         if (is_admin())
         {
+            $data['posts'] = $this->post->where('social_cell_id','!=', 0)->orderBy('created_at', 'DESC')->get();
             $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         }
         else
