@@ -1196,9 +1196,14 @@ class PostController extends Controller
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
 
         date_default_timezone_set('Asia/Kolkata');
-        $current_time = date('Y-m-d H:i');
+        echo "<b> Current Time : </b>".$current_time = date('Y-m-d H:i');
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
-        
+        echo "<pre>";
+        print_r($cronData);
+
+        echo "<br>===============================<br>"
+      
+        exit;
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
             $post_date = $data->post_date;
