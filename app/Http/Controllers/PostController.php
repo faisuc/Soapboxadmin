@@ -1196,19 +1196,17 @@ class PostController extends Controller
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
 
         date_default_timezone_set('Asia/Kolkata');
-        echo "<b> Current Time : </b>".$current_time = date('Y-m-d H:i');
+        $current_time = date('Y-m-d H:i:00');
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
+        
+        /*
+        echo "<b> Current Time : </b>".$current_time = date('Y-m-d H:i');
         echo "<pre>";
         print_r($cronData);
-
         echo "<br>===============================<br>";
-      
-
         $title = 'This post from cron testing';
-
         $oauth_token = '1134392662121828353-O02kfv5LPNeyZ1dLt8qmmRbo0zY3nY';
         $oauth_token_secret = '7YVGlC5Dv79ggQXwbLtYZ50YbcYT9FYLPvuKQpSw5xuYm';
-
         $url = 'https://api.twitter.com/1.1/statuses/update.json';
         $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
         // $parameters = array('status' => $title);
@@ -1218,8 +1216,8 @@ class PostController extends Controller
             print_r($result);
             echo "</pre>";
         }
+        exit;*/
 
-        exit;
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
             $post_date = $data->post_date;
