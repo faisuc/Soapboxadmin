@@ -14,9 +14,6 @@ use Facebook\Exceptions\FacebookSDKException;
 use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
 
-use Illuminate\Mail\Mailable;
-use Sentinel;
-use Mail;
 class PostController extends Controller
 {
     private $image; 
@@ -1193,18 +1190,6 @@ class PostController extends Controller
     /* Cron */
     public function run_cron()
     {
-
-        $name = 'Krunal';
-        Mail::to('kunalsoni3331@gmail.com')->send(new SendMailable($name));
-
-        /*$name = 'hhhhhhhhhhh';
-        $html = 'Hi You are registered successfully.  to verify';
-        $user->html = $html;
-        Mail::send([], [], function ($message) use ($user) { 
-            $html = $html;
-            $message->to('kunalsoni3331@gmail.com', $name)->subject('subject')->setBody($html, 'text/html'); 
-        });*/
-
 
         $callback_url = getenv('TWITTER_REDIRECT');
         $consumer_key = getenv('TWITTER_CLIENT_ID');
