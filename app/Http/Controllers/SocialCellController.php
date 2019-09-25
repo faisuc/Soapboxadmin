@@ -64,7 +64,7 @@ class SocialCellController extends Controller
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
-        $payment_status = $request->input('payment_status');
+        $payment_status = '1';//$request->input('payment_status');
 
         $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('user_id', Sentinel::getUser()->id)->get();
         
@@ -121,7 +121,7 @@ class SocialCellController extends Controller
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
-        $payment_status = $request->input('payment_status');
+        $payment_status = '1';//$request->input('payment_status');
 
         $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
 
