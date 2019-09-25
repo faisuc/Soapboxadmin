@@ -1227,7 +1227,7 @@ class PostController extends Controller
                 $payment_status = $cellData->payment_status;
                 echo "Out =  $payment_status = ".$payment_status."<br>";
 
-                if($payment_status == 1) {
+                if($payment_status == 2) {
                     echo "In =   = ".strtotime($post_date) .' == '.strtotime($current_time);
 
                     if(strtotime($post_date) == strtotime($current_time)){
