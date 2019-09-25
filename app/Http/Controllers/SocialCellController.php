@@ -83,8 +83,9 @@ class SocialCellController extends Controller
             $socialcell->payment_status = $payment_status;
             $socialcell->save();
 
+            $cell_id = $socialcell->id;
+
     		if($request->input('payment') != '') {
-                $cell_id = $socialcell->id;
                 return redirect('generate_payment/'.$cell_id);
             }
             else {
@@ -138,6 +139,8 @@ class SocialCellController extends Controller
             $socialcell->email_client = $email_client;
             $socialcell->payment_status = $payment_status;
             $socialcell->save();
+
+            $cell_id = $socialcell->id;
 
             if($request->input('payment') != '') {
                 return redirect('generate_payment/'.$cell_id);
