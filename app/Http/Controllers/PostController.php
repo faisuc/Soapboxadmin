@@ -1196,7 +1196,7 @@ class PostController extends Controller
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
 
         date_default_timezone_set('Asia/Kolkata');
-        //echo "<b> Current Time : </b>".$current_time = date('Y-m-d H:i:00');
+        echo "<b> Current Time : </b>".$current_time = date('Y-m-d H:i:00');
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
         
        /* echo "<pre>";
@@ -1212,7 +1212,7 @@ class PostController extends Controller
         echo "<br>===============================<br>";      
 
         exit;*/
-
+        echo "<br>";
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
             $post_date = $data->post_date;
@@ -1221,15 +1221,17 @@ class PostController extends Controller
             $cell_id = $postData->social_cell_id;
 
             if($cell_id) {
+                echo $cell_id;exit;
                 $cellData = $this->socialCell->find($cell_id);
                 
                 $payment_status = $cellData->payment_status;
-                echo "Out =  $payment_status = ".$payment_status;
+                echo "Out =  $payment_status = ".$payment_status."<br>";
+
                 if($payment_status == 1) {
                     echo "In =   = ".strtotime($post_date) .' == '.strtotime($current_time);
 
                     if(strtotime($post_date) == strtotime($current_time)){
-                        echo " Match = ".$payment_status;
+                        echo " Match = ".$payment_status."<br>";
                         if($data->type_name == 'twitter') {
                             
                             $postData = $this->post->find($post_id);
