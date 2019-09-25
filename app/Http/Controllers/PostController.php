@@ -1221,7 +1221,7 @@ class PostController extends Controller
             $cell_id = $postData->social_cell_id;
 
             if($cell_id) {
-                echo $cell_id;exit;
+                echo $cell_id."<br>";
                 $cellData = $this->socialCell->find($cell_id);
                 
                 $payment_status = $cellData->payment_status;
