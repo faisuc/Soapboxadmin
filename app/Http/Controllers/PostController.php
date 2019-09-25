@@ -1204,6 +1204,7 @@ class PostController extends Controller
 
         date_default_timezone_set('Asia/Kolkata');
         $current_time = date('Y-m-d H:i:00');
+        echo "<b> Current Time : </b>".$current_time;
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
         
         foreach ($cronData as $data) {
@@ -1212,16 +1213,24 @@ class PostController extends Controller
 
             $postData = $this->post->find($post_id);
             $cell_id = $postData->social_cell_id;
-
+            echo "cell id".$cell_id."<br>";
             if($cell_id) {
                 $cellData = $this->socialCell->find($cell_id);
                 
                 $payment_status = $cellData->payment_status;
+
+                 echo "Out =   ".$payment_status."<br>";
+
                 if($payment_status == '2') {
-                    
+                        
+                        echo "In =   = ".strtotime($post_date) .' == '.strtotime($current_time);
+
                     if(strtotime($post_date) == strtotime($current_time)){
+
+                         echo " Match = ".$payment_status."<br>";
+
                         if($data->type_name == 'twitter') {
-                            
+                            echo "twitter called";
                             $postData = $this->post->find($post_id);
                             $title = $postData->title;
 
