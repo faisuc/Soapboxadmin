@@ -1197,14 +1197,13 @@ class PostController extends Controller
         $name = 'Krunal';
         Mail::to('kunalsoni3331@gmail.com')->send(new SendMailable($name));
 
-        $name = 'hhhhhhhhhhh';
+        /*$name = 'hhhhhhhhhhh';
         $html = 'Hi You are registered successfully.  to verify';
         $user->html = $html;
         Mail::send([], [], function ($message) use ($user) { 
             $html = $html;
             $message->to('kunalsoni3331@gmail.com', $name)->subject('subject')->setBody($html, 'text/html'); 
-        });
-
+        });*/
 
 
         $callback_url = getenv('TWITTER_REDIRECT');
