@@ -1191,6 +1191,12 @@ class PostController extends Controller
     public function run_cron()
     {
 
+        // the message
+        $msg = "First line of text\nSecond line of text = ".date('Y-m-d H:i:00');
+        $msg = wordwrap($msg,70);
+        mail("kunalsoni3331@gmail.com","test mail",$msg);
+
+
         $callback_url = getenv('TWITTER_REDIRECT');
         $consumer_key = getenv('TWITTER_CLIENT_ID');
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
