@@ -1203,6 +1203,22 @@ class PostController extends Controller
 
         echo "<br>===============================<br>";
       
+
+        $title = $postData->title;
+
+        $oauth_token = '1134392662121828353-O02kfv5LPNeyZ1dLt8qmmRbo0zY3nY';
+        $oauth_token_secret = '7YVGlC5Dv79ggQXwbLtYZ50YbcYT9FYLPvuKQpSw5xuYm';
+
+        $url = 'https://api.twitter.com/1.1/statuses/update.json';
+        $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
+        // $parameters = array('status' => $title);
+        $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+        if(isset($result['errors'])) {
+            echo "<pre>";
+            print_r($result);
+            echo "</pre>";
+        }
+
         exit;
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
