@@ -1225,9 +1225,9 @@ class PostController extends Controller
                 $cellData = $this->socialCell->find($cell_id);
                 
                 $payment_status = $cellData->payment_status;
-                echo "Out =  $payment_status = ".$payment_status."<br>";
+                echo "Out =   ".$payment_status."<br>";
 
-                if($payment_status == 2) {
+                if($payment_status == '2') {
                     echo "In =   = ".strtotime($post_date) .' == '.strtotime($current_time);
 
                     if(strtotime($post_date) == strtotime($current_time)){
