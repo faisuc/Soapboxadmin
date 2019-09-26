@@ -44,7 +44,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Social Network</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">URL</th>
+                                    <!-- <th scope="col">URL</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,7 +52,7 @@
                                     <tr>
                                         <th scope="row">{{ $social->id }}</th>
                                         <td>{{ convertSocialType($social->type_id) }}</td>
-                                        <td>{{ $social->url }}</td>
+                                        <!-- <td>{{ $social->url }}</td> -->
                                         <td><a href="{{ url('/socialaccount/delete/'.$social->id.' ') }}" role="button" class="btn btn-danger">Unlink</a></td>
                                     </tr>
                                 @empty
@@ -104,11 +104,12 @@
                     <div class="form-group">
                         <label for="inputName" class="col-form-label">Name:</label>
                         <input type="text" class="form-control" id="inputName" name="name">
+                        <input type="hidden" class="form-control" id="inputURL" name="url">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="inputURL" class="col-form-label">URL:</label>
                         <input type="text" class="form-control" id="inputURL" name="url">
-                    </div>
+                    </div> -->
                     <div id="instagram-acc" style="display: none;">
                         <div class="form-group">
                             <label for="inputInstaUsername" class="col-form-label">Instagram Username:</label>

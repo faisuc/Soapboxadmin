@@ -50,7 +50,11 @@ class PostController extends Controller
         }
         else
         {
-            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            // $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+
+            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
         }
 
         return view('pages.queues', $data);
@@ -89,7 +93,11 @@ class PostController extends Controller
         }
         else
         {
-            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            // $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+
+            $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
         }
 
         if ($cell_id != null) {
@@ -361,7 +369,11 @@ class PostController extends Controller
             }
             else
             {
-                $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+                // $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+                $loginUser = Sentinel::getUser();
+                $loginUserEmail = $loginUser->email;
+
+                $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
             }
 
             $data['post'] = $this->post->find($post_id);

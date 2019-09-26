@@ -36,7 +36,10 @@ class SocialCellController extends Controller
         }
         else
         {
-            $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orderBy('created_at', 'DESC')->get();
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+
+            $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
         }
         // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         
@@ -60,40 +63,56 @@ class SocialCellController extends Controller
             'cellname' => 'required|min:4',
         ]);
 
+        /**/
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+
         $cellname = $request->input('cellname');
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
         $payment_status = '1';//$request->input('payment_status');
 
-        $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('user_id', Sentinel::getUser()->id)->get();
-        
-        if(count($checkCellName) > 0) {
+        $ownerEmail = explode(',', $email_owner);
+        $marketerEmail = explode(',', $email_marketer);
+        $clientEmail = explode(',', $email_client);
+
+        if(in_array($loginUserEmail, $ownerEmail) || in_array($loginUserEmail, $marketerEmail) || in_array($loginUserEmail, $clientEmail)) {
             
-            return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
-        }
-        else {
-
-            $socialcell = new $this->socialCell;
-            $socialcell->user_id = Sentinel::getUser()->id;
-            $socialcell->cell_name = $cellname;
-            $socialcell->email_owner = $email_owner;
-            $socialcell->email_marketer	= $email_marketer;
-            $socialcell->email_client = $email_client;
-            $socialcell->payment_status = $payment_status;
-            $socialcell->save();
-
-            $cell_id = $socialcell->id;
-
-    		if($request->input('payment') != '') {
-                return redirect('generate_payment/'.$cell_id);
+            $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('user_id', Sentinel::getUser()->id)->get();
+            
+            if(count($checkCellName) > 0) {
+                
+                return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
             }
             else {
 
-                return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+                $socialcell = new $this->socialCell;
+                $socialcell->user_id = Sentinel::getUser()->id;
+                $socialcell->cell_name = $cellname;
+                $socialcell->email_owner = $email_owner;
+                $socialcell->email_marketer	= $email_marketer;
+                $socialcell->email_client = $email_client;
+                $socialcell->payment_status = $payment_status;
+                $socialcell->save();
+
+                $cell_id = $socialcell->id;
+
+        		if($request->input('payment') != '') {
+                    return redirect('generate_payment/'.$cell_id);
+                }
+                else {
+
+                    return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+                }
+                // return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
             }
-            // return redirect('socialcell')->with('flash_message', 'Social Cell has been Created.');
         }
+        else {
+            
+            return redirect('/socialcell/add')->withInput()->withErrors(['Please fill your email in any of the below.']);
+        }
+        
      
     }
 
