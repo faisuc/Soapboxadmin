@@ -167,3 +167,22 @@ if ( ! function_exists('convertSocialType'))
     }
 
 }
+
+if ( ! function_exists('postStatus'))
+{
+
+    function postStatus($status_id)
+    {
+
+        $status = [
+            1 => 'Approved',
+            2 => 'Declined',
+            3 => 'Waiting changes',
+            4 => 'Waiting Client Approval',
+        ];
+
+        return $status[$status_id];
+
+    }
+
+}

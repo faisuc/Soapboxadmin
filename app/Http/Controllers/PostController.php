@@ -13,6 +13,8 @@ use DB;
 use Facebook\Exceptions\FacebookSDKException;
 use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
+use Illuminate\Mail\Mailable;
+use Mail;
 
 class PostController extends Controller
 {
@@ -201,7 +203,7 @@ class PostController extends Controller
         $post->title = $title;
         $post->description = $description;
 
-        if ($user = Sentinel::getUser())
+        /*if ($user = Sentinel::getUser())
         {
             if ($user->inRole('client'))
             {
@@ -209,7 +211,24 @@ class PostController extends Controller
             } else {
                 $post->status = 3;
             }
+        }*/
+
+        /**/
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+        $social_cells = $this->socialCell->find($cell_id);
+        $email_owner = explode(',', $social_cells->email_owner);
+        $email_marketer = explode(',', $social_cells->email_marketer);
+        $email_client = explode(',', $social_cells->email_client);
+
+        $post->status = 0;
+        if(in_array($loginUserEmail, $email_marketer)) {
+            $post->status = 4;
         }
+        if(in_array($loginUserEmail, $email_client)) {
+            $post->status = 1;
+        }
+
 
         if ($media_id != 0)
         {
@@ -219,6 +238,39 @@ class PostController extends Controller
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
+
+        /* emails */
+        $html = 'Post Title: '.$title.'<br>'.'Post Content:'.$description.'<br>'.'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.'<a href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a><br><a href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a><br><a href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
+        
+        if(in_array($loginUserEmail, $email_marketer)) {
+            // sent email to client with post content
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval From Marketer')->setBody($html, 'text/html'); 
+                    });
+                }
+            }
+        }
+        if(in_array($loginUserEmail, $email_client)) {
+            // sent email to marketer with post content
+            if(!empty($email_marketer)) {
+                foreach ($email_marketer as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval From Client')->setBody($html, 'text/html'); 
+                    });
+                }
+            }
+        }
+        /**/
 
         if ($media_id != 0)
         {
@@ -338,7 +390,7 @@ class PostController extends Controller
             DB::table('cron_script')->insert($data);
         }
 
-        return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been updated.');
+        return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been created.');
 
     }
 
@@ -498,9 +550,61 @@ class PostController extends Controller
             $post->featured_image_id = $media_id;
         }
 
+        /**/
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+        $social_cells = $this->socialCell->find($cell_id);
+        $email_owner = explode(',', $social_cells->email_owner);
+        $email_marketer = explode(',', $social_cells->email_marketer);
+        $email_client = explode(',', $social_cells->email_client);
+
+        $post->status = 4;
+        /*$post->status = 0;
+        if(in_array($loginUserEmail, $email_marketer)) {
+            $post->status = 4;
+        }
+        if(in_array($loginUserEmail, $email_client)) {
+            $post->status = 1;
+        }*/
+
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
+
+
+
+        /* emails */
+        $html = 'Post Title: '.$title.'<br>'.'Post Content:'.$description.'<br>'.'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.'<a href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a><br><a href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a><br><a href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
+        
+        if(in_array($loginUserEmail, $email_marketer)) {
+            // sent email to client with post content
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval From Marketer')->setBody($html, 'text/html'); 
+                    });
+                }
+            }
+        }
+        if(in_array($loginUserEmail, $email_client)) {
+            // sent email to marketer with post content
+            if(!empty($email_marketer)) {
+                foreach ($email_marketer as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval From Client')->setBody($html, 'text/html'); 
+                    });
+                }
+            }
+        }
+        /**/
 
         if ($media_id != 0)
         {
