@@ -29,7 +29,7 @@ class PostNotesController extends Controller
 
                 if ($user = Sentinel::getUser())
                 {
-                    if ($user->inRole('client'))
+                    /*if ($user->inRole('client'))
                     {
                         DB::table('posts')
                             ->where('id', $post_id)
@@ -38,7 +38,7 @@ class PostNotesController extends Controller
                         DB::table('posts')
                         ->where('id', $post_id)
                         ->update(['status' => 3]);
-                    }
+                    }*/
                 }
 
                 $note = $this->postNotes->select(

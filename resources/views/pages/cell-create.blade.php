@@ -50,15 +50,11 @@
                             <label for="clientEmail">Client Email</label>
                             <input id="clientEmail" type="text" value="{{ old('email_client') }}" name="email_client" class="form-control" data-role="tagsinput">
                         </div>
-                        <?php /* <div class="form-group">
-                            <label for="inputStatus">Payment Status</label>                            
-                            <select id="inputStatus" name="payment_status" class="form-control">                            
-                                <option value="1">Waiting Payment</option>
-                                <option value="2">Active</option>
-                                <option value="3">Cancelled</option>
-                                <option value="4">On Hold</option>
-                            </select>
-                        </div> */ ?>
+                        <div class="form-group">
+                            <label for="post_status" class="custom-control custom-checkbox">
+                                <input class="custom-control-input" id="post_status" type="checkbox" name="post_status" value="1"><span class="custom-control-label">Post Status Set to Approve</span>
+                            </label>
+                        </div>
 
                         <div class="form-group">
                             <input type="submit" value="SAVE" class="btn btn-primary">

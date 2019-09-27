@@ -59,6 +59,13 @@ class PostController extends Controller
             $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
         }
 
+        /*/
+        $posts = $data['posts'];
+        foreach ($posts as $post_key => $post) {
+            $facebook_account = $this->socialAccount->where('social_cell_id', $post->social_cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        }
+        /**/
+        
         return view('pages.queues', $data);
 
     }
@@ -240,7 +247,22 @@ class PostController extends Controller
         $post->save();
 
         /* emails */
-        $html = 'Post Title: '.$title.'<br>'.'Post Content:'.$description.'<br>'.'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.'<a href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a><br><a href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a><br><a href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
+        $html = 'Post Title: '.$title.'<br>'.
+        'Post Content:'.$description.'<br>'.
+        'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.
+        '<form method="post" action="'.URL::to('/').'/post/approve/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-1" value="'. Session::token() .'" />
+            <input type="submit" value="Approve" class="btn btn-primary" />
+        </form>'.
+        '<form method="post" action="'.URL::to('/').'/post/decline/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-2" value="'. Session::token() .'" />
+            <input type="submit" value="Decline" class="btn btn-danger" />
+        </form>'.
+        '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
+            <textarea name="content" required></textarea>
+            <input type="submit" value="Make Changes" class="btn btn-defualt" />
+        </form>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
@@ -516,7 +538,7 @@ class PostController extends Controller
         $schedule_date = $request->input('schedule_date');
         $status = $request->input('status');
         $cell_id = $request->input('cell_id');
-
+        
         $data = [];
         $media_id = 0;
 
@@ -558,23 +580,41 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
-        $post->status = 4;
-        /*$post->status = 0;
-        if(in_array($loginUserEmail, $email_marketer)) {
-            $post->status = 4;
-        }
-        if(in_array($loginUserEmail, $email_client)) {
+        if($social_cells->post_status) {
             $post->status = 1;
-        }*/
+        }
+        else {
+            $post->status = 4;
+            /*if(in_array($loginUserEmail, $email_marketer)) {
+                $post->status = 4;
+            }
+            if(in_array($loginUserEmail, $email_client)) {
+                $post->status = 1;
+            }*/
+        }
 
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
 
 
-
         /* emails */
-        $html = 'Post Title: '.$title.'<br>'.'Post Content:'.$description.'<br>'.'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.'<a href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a><br><a href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a><br><a href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
+        $html = 'Post Title: '.$title.'<br>'.
+        'Post Content:'.$description.'<br>'.
+        'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.
+        '<form method="post" action="'.URL::to('/').'/post/approve/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-1" value="'. Session::token() .'" />
+            <input type="submit" value="Approve" class="btn btn-primary" />
+        </form>'.
+        '<form method="post" action="'.URL::to('/').'/post/decline/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-2" value="'. Session::token() .'" />
+            <input type="submit" value="Decline" class="btn btn-danger" />
+        </form>'.
+        '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
+            <textarea name="content" required></textarea>
+            <input type="submit" value="Make Changes" class="btn btn-defualt" />
+        </form>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
@@ -761,6 +801,42 @@ class PostController extends Controller
 
         return redirect()->back()->with('flash_message', 'Post has been deleted.');
 
+    }
+
+    public function approve(Request $request, $post_id = null)
+    {
+        $post = $this->post->find($post_id);
+        $post->status = '1';
+        $post->save();
+
+        return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been Approved.');
+    }
+
+    public function decline(Request $request, $post_id = null)
+    {
+        $post = $this->post->find($post_id);
+        $post->status = '2';
+        $post->save();
+
+        return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been Declined.');
+    }
+
+    public function make_change(Request $request, $post_id = null)
+    {
+        $content = $request->input('content');
+        $roles = Sentinel::getUser()->roles;
+
+        $note = new $this->postNotes;
+        $note->user_id = Sentinel::getUser()->id;
+        $note->content = $content;
+        $note->post_id = $post_id;
+        $note->save();
+
+        $post = $this->post->find($post_id);
+        $post->status = '4';
+        $post->save();
+
+        return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has Some Note to Make Change.');
     }
 
     public function setFacebookObject()

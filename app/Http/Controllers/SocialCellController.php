@@ -94,6 +94,11 @@ class SocialCellController extends Controller
                 $socialcell->email_marketer	= $email_marketer;
                 $socialcell->email_client = $email_client;
                 $socialcell->payment_status = $payment_status;
+
+                if($request->input('post_status') != '') {
+                    $socialcell->post_status = '1';
+                }
+
                 $socialcell->save();
 
                 $cell_id = $socialcell->id;
@@ -137,39 +142,54 @@ class SocialCellController extends Controller
             'cellname' => 'required|min:4',
         ]);
 
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+
         $cellname = $request->input('cellname');
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
         $payment_status = '1';//$request->input('payment_status');
 
-        $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
+        $ownerEmail = explode(',', $email_owner);
+        $marketerEmail = explode(',', $email_marketer);
+        $clientEmail = explode(',', $email_client);
 
-        if(count($checkCellName) > 0) {
+        if(in_array($loginUserEmail, $ownerEmail) || in_array($loginUserEmail, $marketerEmail) || in_array($loginUserEmail, $clientEmail)) {
+            $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
 
-            return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
-        }
-        else {
-            
-            $socialcell = $this->socialCell->find($cell_id);
-            $socialcell->cell_name = $cellname;
-            $socialcell->email_owner = $email_owner;
-            $socialcell->email_marketer = $email_marketer;
-            $socialcell->email_client = $email_client;
-            $socialcell->payment_status = $payment_status;
-            $socialcell->save();
+            if(count($checkCellName) > 0) {
 
-            $cell_id = $socialcell->id;
-
-            if($request->input('payment') != '') {
-                return redirect('generate_payment/'.$cell_id);
+                return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
             }
             else {
+                
+                $socialcell = $this->socialCell->find($cell_id);
+                $socialcell->cell_name = $cellname;
+                $socialcell->email_owner = $email_owner;
+                $socialcell->email_marketer = $email_marketer;
+                $socialcell->email_client = $email_client;
+                $socialcell->payment_status = $payment_status;
 
-                return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+                if($request->input('post_status') != '') {
+                    $socialcell->post_status = '1';
+                }
+                
+                $socialcell->save();
+
+                $cell_id = $socialcell->id;
+
+                if($request->input('payment') != '') {
+                    return redirect('generate_payment/'.$cell_id);
+                }
+                else {
+
+                    return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
+                }
+
             }
-
         }
+
 
     }
 

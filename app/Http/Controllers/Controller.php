@@ -125,12 +125,18 @@ class Controller extends BaseController
     public function post_statuses()
     {
 
-        $statuses = [
+        /*$statuses = [
             0 => 'Rejected',
             //1 => 'For Review',
             2 => 'Ready for Post',
             3 => 'Waiting Client Review',
             4 => 'Waiting Staff Review'
+        ];*/
+        $statuses = [
+            1 => 'Approved',
+            2 => 'Declined',
+            3 => 'Waiting changes',
+            4 => 'Waiting Client Approval',
         ];
 
         return $statuses;
