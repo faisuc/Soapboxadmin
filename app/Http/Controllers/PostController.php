@@ -261,7 +261,7 @@ class PostController extends Controller
         '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
             <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
             <textarea name="content" required></textarea>
-            <input type="submit" value="Make Changes" class="btn btn-defualt" />
+            <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
@@ -613,7 +613,7 @@ class PostController extends Controller
         '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
             <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
             <textarea name="content" required></textarea>
-            <input type="submit" value="Make Changes" class="btn btn-defualt" />
+            <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
