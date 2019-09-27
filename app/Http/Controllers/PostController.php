@@ -57,6 +57,16 @@ class PostController extends Controller
             $loginUserEmail = $loginUser->email;
 
             $data['socialCells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+            $post_ids = array();
+            foreach ($data['socialCells'] as $cell_key => $cell) {
+                array_push($post_ids,$cell->id);
+            }
+            if($cell_id) {
+                $data['posts'] = $this->post->whereIn('social_cell_id', array($cell_id))->orderBy('created_at', 'DESC')->get();
+            }
+            else {
+                $data['posts'] = $this->post->whereIn('social_cell_id', $post_ids)->orderBy('created_at', 'DESC')->get();
+            }
         }
 
         /*/
@@ -425,7 +435,7 @@ class PostController extends Controller
 
             $data = [];
 
-            if (is_client())
+            /*if (is_client())
             {
                 $can_edit = $this->post->where('user_id', Sentinel::getUser()->id)->where('id', $post_id)->first();
 
@@ -434,7 +444,7 @@ class PostController extends Controller
                     return redirect('dashboard');
                 }
 
-            }
+            }*/
 
             // $data['socialCells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
             if (is_admin())
