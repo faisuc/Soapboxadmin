@@ -74,14 +74,15 @@
                             <label for="inputScheduleDate">Schedule Post</label>
                             <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ $post->schedule_to_post_date }}" name="schedule_date" class="form-control datetimepicker" required>
                         </div>
-                        <?php /* <div class="form-group">
+                        <div class="form-group">
                             <label for="inputStatus">Status</label>
+                            <input type="hidden" name="old_status" value="{{ $post->status }}">
                             <select id="inputStatus" name="status" class="form-control">
                                 @foreach ($post_statuses as $key => $status)
                                     <option {{ $key == $post->status ? 'selected' : '' }} value="{{ $key }}">{{ $status }}</option>
                                 @endforeach
                             </select>
-                        </div> */ ?>
+                        </div>
                         <div class="form-group">
                             <label for="inputPhoto">Photo</label>
                             <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control">

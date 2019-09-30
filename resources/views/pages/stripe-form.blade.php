@@ -58,7 +58,7 @@
                                         ?>
                                         <select name="ccExpiryYear" class="form-control card-expiry-year">
                                             <option value="">Year</option>
-                                            @for($i=$year;$i>=50;$i--)
+                                            @for($i=$year+10;$i>=50;$i--)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
                                         </select>
@@ -68,8 +68,9 @@
                                     <div class="col-md-6">
                                         <div class="form-control total btn btn-primary">
                                             Total:
-                                            <span class="amount">$1</span>
-                                            <input type="hidden" name="amount" value="1">
+                                            <span class="amount">$3</span>
+                                            <input type="hidden" name="amount" value="3">
+                                            <input type="hidden" name="email" value="{{ $customer_email }}">
                                             <input type="hidden" name="cell_id" value="{{ $cell_id }}">
                                         </div>
                                     </div>

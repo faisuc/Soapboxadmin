@@ -206,6 +206,8 @@ class SocialCellController extends Controller
         $data['cell_id'] = $cell_id;
         $cells = $this->socialCell->find($cell_id);
         $data['cell_name'] = $cells->cell_name;
+        $customer = $this->user->find($cells->user_id);
+        $data['customer_email'] = $customer->email;
         return view('pages.stripe-form', $data);
     }
 
@@ -231,7 +233,12 @@ class SocialCellController extends Controller
             $stripe_live_key = getenv('STRIPE_PUBLIC_KEY');
             $stripe_live_secret = getenv('STRIPE_PUBLIC_SECRET');
             $cell_id = $request->input('cell_id');
-
+            $email = $request->input('email');
+            $validity_date = date('Y-m-d',strtotime("+30 days"));
+            
+            $amount = $request->input('amount');
+            $amount = (int)($amount * 100);
+            
             if($stripe_sandbox) {
 
                 \Stripe\Stripe::setApiKey($stripe_test_secret);
@@ -239,10 +246,21 @@ class SocialCellController extends Controller
             else {
                 \Stripe\Stripe::setApiKey($stripe_live_secret);
             }
-            
+
             try {
+
+                $plan = \Stripe\Plan::create(array(
+                    "product" => [
+                        "name" => "Socialhat",
+                        "type" => "service"
+                    ],
+                    "nickname" => "Socialhat",
+                    "interval" => "month",
+                    "interval_count" => "1",
+                    "currency" => "usd",
+                    "amount" => $amount,
+                ));
                 
-                // echo $request->input('cvvNumber'); die();
                 $token = \Stripe\Token::create([
                     'card' => [
                         'number' => $request->input('card_no'),
@@ -257,21 +275,33 @@ class SocialCellController extends Controller
                     return redirect('/generate_payment/'.$cell_id)->withErrors(['Token Not Generated.']);
                 }
 
-                $amount = $request->input('amount');
-                $amount = (int)($amount * 100);
-
-                $charge = \Stripe\Charge::create([
+                /*$charge = \Stripe\Charge::create([
                     // 'card' => $token['id'],
                     'currency' => 'USD',
                     'amount' => $amount,
                     // 'description' => 'wallet',
                     'source' => $token
+                ]);*/
+                $customer = \Stripe\Customer::create([
+                    'email' => $email,
+                    'source'  => $token,
                 ]);
-     
-                if($charge['status'] == 'succeeded') {
+
+                $subscription = \Stripe\Subscription::create(array(
+                    "customer" => $customer->id,
+                    "items" => array(
+                        array(
+                            "plan" => $plan->id,
+                        ),
+                    ),
+                ));
+
+                // if($charge['status'] == 'succeeded') {
+                if($subscription['status'] == 'active') {
                     
                     $socialcell = $this->socialCell->find($cell_id);
                     $socialcell->payment_status = '2';
+                    $socialcell->payment_validity = $validity_date;
                     $socialcell->save();
                     
                     return redirect('/socialcell/edit/'.$cell_id)->with('flash_message','Payment Generated Successfully..');

@@ -238,12 +238,17 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
-        $post->status = 0;
-        if(in_array($loginUserEmail, $email_marketer)) {
-            $post->status = 4;
+        if($status != '') {
+            $post->status = $status;
         }
-        if(in_array($loginUserEmail, $email_client)) {
-            $post->status = 1;
+        else {
+            $post->status = 0;
+            if(in_array($loginUserEmail, $email_marketer)) {
+                $post->status = 4;
+            }
+            if(in_array($loginUserEmail, $email_client)) {
+                $post->status = 1;
+            }
         }
 
 
@@ -547,8 +552,9 @@ class PostController extends Controller
         $link = $request->input('link');
         $schedule_date = $request->input('schedule_date');
         $status = $request->input('status');
+        $old_status = $request->input('old_status');
         $cell_id = $request->input('cell_id');
-        
+
         $data = [];
         $media_id = 0;
 
@@ -590,19 +596,24 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
-        if($social_cells->post_status) {
-            $post->status = 1;
+        if($status != $old_status) {
+            $post->status = $status;
         }
         else {
-            $post->status = 4;
-            /*if(in_array($loginUserEmail, $email_marketer)) {
-                $post->status = 4;
-            }
-            if(in_array($loginUserEmail, $email_client)) {
+            if($social_cells->post_status) {
                 $post->status = 1;
-            }*/
+            }
+            else {
+                $post->status = 4;
+                /*if(in_array($loginUserEmail, $email_marketer)) {
+                    $post->status = 4;
+                }
+                if(in_array($loginUserEmail, $email_client)) {
+                    $post->status = 1;
+                }*/
+            }
         }
-
+        
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
@@ -621,6 +632,7 @@ class PostController extends Controller
             <input type="submit" value="Decline" class="btn btn-danger" />
         </form>'.
         '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
+            <input type="hidden" name="_token" id="csrf-token" value="'. Session::token() .'" />
             <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
             <textarea name="content" required></textarea>
             <input type="submit" value="Make Changes" class="btn btn-default" />
