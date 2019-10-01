@@ -92,9 +92,13 @@ Route::middleware(['auth'])->group(function() {
         Route::get('edit/{post_id}', 'PostController@edit');
         Route::post('update/{post_id}', 'PostController@update');
         Route::get('delete/{post_id}', 'PostController@delete');
-        Route::post('approve/{post_id}', 'PostController@approve');
+        /*Route::post('approve/{post_id}', 'PostController@approve');
         Route::post('decline/{post_id}', 'PostController@decline');
-        Route::post('make_change/{post_id}', 'PostController@make_change');
+        Route::post('make_change/{post_id}', 'PostController@make_change');*/
+        Route::get('approve/{post_id}', 'PostController@approve');
+        Route::get('decline/{post_id}', 'PostController@decline');
+        Route::get('make_change/{post_id}', 'PostController@make_change');
+        Route::post('submit_make_change/{post_id}', 'PostController@submit_make_change');
     });
     Route::get('generate_payment/{cell_id}', 'SocialCellController@generate_payment');
     Route::post('create_payment/{cell_id}', 'SocialCellController@postPaymentStripe');

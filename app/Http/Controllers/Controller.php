@@ -143,4 +143,17 @@ class Controller extends BaseController
 
     }
 
+    public function payment_statuses()
+    {
+        $statuses = [
+            1 => 'Waiting Payment',
+            2 => 'Active',
+            3 => 'Cancelled',
+            4 => 'On Hold',
+        ];
+
+        return $statuses;
+
+    }
+
 }

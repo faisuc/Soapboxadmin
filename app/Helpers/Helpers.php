@@ -186,3 +186,22 @@ if ( ! function_exists('postStatus'))
     }
 
 }
+
+if ( ! function_exists('paymentStatus'))
+{
+
+    function paymentStatus($status_id)
+    {
+
+        $status = [
+            1 => 'Waiting Payment',
+            2 => 'Active',
+            3 => 'Cancelled',
+            4 => 'On Hold',
+        ];
+
+        return $status[$status_id];
+
+    }
+
+}

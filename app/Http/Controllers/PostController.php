@@ -69,15 +69,46 @@ class PostController extends Controller
             }
         }
 
-        /*/
-        $posts = $data['posts'];
-        foreach ($posts as $post_key => $post) {
-            $facebook_account = $this->socialAccount->where('social_cell_id', $post->social_cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        foreach ($data['posts'] as $post_key => $post) {
+            $social_cell_id = $post->social_cell_id;
+            $data['posts'][$post_key]['payment_status'] = 3;
+            $social_cell = $this->socialCell->find($social_cell_id);
+            if(!empty($social_cell)) {
+                $data['posts'][$post_key]['payment_status'] = $social_cell->payment_status;
+            }
+            $data['posts'][$post_key]['payment_status'] = 3;
+            if($post->facebook) {
+                $facebook_account = $this->socialAccount->where('social_cell_id', $social_cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+                $this->fetch_facebook_like_share($facebook_account,$post->facebook_page_id);
+            }
         }
-        /**/
         
         return view('pages.queues', $data);
 
+    }
+
+    public function fetch_facebook_like_share($facebook_account,$page_id)
+    {
+        $this->setFacebookObject();
+        if(!empty($facebook_account)) {
+            if($facebook_account->facebook_token) {
+                $token = $facebook_account->facebook_token;
+                $userdata = $this->api->get('/me', $token);
+                $userdata = $userdata->getGraphUser();
+                $user_id = $userdata['id'];
+                $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+                $accounts = $accounts->getDecodedBody();
+                /*echo "<pre>";
+                print_r($accounts);
+                die()
+                foreach ($accounts['data'] as $ac_key => $account) {
+                    if($account['id'] == $page_id) {
+
+                    }
+                }
+                die();*/
+            }
+        }
     }
 
     public function create($cell_id = null)
@@ -262,7 +293,7 @@ class PostController extends Controller
         $post->save();
 
         /* emails */
-        $html = 'Post Title: '.$title.'<br>'.
+        /*$html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
         'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.
         '<form method="post" action="'.URL::to('/').'/post/approve/'.$post->id.'">
@@ -277,7 +308,18 @@ class PostController extends Controller
             <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
             <textarea name="content" required></textarea>
             <input type="submit" value="Make Changes" class="btn btn-default" />
-        </form>';
+        </form>';*/
+        $image = 'N/A';
+        if($post->featured_image_id) {
+            $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
+        }
+        $html = 'Post Title: '.$title.'<br>'.
+        'Post Content:'.$description.'<br>'.
+        'Post Schedule On:'.$schedule_date.'<br>'.
+        'Post Image:'.$image.'<br>'.'<br>'.
+        '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>'.'<br>'.
+        '<a class="btn btn-danger" href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a>'.'<br>'.
+        '<a class="btn btn-info" href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
@@ -321,6 +363,10 @@ class PostController extends Controller
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
+
+            $post = $this->post->find($post_id);
+            $post->facebook = '1';
+            $post->save();
         }
         /* Schedule Post Facebook Page */
 
@@ -341,6 +387,10 @@ class PostController extends Controller
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
 
+            $post = $this->post->find($post_id);
+            $post->twitter = '1';
+            $post->save();
+
             /* Direct POST /
             $url = 'https://api.twitter.com/1.1/statuses/update.json';
             $parameters = array('status' => $title);
@@ -355,7 +405,7 @@ class PostController extends Controller
 
         if($request->input('instagram_post') != '') {
             // $social_id = session()->get('instagram');
-            
+            $post_id = $post->id;
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             $insta_user = $social_account->instagram_user;
             $insta_pass = $social_account->instagram_password;
@@ -379,6 +429,10 @@ class PostController extends Controller
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
+
+            $post = $this->post->find($post_id);
+            $post->instagram = '1';
+            $post->save();
 
             /*$root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
@@ -412,7 +466,7 @@ class PostController extends Controller
             die();*/
         }
         if ($request->input('pinterest_post') != '') {
-
+            $post_id = $post->id;
             $board_id = $request->input('pint_board');
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             
@@ -425,6 +479,10 @@ class PostController extends Controller
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'pinterest','session'=>$token,'session_secret'=>$board_id,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
+
+            $post = $this->post->find($post_id);
+            $post->pinterest = '1';
+            $post->save();
         }
 
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been created.');
@@ -620,23 +678,17 @@ class PostController extends Controller
 
 
         /* emails */
+        $image = 'N/A';
+        if($post->featured_image_id) {
+            $image = '<br><img src="'.URL::to('/').$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
+        }
         $html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
-        'Post Schedule On:'.$schedule_date.'<br>'.'<br>'.
-        '<form method="post" action="'.URL::to('/').'/post/approve/'.$post->id.'">
-            <input type="hidden" name="_token" id="csrf-token-1" value="'. Session::token() .'" />
-            <input type="submit" value="Approve" class="btn btn-primary" />
-        </form>'.
-        '<form method="post" action="'.URL::to('/').'/post/decline/'.$post->id.'">
-            <input type="hidden" name="_token" id="csrf-token-2" value="'. Session::token() .'" />
-            <input type="submit" value="Decline" class="btn btn-danger" />
-        </form>'.
-        '<form method="post" action="'.URL::to('/').'/post/make_change/'.$post->id.'">
-            <input type="hidden" name="_token" id="csrf-token" value="'. Session::token() .'" />
-            <input type="hidden" name="_token" id="csrf-token-3" value="'. Session::token() .'" />
-            <textarea name="content" required></textarea>
-            <input type="submit" value="Make Changes" class="btn btn-default" />
-        </form>';
+        'Post Schedule On:'.$schedule_date.'<br>'.
+        'Post Image:'.$image.'<br>'.'<br>'.
+        '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>'.'<br>'.
+        '<a class="btn btn-danger" href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a>'.'<br>'.
+        '<a class="btn btn-info" href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
         
         if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
@@ -680,6 +732,10 @@ class PostController extends Controller
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
+
+            $post = $this->post->find($post_id);
+            $post->facebook = '1';
+            $post->save();
         }
         /* Schedule Post Facebook Page */
 
@@ -699,6 +755,10 @@ class PostController extends Controller
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
+
+            $post = $this->post->find($post_id);
+            $post->twitter = '1';
+            $post->save();
             
             /* Direct POST /
             $url = 'https://api.twitter.com/1.1/statuses/update.json';
@@ -715,6 +775,7 @@ class PostController extends Controller
         }
 
         if($request->input('instagram_post') != '') {
+            $post_id = $post->id;
             // $social_id = session()->get('instagram');
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             
@@ -739,6 +800,10 @@ class PostController extends Controller
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
+
+            $post = $this->post->find($post_id);
+            $post->instagram = '1';
+            $post->save();
 
             // $new_filename = url($filename);
             /*$root = $_SERVER['DOCUMENT_ROOT'];
@@ -775,6 +840,7 @@ class PostController extends Controller
 
         if ($request->input('pinterest_post') != '') {
 
+            $post_id = $post->id;
             $board_id = $request->input('pint_board');
             $social_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 6)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
             
@@ -810,6 +876,10 @@ class PostController extends Controller
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'pinterest','session'=>$token,'session_secret'=>$board_id,'post_date'=>$post_date,'is_cron_run'=>0);
             DB::table('cron_script')->insert($data);
+
+            $post = $this->post->find($post_id);
+            $post->pinterest = '1';
+            $post->save();
         }
         
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been updated.');
@@ -825,7 +895,7 @@ class PostController extends Controller
 
     }
 
-    public function approve(Request $request, $post_id = null)
+    public function approve($post_id)
     {
         $post = $this->post->find($post_id);
         $post->status = '1';
@@ -834,7 +904,7 @@ class PostController extends Controller
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been Approved.');
     }
 
-    public function decline(Request $request, $post_id = null)
+    public function decline($post_id)
     {
         $post = $this->post->find($post_id);
         $post->status = '2';
@@ -843,11 +913,20 @@ class PostController extends Controller
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been Declined.');
     }
 
-    public function make_change(Request $request, $post_id = null)
+    // public function make_change(Request $request, $post_id = null)
+    public function make_change($post_id)
     {
+        $this->_loadSharedViews();
+        $data['post_id'] = $post_id;
+        return view('pages.make-change', $data);
+    }
+
+    public function submit_make_change(Request $request, $post_id)
+    {
+
         $content = $request->input('content');
         $roles = Sentinel::getUser()->roles;
-
+        
         $note = new $this->postNotes;
         $note->user_id = Sentinel::getUser()->id;
         $note->content = $content;

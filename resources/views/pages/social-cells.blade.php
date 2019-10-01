@@ -37,28 +37,14 @@
                                     <div class="tools">
                                         <span><i class="fa fa-clock"></i> {{ $socialcell->created_at }} </span>
                                     </div>
-                                    <!-- {{ $socialcell->description }} -->
                                 </p>
                                 <p class="card-text">Owner Mail : {{ $socialcell->email_owner ? $socialcell->email_owner: 'N/A'}} </p>
                                 <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer ? $socialcell->email_marketer : 'N/A' }} </p>
                                 <p class="card-text">Client Mail : {{ $socialcell->email_client ? $socialcell->email_client : 'N/A' }} </p>
-                                <p class="card-text">Payment Status : 
-                                    @if($socialcell->payment_status == '1')
-                                         Waiting Payment
-                                    @elseif ($socialcell->payment_status == '2')                                    
-                                         Active 
-                                    @elseif ($socialcell->payment_status == '3')
-                                        Cancelled
-                                    @elseif ($socialcell->payment_status == '4')
-                                        On Hold                                   
-                                    @endif
-                                </p>
-                                <!-- <a href="#" class="btn btn-lg"><i class="fab fa-facebook"></i></a> -->
-                                <!-- <a href="#" class="btn btn-lg"><i class="fab fa-twitter"></i></a> -->
+                                <p class="card-text">Payment Status : {{ paymentStatus($socialcell->payment_status) }}</p>
                             </div>
                             <div class="card-footer">
                                 <div class="btn-group">
-                                    <!-- <a href="#" data-post-id="{{ $socialcell->id }}" class="btn" data-toggle="modal" data-target=".postnotes-modal"><i class="fas fa-sticky-note"></i></a> -->
                                     <a href="/socialcell/edit/{{ $socialcell->id }}" class="btn"><i class="fas fa-edit"></i></a>
                                     <a href="/socialcell/delete/{{ $socialcell->id }}" class="btn confirmDeleteButton"><i class="fas fa-trash-alt"></i></a>
                                     <a href="/socialcell/{{ $socialcell->id }}" class="btn btn-info float-right">View</a>

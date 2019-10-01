@@ -7172,6 +7172,27 @@ Media Query
 
   .messaging img{ max-width:100%;}
 
+
+.attach_url {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+.card-body .social_icons {
+    border-top: #ccc solid 1px;
+    border-bottom: #ccc solid 1px;
+    margin: 10px -5px 10px 0px;
+    min-height: 48px;
+}
+.stripe_status {
+    background-color: #f00;
+    color: #fff;
+    padding: 5px 0 5px 15px;
+}
+.action_icons {
+    background-color: #eee;
+    color: #fff;
+}
+
   /** GLYPH ICONS **/
 
   @font-face{font-family:'Glyphicons Halflings';src:url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot');src:url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.woff') format('woff'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.ttf') format('truetype'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');}.glyphicon{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
