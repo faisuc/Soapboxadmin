@@ -7192,6 +7192,16 @@ Media Query
     background-color: #eee;
     color: #fff;
 }
+.card-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.card-footer ul li {
+    display: inline-block;
+    margin: auto 15px;
+    text-align: center;
+}
 
   /** GLYPH ICONS **/
 

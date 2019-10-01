@@ -15,6 +15,7 @@ use DirkGroenen\Pinterest\Pinterest;
 use Facebook\Facebook;
 use Illuminate\Mail\Mailable;
 use Mail;
+use App\Http\Controllers\TwitterAPIExchange;
 
 class PostController extends Controller
 {
@@ -71,15 +72,22 @@ class PostController extends Controller
 
         foreach ($data['posts'] as $post_key => $post) {
             $social_cell_id = $post->social_cell_id;
-            $data['posts'][$post_key]['payment_status'] = 3;
+            $data['posts'][$post_key]['payment_status'] = '3';
             $social_cell = $this->socialCell->find($social_cell_id);
             if(!empty($social_cell)) {
                 $data['posts'][$post_key]['payment_status'] = $social_cell->payment_status;
             }
-            $data['posts'][$post_key]['payment_status'] = 3;
             if($post->facebook) {
                 $facebook_account = $this->socialAccount->where('social_cell_id', $social_cell_id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
-                $this->fetch_facebook_like_share($facebook_account,$post->facebook_page_id);
+                if($post->facebook_page_id && $post->facebook_post_id) {
+                    $data['posts'][$post_key]['fb_like_share'] = $this->fetch_facebook_like_share($facebook_account,$post->facebook_page_id,$post->facebook_post_id);
+                }
+            }
+            if($post->twitter) {
+                $twitter_account = $this->socialAccount->where('social_cell_id', $social_cell_id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+                if($post->twitter_post_id) {
+                    $data['posts'][$post_key]['twt_like_share'] = $this->fetch_twitter_like_share($twitter_account,$post->twitter_post_id);
+                }
             }
         }
         
@@ -87,8 +95,9 @@ class PostController extends Controller
 
     }
 
-    public function fetch_facebook_like_share($facebook_account,$page_id)
+    public function fetch_facebook_like_share($facebook_account,$page_id,$post_id)
     {
+        $response = array();
         $this->setFacebookObject();
         if(!empty($facebook_account)) {
             if($facebook_account->facebook_token) {
@@ -98,17 +107,54 @@ class PostController extends Controller
                 $user_id = $userdata['id'];
                 $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
                 $accounts = $accounts->getDecodedBody();
-                /*echo "<pre>";
-                print_r($accounts);
-                die()
                 foreach ($accounts['data'] as $ac_key => $account) {
                     if($account['id'] == $page_id) {
-
+                        $access_token = $account['access_token'];
+                        $summary = $this->api->get('/'.$post_id.'?fields=shares,likes.summary(true),comments.summary(true)',$access_token);
+                        $summary = $summary->getDecodedBody();
+                        $response['likes'] = (isset($summary['likes'])) ? $summary['likes']['summary']['total_count'] : 0;
+                        $response['shares'] = (isset($summary['shares'])) ? $summary['shares']['count'] : 0;
                     }
                 }
-                die();*/
             }
         }
+
+        return $response;
+    }
+
+    public function fetch_twitter_like_share($twitter_account,$post_id)
+    {
+        $response = array();
+        $this->setFacebookObject();
+        if(!empty($twitter_account)) {
+            if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
+                $consumer_key = getenv('TWITTER_CLIENT_ID');
+                $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
+                $oauth_token = $twitter_account->twitter_session;
+                $oauth_token_secret = $twitter_account->twitter_secret;
+
+                $settings = array(
+                    'oauth_access_token' => $oauth_token,
+                    'oauth_access_token_secret' => $oauth_token_secret,
+                    'consumer_key' => $consumer_key,
+                    'consumer_secret' => $consumer_secret
+                );
+
+                $url = "https://api.twitter.com/1.1/statuses/show/".$post_id.".json";
+                $requestMethod = "GET";
+                $getfield = '?tweet_mode=extended';
+
+                $twitter = new TwitterAPIExchange($settings);
+                $user_timeline = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+                
+                if(!empty($user_timeline)) {
+                    $response['likes'] = $user_timeline['favorite_count'];
+                    $response['shares'] = $user_timeline['retweet_count'];   
+                }
+            }
+        }
+        return $response;
     }
 
     public function create($cell_id = null)
@@ -366,6 +412,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
+            $post->facebook_page_id = $page_id;
             $post->save();
         }
         /* Schedule Post Facebook Page */
@@ -735,6 +782,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
+            $post->facebook_page_id = $page_id;
             $post->save();
         }
         /* Schedule Post Facebook Page */
@@ -752,19 +800,21 @@ class PostController extends Controller
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
-            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
+            DB::table('cron_script')->insert($data);*/
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
             $post->save();
-            
+
             /* Direct POST /
             $url = 'https://api.twitter.com/1.1/statuses/update.json';
-            $parameters = array('status' => $title);
+            $parameters = array('status' => $title.'On '.date('Y m D'));
             $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+            $twitter_post_id = $result['id_str'];
             /* Direct POST */
+            
 
             /* Schedule POST /
             $parameters = array('status' => $title);
@@ -1148,6 +1198,12 @@ class PostController extends Controller
             $res = $this->api->post($facebook_page_id . '/feed/' ,$data, $pageAccessToken);
             // session()->forget('fb_access_token');
             if($res->getHttpStatusCode() == 200) {
+                $res = $res->getDecodedBody();
+
+                $facebook_post_id = $res['id'];
+                $post->facebook_post_id = $facebook_post_id;
+                $post->save();
+                
                 $response['success'] = true;
                 $response['message'] = "Your Schedule Post has been posted.";
                 // return redirect('/queues')->with('flash_message', 'Your Schedule Post has been posted.');
@@ -1485,19 +1541,12 @@ class PostController extends Controller
     public function run_cron()
     {
 
-        // the message
-        /*$msg = "First line of text\nSecond line of text = ".date('Y-m-d H:i:00');
-        $msg = wordwrap($msg,70);
-        mail("kunalsoni3331@gmail.com","test mail",$msg);*/
-
-
         $callback_url = getenv('TWITTER_REDIRECT');
         $consumer_key = getenv('TWITTER_CLIENT_ID');
         $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
 
         date_default_timezone_set('Asia/Kolkata');
         $current_time = date('Y-m-d H:i:00');
-        echo "<b> Current Time : </b>".$current_time;
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
         
         foreach ($cronData as $data) {
@@ -1506,24 +1555,17 @@ class PostController extends Controller
 
             $postData = $this->post->find($post_id);
             $cell_id = $postData->social_cell_id;
-            echo "cell id".$cell_id."<br>";
+
             if($cell_id) {
-                $cellData = $this->socialCell->find($cell_id);
                 
+                $cellData = $this->socialCell->find($cell_id);
                 $payment_status = $cellData->payment_status;
 
-                 echo "Out =   ".$payment_status."<br>";
-
-                if($payment_status == '2') {
+                if($postData->status == '1' && $payment_status == '2') {
                         
-                        echo "In =   = ".strtotime($post_date) .' == '.strtotime($current_time);
-
                     if(strtotime($post_date) == strtotime($current_time)){
 
-                         echo " Match = ".$payment_status."<br>";
-
                         if($data->type_name == 'twitter') {
-                            echo "twitter called";
                             $postData = $this->post->find($post_id);
                             $title = $postData->title;
 
@@ -1534,6 +1576,9 @@ class PostController extends Controller
                             $parameters = array('status' => $title.' on '.date('d m Y H:i A'));
                             // $parameters = array('status' => $title);
                             $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
+                            $twitter_post_id = (isset($result['id_str'])) ? $result['id_str'] : '';
+                            $postData->twitter_post_id = $twitter_post_id;
+                            $postData->save();
                             if(isset($result['errors'])) {
                                 echo "<pre>";
                                 print_r($result);

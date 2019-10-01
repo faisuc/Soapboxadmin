@@ -76,7 +76,7 @@
                                     <div class="row">
                                         <div class="col-md-12 social_icons">
                                             <div class="">
-                                                @if($post->facebook && $post->twitter)
+                                                @if($post->facebook || $post->twitter)
                                                     @if($post->facebook)
                                                     <a href="javascript:void(0);" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
                                                     @endif
@@ -105,7 +105,24 @@
                                 {{ paymentStatus($post->payment_status) }}
                             </div>
                             <div class="card-footer">
-                                FB Like and Share
+                                <ul>
+                                    <li>
+                                        {{ (isset($post->fb_like_share)) ? $post->fb_like_share['likes'] : 0 }}<br>
+                                        FB Likes
+                                    </li>
+                                    <li>
+                                        {{ (isset($post->fb_like_share)) ? $post->fb_like_share['shares'] : 0 }}<br>
+                                        FB Shares
+                                    </li>
+                                    <li>
+                                        {{ (isset($post->twt_like_share)) ? $post->twt_like_share['likes'] : 0 }}<br>
+                                        Twitter Likes
+                                    </li>
+                                    <li>
+                                        {{ (isset($post->twt_like_share)) ? $post->twt_like_share['shares'] : 0 }}<br>
+                                        Twitter Shares
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
