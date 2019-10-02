@@ -47,7 +47,7 @@
             <div class="row">
                 @forelse ($posts as $post)
                     <div class="col-md-3 queue-{{ $post->id }}">
-                        <div class="card" style="border: 5px solid
+                        <div class="card post_box" style="border: 5px solid
                             @if ($post->status == 0)
                                 #f44336;
                             @elseif ($post->status == 1)
@@ -62,8 +62,8 @@
                         ">
                             <img height="300px" class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
                             <div class="card-body">
-                                <p class="card-text">
-                                    <h3>{{ (strlen($post->title) > 90) ? substr($post->title,0,90).'..' : $post->title }}</h3>
+                                <h3>{{ (strlen($post->title) > 90) ? substr($post->title,0,90).'..' : $post->title }}</h3>
+                                <p class="description">
                                     <?php
                                     $view_link = '<a href="/post/edit/'.$post->id.'">Read More</a>';
                                     ?>
@@ -72,27 +72,27 @@
                                     @else
                                         {{ $post->description }}
                                     @endif
-                                    <p class="attach_url">Attached URL: {{ $post->link }}</p>
-                                    <div class="row">
-                                        <div class="col-md-12 social_icons">
-                                            <div class="">
-                                                @if($post->facebook || $post->twitter)
-                                                    @if($post->facebook)
-                                                    <a href="javascript:void(0);" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
-                                                    @endif
-                                                    @if($post->twitter)
-                                                    <a href="javascript:void(0);" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
-                                                    @endif
-                                                @else
-                                                    <a href="javascript:void(0);" class="btn btn-lg">N/A</a>
+                                </p>
+                                <p class="attach_url">Attached URL: {{ $post->link }}</p>
+                                <div class="row">
+                                    <div class="col-md-12 social_icons">
+                                        <div class="">
+                                            @if($post->facebook || $post->twitter)
+                                                @if($post->facebook)
+                                                <a href="javascript:void(0);" class="btn btn-lg"><i class="fab fa-facebook"></i></a>
                                                 @endif
-                                            </div>
+                                                @if($post->twitter)
+                                                <a href="javascript:void(0);" class="btn btn-lg"><i class="fab fa-twitter"></i></a>
+                                                @endif
+                                            @else
+                                                <a href="javascript:void(0);" class="btn btn-lg">N/A</a>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="tools">
-                                        <span><i class="fa fa-clock-o"></i> {{ $post->schedule_to_post_date }}
-                                    </div>
-                                </p>
+                                </div>
+                                <div class="tools">
+                                    <span><i class="fa fa-clock-o"></i> {{ $post->schedule_to_post_date }}
+                                </div>
                             </div>
                             <div class="action_icons">
                                 <div class="btn-group">
@@ -106,6 +106,7 @@
                             </div>
                             <div class="card-footer">
                                 <ul>
+                                    @if($post->facebook)
                                     <li>
                                         {{ (isset($post->fb_like_share)) ? $post->fb_like_share['likes'] : 0 }}<br>
                                         FB Likes
@@ -114,6 +115,8 @@
                                         {{ (isset($post->fb_like_share)) ? $post->fb_like_share['shares'] : 0 }}<br>
                                         FB Shares
                                     </li>
+                                    @endif
+                                    @if($post->twitter)
                                     <li>
                                         {{ (isset($post->twt_like_share)) ? $post->twt_like_share['likes'] : 0 }}<br>
                                         Twitter Likes
@@ -122,6 +125,7 @@
                                         {{ (isset($post->twt_like_share)) ? $post->twt_like_share['shares'] : 0 }}<br>
                                         Twitter Shares
                                     </li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>

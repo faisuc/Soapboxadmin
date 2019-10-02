@@ -181,9 +181,12 @@ jQuery(document).ready(function($) {
         let check = $(this).prop('checked');
         if(check) {
             $('#facebook-pages').show();
+            // Facebook Post Preview
+            facebook_post_preview();
         }
         else {
             $('#facebook-pages').hide();
+            $('#fb_post_preview').hide();
         }
     });
     /* Facebook Pages Display For Post */
@@ -243,4 +246,67 @@ jQuery(document).ready(function($) {
     });
     /* Pinterest Board Display For Post */
 
+    /* FB Post Preview Hide Show */
+    $(document).on('click','.fb-post-disp-btn',function() {
+        if($('.fb_preview_tool').hasClass('showing')) {
+            $('.fb_preview_tool').css('width','0');
+            $(this).css('right','0');
+            $('.fb_preview_tool').removeClass('showing');
+        }
+        else {
+            $('.fb_preview_tool').css('width','20%');
+            $(this).css('right','20%');
+            $('.fb_preview_tool').addClass('showing');
+        }
+    });
+    /* FB Post Preview Hide Show */
+
+    /* Fetch FB Post Preview Content */
+    $('#inputTitle,#inputPhoto,#inputTextContent').on('change',function() {
+        facebook_post_preview();
+    });
+    /* Fetch FB Post Preview Content */
+
 });
+
+function facebook_post_preview()
+{
+    let page_check = $('input[name="facebook_post"]').prop('checked');
+    let page_name = $('#facebook-pages input[name="fb_page"]:checked').data('page-name');
+    let page_picture = $('#facebook-pages input[name="fb_page"]:checked').data('page-picture');
+    let title = $('#inputTitle').val();
+    let description = $('#inputTextContent').val();
+    let image = $('#inputPhoto')[0].files[0];
+    let image_val = $('#inputPhoto').val();
+    let old_image = $('#feature_image').val();
+    if(page_check) {
+        if(page_name != '') {
+            $('#fb_post_preview').find('.page-name').text(page_name);
+        }
+        if(page_picture != '') {
+            $('#fb_post_preview').find('.facebook-thumb').attr('src',page_picture);
+        }
+        if(title != '') {
+            $('#fb_post_preview').find('.fb-post h4').text(title);
+        }
+        if(description != '') {
+            $('#fb_post_preview').find('.fb-post p').text(description);
+        }
+        if(image === undefined) {
+            if(old_image !== undefined) {
+                console.log(old_image);
+                $('#fb_post_preview').find('.fb-post img').attr('src', old_image);
+            }
+        }
+        else {
+            if(image_val != '') {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#fb_post_preview').find('.fb-post img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(image);
+            }
+        }
+        $('#fb_post_preview').show();
+    }
+}

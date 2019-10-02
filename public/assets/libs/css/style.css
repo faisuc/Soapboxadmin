@@ -7192,18 +7192,55 @@ Media Query
     background-color: #eee;
     color: #fff;
 }
+/*.post_box {
+    min-height: 800px;
+}
+.post_box .description {
+    min-height: 150px;
+}*/
+.post_box .card-footer {
+    padding: 5px 10px;
+    min-height: 75px;
+}
 .card-footer ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 .card-footer ul li {
-    display: inline-block;
-    margin: auto 15px;
+    width: 25%;
+    float: left;
     text-align: center;
 }
 
-  /** GLYPH ICONS **/
+/*
+    *******************************************************************
+    ********************* FB Preview Tool *****************************
+    *******************************************************************
+*/
+#fb_post_preview { display: none; }
+.fb_preview_tool { position: fixed; right: 0; bottom: 0; width: 20%; z-index: 9999; height: 100%; transition: all 1s; }
+.fb-post-disp-btn { position: fixed; right: 20%; top: 0; z-index: 9999; transition: all 1s; }
+.fb-testimonial{background:#fff;padding:5px;border-radius:2px; border: #aaa solid 2px;}
+.fb-testimonial-inner{background:#fff;padding:5px;border-radius:3px;}
+.facebook-thumb{width:40px; height: 40px; display:inline-block; vertical-align:top;}
+.facebook-name{display:inline-block; margin:0px; font-family:Helvetica, Arial, Sans-serif; font-weight:700; color:#3b5998;}
+.facebook-date a{color:#9197a3; font-size:12px; font-weight:500; text-decoration:underline;}
+.facebook-date {color:#9197a3; font-size:12px; font-weight:500;}
+.fa.fa-caret-right{color:#9197a3;}
+.fb-testimonial-copy{padding:15px 0px 0px 0px;}
+.fb-testimonial-copy p { text-align: justify; margin-bottom: 5px; }
+.fb-testimonial-copy img { height: 200px; /*width: 100%; object-fit: cover;*/ }
+.fb-post { border: #ccc solid 1px; }
+.fb-post hr { margin: 5px 0; }
+.fb-post h4 { margin-bottom: 5px; }
+.fb-post h4,.fb-post p { padding-left: 5px; }
+/* FB Preview Tool */
+
+
+
+
+/** GLYPH ICONS **/
 
   @font-face{font-family:'Glyphicons Halflings';src:url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot');src:url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.woff') format('woff'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.ttf') format('truetype'),url('http://netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');}.glyphicon{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
 .glyphicon-asterisk:before{content:"\2a";}

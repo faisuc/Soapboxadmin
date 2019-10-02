@@ -209,7 +209,7 @@ class PostController extends Controller
                     $userdata = $this->api->get('/me', $token);
                     $userdata = $userdata->getGraphUser();
                     $user_id = $userdata['id'];
-                    $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+                    $accounts = $this->api->get('/'.$user_id.'/accounts?fields=picture,name', $token);
                     
                     $accounts = $accounts->getDecodedBody();
                     $data['pages'] = $accounts['data'];
@@ -602,7 +602,7 @@ class PostController extends Controller
                     $userdata = $this->api->get('/me', $token);
                     $userdata = $userdata->getGraphUser();
                     $user_id = $userdata['id'];
-                    $accounts = $this->api->get('/'.$user_id.'/accounts', $token);
+                    $accounts = $this->api->get('/'.$user_id.'/accounts?fields=picture,name', $token);
                     
                     $accounts = $accounts->getDecodedBody();
                     $data['pages'] = $accounts['data'];
