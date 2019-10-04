@@ -381,6 +381,14 @@ class PostController extends Controller
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
 
+        // if($post->id) {}
+        if ($media_id != 0)
+        {
+            $media = $this->media->find($media_id);
+            $media->post_id = $post->id;
+            $media->save();
+        }
+
         /* emails */
         /*$html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
@@ -399,9 +407,6 @@ class PostController extends Controller
             <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';*/
         $image = 'N/A';
-        echo "<pre>";
-        print_r($post);
-        die();
         if($post->featured_image_id) {
             $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
         }
@@ -442,15 +447,6 @@ class PostController extends Controller
             }
         }
         /**/
-
-        // if($post->id) {}
-        echo $media_id; die();
-        if ($media_id != 0)
-        {
-            $media = $this->media->find($media_id);
-            $media->post_id = $post->id;
-            $media->save();
-        }
 
         /* Schedule Post Facebook Page */
         if ($request->input('facebook_post') != '') {
