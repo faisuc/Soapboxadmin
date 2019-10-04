@@ -441,7 +441,8 @@ class PostController extends Controller
         }
         /**/
 
-        if ($media_id != 0 && $post->id != 0)
+        // if($post->id) {}
+        if ($media_id != 0)
         {
             $media = $this->media->find($media_id);
             $media->post_id = $post->id;
