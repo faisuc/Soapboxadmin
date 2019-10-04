@@ -292,6 +292,13 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'link' => 'required',
+            'schedule_date' => 'required',
+            'cell_id' => 'required',
+        ]);
 
         $title = $request->input('title');
         $description = $request->input('description');
