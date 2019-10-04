@@ -399,6 +399,9 @@ class PostController extends Controller
             <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';*/
         $image = 'N/A';
+        echo "<pre>";
+        print_r($post);
+        die();
         if($post->featured_image_id) {
             $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
         }
