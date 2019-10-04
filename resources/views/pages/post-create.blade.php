@@ -92,7 +92,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inputStatus">Status</label>
-                        <select id="inputStatus" name="status" class="form-control" required <?php echo $disabled; ?>>
+                        <select id="inputStatus" name="status" class="form-control" <?php echo $disabled; ?>>
                             <option value="">Status</option>
                             @foreach ($post_statuses as $key => $status)
                                 <option value="{{ $key }}">{{ $status }}</option>
