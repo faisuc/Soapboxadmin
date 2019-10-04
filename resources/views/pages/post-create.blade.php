@@ -76,23 +76,23 @@
                     @endif
                     <div class="form-group">
                         <label for="inputTitle">Title</label>
-                        <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" class="form-control" <?php echo $disabled; ?>>
+                        <input id="inputTitle" type="text" placeholder="Title" value="{{ old('title') }}" name="title" required class="form-control" <?php echo $disabled; ?>>
                     </div>
                     <div class="form-group">
                         <label for="inputTextContent">Text Content</label>
-                        <textarea id="inputTextContent" type="text" placeholder="Text Content" name="description" class="form-control" <?php echo $disabled; ?>>{{ old('description') }}</textarea>
+                        <textarea id="inputTextContent" type="text" placeholder="Text Content" name="description" class="form-control" required <?php echo $disabled; ?>>{{ old('description') }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="inputURL">URL/Link</label>
-                        <input id="inputURL" type="text" placeholder="URL/Link" value="{{ old('link') }}" name="link" class="form-control" <?php echo $disabled; ?>>
+                        <input id="inputURL" type="text" placeholder="URL/Link" value="{{ old('link') }}" name="link" required class="form-control" <?php echo $disabled; ?>>
                     </div>
                     <div class="form-group">
                         <label for="inputScheduleDate">Schedule Post</label>
-                        <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required <?php echo $disabled; ?>>
+                        <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" required value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required <?php echo $disabled; ?>>
                     </div>
                     <div class="form-group">
                         <label for="inputStatus">Status</label>
-                        <select id="inputStatus" name="status" class="form-control" <?php echo $disabled; ?>>
+                        <select id="inputStatus" name="status" class="form-control" required <?php echo $disabled; ?>>
                             <option value="">Status</option>
                             @foreach ($post_statuses as $key => $status)
                                 <option value="{{ $key }}">{{ $status }}</option>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inputPhoto">Photo</label>
-                        <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control" <?php echo $disabled; ?>>
+                        <input id="inputPhoto" type="file" placeholder="Photo" name="photo" required class="form-control" <?php echo $disabled; ?>>
                     </div>
                     @if(isset($facebook))
                         @if(!empty($pages))

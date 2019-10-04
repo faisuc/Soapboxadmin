@@ -33,6 +33,9 @@ class SocialCellController extends Controller
         if (is_admin())
         {
             $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+            $data['user_email'] = $loginUserEmail;
         }
         else
         {
@@ -214,6 +217,14 @@ class SocialCellController extends Controller
         $socialcell->payment_status = '4';
         $socialcell->save();
         return redirect()->back()->with('flash_message', 'Social Cell has been On Hold.');
+    }
+
+    public function active_payment($cell_id = null)
+    {
+        $socialcell = $this->socialCell->find($cell_id);
+        $socialcell->payment_status = '2';
+        $socialcell->save();
+        return redirect()->back()->with('flash_message', 'Social Cell has been Active.');
     }
 
     public function generate_payment($cell_id)

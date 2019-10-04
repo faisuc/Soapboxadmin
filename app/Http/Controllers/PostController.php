@@ -90,7 +90,7 @@ class PostController extends Controller
                 }
             }
         }
-        
+
         return view('pages.queues', $data);
 
     }
@@ -434,7 +434,7 @@ class PostController extends Controller
         }
         /**/
 
-        if ($media_id != 0)
+        if ($media_id != 0 && $post->id != 0)
         {
             $media = $this->media->find($media_id);
             $media->post_id = $post->id;

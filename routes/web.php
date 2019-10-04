@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('fb_cell_callback', 'SocialCellController@fb_cell_callback');
     Route::get('socialcell/cancel_payment/{cell_id}', 'SocialCellController@cancel_payment');
     Route::get('socialcell/onhold_payment/{cell_id}', 'SocialCellController@onhold_payment');
+    Route::get('socialcell/active_payment/{cell_id}', 'SocialCellController@active_payment');
     /* Social Cell */
 
 
