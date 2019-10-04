@@ -105,6 +105,7 @@
                                 {{ paymentStatus($post->payment_status) }}
                             </div>
                             <div class="card-footer">
+                                @if($post->facebook || $post->twitter)
                                 <ul>
                                     @if($post->facebook)
                                     <li>
@@ -127,6 +128,9 @@
                                     </li>
                                     @endif
                                 </ul>
+                                @else
+                                <p>N/A</p>
+                                @endif
                             </div>
                         </div>
                     </div>
