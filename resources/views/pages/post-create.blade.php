@@ -88,7 +88,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inputScheduleDate">Schedule Post</label>
-                        <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" required value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required <?php echo $disabled; ?>>
+                        <input id="inputScheduleDate" readonly type="text" placeholder="Date & Time" value="{{ old('schedule_date') }}" name="schedule_date" class="form-control datetimepicker" required <?php echo $disabled; ?>>
                     </div>
                     <div class="form-group">
                         <label for="inputStatus">Status</label>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inputPhoto">Photo</label>
-                        <input id="inputPhoto" type="file" placeholder="Photo" name="photo" required class="form-control" <?php echo $disabled; ?>>
+                        <input id="inputPhoto" type="file" placeholder="Photo" name="photo" class="form-control" <?php echo $disabled; ?>>
                     </div>
                     @if(isset($facebook))
                         @if(!empty($pages))
