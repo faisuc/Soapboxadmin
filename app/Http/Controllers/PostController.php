@@ -372,12 +372,11 @@ class PostController extends Controller
             }
         }
 
-
         if ($media_id != 0)
         {
             $post->featured_image_id = $media_id;
         }
-
+        
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
@@ -442,6 +441,7 @@ class PostController extends Controller
         /**/
 
         // if($post->id) {}
+        echo $media_id; die();
         if ($media_id != 0)
         {
             $media = $this->media->find($media_id);
