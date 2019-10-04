@@ -42,6 +42,17 @@
                                 <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer ? $socialcell->email_marketer : 'N/A' }} </p>
                                 <p class="card-text">Client Mail : {{ $socialcell->email_client ? $socialcell->email_client : 'N/A' }} </p>
                                 <p class="card-text">Payment Status : {{ paymentStatus($socialcell->payment_status) }}</p>
+                                <?php
+                                $owner_emails = explode(',', $socialcell->email_owner);
+                                ?>
+                                @if(in_array($user_email, $owner_emails))
+                                    @if($socialcell->payment_status != '3')
+                                    <a href="{{ url('socialcell/cancel_payment/'.$socialcell->id) }}" class="btn btn-info">Cancel Payment</a>
+                                    @endif
+                                    @if($socialcell->payment_status != '4')
+                                    <a href="{{ url('socialcell/onhold_payment/'.$socialcell->id) }}" class="btn btn-info">On Hold Payment</a>
+                                    @endif
+                                @endif
                             </div>
                             <div class="card-footer">
                                 <div class="btn-group">

@@ -119,7 +119,7 @@
                     <div class="form-group">
                         <label for="twitter_post">Twitter Post</label>
                         <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" id="twitter_post" type="checkbox" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
+                            <input class="custom-control-input" id="twitter_post" type="checkbox" data-profile-name="{{ $twitter_profile_name }}" data-username="{{ $twitter_username }}" data-profile-pic="{{ $twitter_profile_pic }}" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
                         </label>
                     </div>
                     @endif
@@ -128,7 +128,7 @@
                     <div class="form-group">
                         <label for="instagram_post">Instagram</label>
                         <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" id="instagram_post" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
+                            <input class="custom-control-input" id="instagram_post" data-username="{{ $insta_username }}" data-profile-pic="{{ $insta_profile_pic }}" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
                         </label>
                     </div>
                     <?php /* ?><div id="instagram_user_pass" style="display: none;">

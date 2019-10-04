@@ -249,21 +249,101 @@ jQuery(document).ready(function($) {
     /* FB Post Preview Hide Show */
     $(document).on('click','.fb-post-disp-btn',function() {
         if($('.fb_preview_tool').hasClass('showing')) {
+            
             $('.fb_preview_tool').css('width','0');
+            $('.twt_preview_tool').css('width','0');
+            $('.insta_preview_tool').css('width','0');
+            
             $(this).css('right','0');
+            $('.twt-post-disp-btn').css('right',0);
+            $('.insta-post-disp-btn').css('right',0);
+            
             $('.fb_preview_tool').removeClass('showing');
+            
         }
         else {
+            
             $('.fb_preview_tool').css('width','20%');
+            $('.twt_preview_tool').css('width','0');
+            $('.insta_preview_tool').css('width','0');
+            
             $(this).css('right','20%');
+            $('.twt-post-disp-btn').css('right','20%');
+            $('.insta-post-disp-btn').css('right','20%');
+
             $('.fb_preview_tool').addClass('showing');
+            $('.twt_preview_tool').removeClass('showing');
+            $('.insta_preview_tool').removeClass('showing');
         }
     });
     /* FB Post Preview Hide Show */
+    /* Twitter Post Preview Hide Show */
+    $(document).on('click','.twt-post-disp-btn',function() {
+        if($('.twt_preview_tool').hasClass('showing')) {
+            
+            $('.fb_preview_tool').css('width','0');
+            $('.twt_preview_tool').css('width','0');
+            $('.insta_preview_tool').css('width','0');
+            
+            $(this).css('right','0');
+            $('.fb-post-disp-btn').css('right',0);
+            $('.insta-post-disp-btn').css('right',0);
+            
+            $('.twt_preview_tool').removeClass('showing');
+            
+        }
+        else {
+            
+            $('.twt_preview_tool').css('width','20%');
+            $('.fb_preview_tool').css('width','0');
+            $('.insta_preview_tool').css('width','0');
+            
+            $(this).css('right','20%');
+            $('.fb-post-disp-btn').css('right','20%');
+            $('.insta-post-disp-btn').css('right','20%');
+
+            $('.twt_preview_tool').addClass('showing');
+            $('.fb_preview_tool').removeClass('showing');
+            $('.insta_preview_tool').removeClass('showing');
+        }
+    });
+    /* Twitter Post Preview Hide Show */
+    /* Insta Post Preview Hide Show */
+    $(document).on('click','.insta-post-disp-btn',function() {
+        if($('.insta_preview_tool').hasClass('showing')) {
+            
+            $('.fb_preview_tool').css('width','0');
+            $('.twt_preview_tool').css('width','0');
+            $('.insta_preview_tool').css('width','0');
+            
+            $(this).css('right','0');
+            $('.twt-post-disp-btn').css('right',0);
+            $('.fb-post-disp-btn').css('right',0);
+            
+            $('.insta_preview_tool').removeClass('showing');
+        }
+        else {
+            
+            $('.insta_preview_tool').css('width','20%');
+            $('.twt_preview_tool').css('width','0');
+            $('.fb_preview_tool').css('width','0');
+            
+            $(this).css('right','20%');
+            $('.twt-post-disp-btn').css('right','20%');
+            $('.fb-post-disp-btn').css('right','20%');
+
+            $('.insta_preview_tool').addClass('showing');
+            $('.fb_preview_tool').removeClass('showing');
+            $('.twt_preview_tool').removeClass('showing');
+        }
+    });
+    /* Insta Post Preview Hide Show */
 
     /* Fetch FB Post Preview Content */
     $('#inputTitle,#inputPhoto,#inputTextContent').on('change',function() {
         facebook_post_preview();
+        twitter_post_preview();
+        instagram_post_preview();
     });
     /* Fetch FB Post Preview Content */
 
@@ -271,7 +351,7 @@ jQuery(document).ready(function($) {
 
 function facebook_post_preview()
 {
-    let page_check = $('input[name="facebook_post"]').prop('checked');
+    let page_check = true;//$('input[name="facebook_post"]').prop('checked');
     let page_name = $('#facebook-pages input[name="fb_page"]:checked').data('page-name');
     let page_picture = $('#facebook-pages input[name="fb_page"]:checked').data('page-picture');
     let title = $('#inputTitle').val();
@@ -281,32 +361,107 @@ function facebook_post_preview()
     let old_image = $('#feature_image').val();
     if(page_check) {
         if(page_name != '') {
-            $('#fb_post_preview').find('.page-name').text(page_name);
+            $('#fb_post_preview .fb_preview_tool').find('.page-name').text(page_name);
         }
         if(page_picture != '') {
-            $('#fb_post_preview').find('.facebook-thumb').attr('src',page_picture);
+            $('#fb_post_preview .fb_preview_tool').find('.facebook-thumb').attr('src',page_picture);
         }
         if(title != '') {
-            $('#fb_post_preview').find('.fb-post h4').text(title);
+            $('#fb_post_preview .fb_preview_tool').find('.fb-post h4').text(title);
         }
         if(description != '') {
-            $('#fb_post_preview').find('.fb-post p').text(description);
+            $('#fb_post_preview .fb_preview_tool').find('.fb-post p').text(description);
         }
         if(image === undefined) {
             if(old_image !== undefined) {
-                console.log(old_image);
-                $('#fb_post_preview').find('.fb-post img').attr('src', old_image);
+                $('#fb_post_preview .fb_preview_tool').find('.fb-post img').attr('src', old_image);
             }
         }
         else {
             if(image_val != '') {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#fb_post_preview').find('.fb-post img').attr('src', e.target.result);
+                    $('#fb_post_preview .fb_preview_tool').find('.fb-post img').attr('src', e.target.result);
                 }
                 reader.readAsDataURL(image);
             }
         }
-        $('#fb_post_preview').show();
+        $('#fb_post_preview .fb_preview_tool').show();
     }
+}
+
+function twitter_post_preview()
+{
+    let twitter_profile_name = $('#twitter_post').data('profile-name');
+    let twitter_username = $('#twitter_post').data('username');
+    let profile_picture = $('#twitter_post').data('profile-pic');
+    let title = $('#inputTitle').val();
+    let description = $('#inputTextContent').val();
+    let image = $('#inputPhoto')[0].files[0];
+    let image_val = $('#inputPhoto').val();
+    let old_image = $('#feature_image').val();
+
+    if(twitter_profile_name != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.profile-name').text(twitter_profile_name);
+    }
+    if(twitter_username != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.username').text(twitter_username);
+    }
+    if(profile_picture != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.twitter-thumb').attr('src',profile_picture);
+    }
+    if(title != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.twt-post h4').text(title);
+    }
+    if(description != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.twt-post p').text(description);
+    }
+    if(image === undefined) {
+        if(old_image !== undefined) {
+            $('#fb_post_preview .twt_preview_tool').find('.twt-post img').attr('src', old_image);
+        }
+    }
+    else {
+        if(image_val != '') {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#fb_post_preview .twt_preview_tool').find('.twt-post img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(image);
+        }
+    }
+
+    $('#fb_post_preview').show();
+}
+
+function instagram_post_preview()
+{
+    let insta_username = $('#instagram_post').data('username');
+    let profile_picture = $('#instagram_post').data('profile-pic');
+    let image = $('#inputPhoto')[0].files[0];
+    let image_val = $('#inputPhoto').val();
+    let old_image = $('#feature_image').val();
+
+    if(insta_username != '') {
+        $('#fb_post_preview .insta_preview_tool').find('.username').text(insta_username);
+    }
+    if(profile_picture != '') {
+        $('#fb_post_preview .insta_preview_tool').find('.twitter-thumb').attr('src',profile_picture);
+    }
+    if(image === undefined) {
+        if(old_image !== undefined) {
+            $('#fb_post_preview .insta_preview_tool').find('.insta-post img').attr('src', old_image);
+        }
+    }
+    else {
+        if(image_val != '') {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#fb_post_preview .insta_preview_tool').find('.insta-post img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(image);
+        }
+    }
+
+    $('#insta_post_preview').show();
 }

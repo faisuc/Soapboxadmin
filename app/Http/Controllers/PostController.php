@@ -219,10 +219,47 @@ class PostController extends Controller
             if (!empty($twitter_account)) {
                 if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
                     $data['twitter'] = true;
+
+                    $consumer_key = getenv('TWITTER_CLIENT_ID');
+                    $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
+                    $oauth_token = $twitter_account->twitter_session;
+                    $oauth_token_secret = $twitter_account->twitter_secret;
+
+                    $settings = array(
+                        'oauth_access_token' => $oauth_token,
+                        'oauth_access_token_secret' => $oauth_token_secret,
+                        'consumer_key' => $consumer_key,
+                        'consumer_secret' => $consumer_secret
+                    );
+
+                    $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+                    $requestMethod = "GET";
+                    $getfield = '?tweet_mode=extended';
+
+                    $twitter = new TwitterAPIExchange($settings);
+                    $user_timeline = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+                    $user_timeline = $user_timeline[0];
+                    $data['twitter_profile_name'] = $user_timeline['user']['name'];
+                    $data['twitter_username'] = $user_timeline['user']['screen_name'];
+                    $data['twitter_profile_pic'] = $user_timeline['user']['profile_image_url'];
                 }
             }
             if (!empty($instagram_account)) {
                 $data['instagram'] = true;
+
+                $username = $instagram_account->instagram_username;
+                $apiurl = 'https://www.instagram.com/'.$username.'/?__a=1';
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $apiurl);
+                curl_setopt($curl, CURLOPT_HEADER, false);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+                $response = curl_exec($curl);
+                curl_close($curl);
+                $response = json_decode($response,true);
+                $data['insta_profile_pic'] = $response['graphql']['user']['profile_pic_url'];
+                $data['insta_username'] = $response['graphql']['user']['username'];
             }
             if (!empty($pinterest_account)) {
                 if($pinterest_account->pinterest_token) {
@@ -612,10 +649,47 @@ class PostController extends Controller
             if(!empty($twitter_account)) {
                 if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
                     $data['twitter'] = true;
+
+                    $consumer_key = getenv('TWITTER_CLIENT_ID');
+                    $consumer_secret = getenv('TWITTER_CLIENT_SECRET');
+
+                    $oauth_token = $twitter_account->twitter_session;
+                    $oauth_token_secret = $twitter_account->twitter_secret;
+
+                    $settings = array(
+                        'oauth_access_token' => $oauth_token,
+                        'oauth_access_token_secret' => $oauth_token_secret,
+                        'consumer_key' => $consumer_key,
+                        'consumer_secret' => $consumer_secret
+                    );
+
+                    $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+                    $requestMethod = "GET";
+                    $getfield = '?tweet_mode=extended';
+
+                    $twitter = new TwitterAPIExchange($settings);
+                    $user_timeline = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+                    $user_timeline = $user_timeline[0];
+                    $data['twitter_profile_name'] = $user_timeline['user']['name'];
+                    $data['twitter_username'] = $user_timeline['user']['screen_name'];
+                    $data['twitter_profile_pic'] = $user_timeline['user']['profile_image_url'];
                 }
             }
             if (!empty($instagram_account)) {
                 $data['instagram'] = true;
+
+                $username = $instagram_account->instagram_username;
+                $apiurl = 'https://www.instagram.com/'.$username.'/?__a=1';
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $apiurl);
+                curl_setopt($curl, CURLOPT_HEADER, false);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+                $response = curl_exec($curl);
+                curl_close($curl);
+                $response = json_decode($response,true);
+                $data['insta_profile_pic'] = $response['graphql']['user']['profile_pic_url'];
+                $data['insta_username'] = $response['graphql']['user']['username'];
             }
             if (!empty($pinterest_account)) {
                 if($pinterest_account->pinterest_token) {

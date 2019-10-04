@@ -40,6 +40,7 @@ class SocialCellController extends Controller
             $loginUserEmail = $loginUser->email;
 
             $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+            $data['user_email'] = $loginUserEmail;
         }
         // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
         
@@ -197,6 +198,22 @@ class SocialCellController extends Controller
     {
         $this->socialCell->find($cell_id)->delete();
         return redirect()->back()->with('flash_message', 'Social Cell has been deleted.');
+    }
+
+    public function cancel_payment($cell_id = null)
+    {
+        $socialcell = $this->socialCell->find($cell_id);
+        $socialcell->payment_status = '3';
+        $socialcell->save();
+        return redirect()->back()->with('flash_message', 'Social Cell has been Cancelled.');
+    }
+
+    public function onhold_payment($cell_id = null)
+    {
+        $socialcell = $this->socialCell->find($cell_id);
+        $socialcell->payment_status = '4';
+        $socialcell->save();
+        return redirect()->back()->with('flash_message', 'Social Cell has been On Hold.');
     }
 
     public function generate_payment($cell_id)

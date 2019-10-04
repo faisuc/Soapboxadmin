@@ -60,7 +60,7 @@
                                 #516bf0;
                             @endif
                         ">
-                            <img height="300px" class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
+                            <img height="200px" class="card-img-top" src="{{ $post->featured_image }}" alt="Card image cap">
                             <div class="card-body">
                                 <h3>{{ (strlen($post->title) > 90) ? substr($post->title,0,90).'..' : $post->title }}</h3>
                                 <p class="description">
