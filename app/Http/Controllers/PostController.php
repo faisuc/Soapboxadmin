@@ -804,6 +804,12 @@ class PostController extends Controller
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
 
+        if ($media_id != 0)
+        {
+            $media = $this->media->find($media_id);
+            $media->post_id = $post_id;
+            $media->save();
+        }
 
         /* emails */
         $image = 'N/A';
@@ -847,13 +853,6 @@ class PostController extends Controller
             }
         }
         /**/
-
-        if ($media_id != 0)
-        {
-            $media = $this->media->find($media_id);
-            $media->post_id = $post_id;
-            $media->save();
-        }
 
         /* Schedule Post Facebook Page */
         if ($request->input('facebook_post') != '') {
