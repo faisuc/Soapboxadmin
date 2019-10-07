@@ -17,6 +17,8 @@ use Google_Client;
 
 use Validator;
 use Stripe;
+use Illuminate\Mail\Mailable;
+use Mail;
 // use App\Http\Controllers\Stripe;
 // use Stripe\Stripe;
 // use Stripe\Charge;
@@ -111,6 +113,18 @@ class SocialCellController extends Controller
                     return redirect('generate_payment/'.$cell_id);
                 }
                 else {
+
+                    $html = 'Please Make Payment for Your Cell <strong>'.$cellname.'</strong>'.'<br>'.'<br>'.
+                    '<a class="btn btn-primary" href="'.URL::to('/').'/generate_payment/'.$socialcell->id.'">Make Payment</a>';
+                    foreach ($ownerEmail as $owner_email) {
+                        $userdata = new $this->user;
+                        $userdata->email = $c_email;
+                        $userdata->html = $html;
+                        Mail::send([], [], function ($message) use ($userdata) { 
+                            $html = $userdata->html;
+                            $message->to($userdata->email)->subject('Social Cell make Payment')->setBody($html, 'text/html'); 
+                        });
+                    }
 
                     return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
                 }
