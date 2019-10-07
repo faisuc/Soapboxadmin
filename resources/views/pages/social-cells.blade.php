@@ -8,6 +8,17 @@
                 <div class="col-md-3">
                     <a href="{{ url('/socialcell/add') }}" class="btn btn-primary">Create Social Cell</a>
                 </div>
+                <div class="col-md-5 text-right">
+                    <b>Select Status: </b>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" name="socialcell" onchange="(window.location = '/socialcell/status/' + this.options[this.selectedIndex].value);">
+                        <option value="all">Active & Waiting Payment</option>
+                        @foreach ($statuses as $status_key => $status)
+                            <option {{ (isset($status_id) && $status_id == $status_key) ? 'selected' : '' }} value="{{ $status_key }}">{{ $status }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <hr />
             <div class="row">

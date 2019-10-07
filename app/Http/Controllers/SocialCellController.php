@@ -26,15 +26,22 @@ use Mail;
 class SocialCellController extends Controller
 {
     private $api;
-    public function index()
+    public function index($status_id = null)
     {
-    	$this->_loadSharedViews();
+        $this->_loadSharedViews();
+
+        $status_id = ($status_id == 'all') ? null : $status_id;
 
         $data = [];
         
         if (is_admin())
         {
-            $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            if($status_id == null) {
+                $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+            }
+            else {
+                $data['socialcells'] = $this->socialCell->where('payment_status',$status_id)->orderBy('created_at', 'DESC')->get();
+            }
             $loginUser = Sentinel::getUser();
             $loginUserEmail = $loginUser->email;
             $data['user_email'] = $loginUserEmail;
@@ -43,11 +50,20 @@ class SocialCellController extends Controller
         {
             $loginUser = Sentinel::getUser();
             $loginUserEmail = $loginUser->email;
-
-            $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
             $data['user_email'] = $loginUserEmail;
+
+            if($status_id == null) {
+                $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+            }
+            else {
+                $data['socialcells'] = $this->socialCell->where(function($query) use($loginUserEmail) {
+                    $query->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%');
+                })->where('payment_status',$status_id)->orderBy('created_at', 'DESC')->get();
+            }
         }
         // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        $data['statuses'] = $this->payment_statuses();
+        $data['status_id'] = $status_id;
         
         return view('pages.social-cells', $data);
         // return view('pages.social-cells', $data);
