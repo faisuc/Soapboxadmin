@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('socialcell', 'SocialCellController@index');
     Route::get('socialcell/{cell_id?}', 'SocialCellController@social_cell_accounts');
     Route::get('socialcell/status/{status_id?}', 'SocialCellController@index');
+    Route::get('socialcell/date/{start_date?}/{end_date?}', 'SocialCellController@date_filter');
     Route::post('socialcell/store', 'SocialCellController@store');
     Route::get('socialcell/edit/{cell_id}', 'SocialCellController@edit');
     Route::post('socialcell/update/{cell_id}', 'SocialCellController@update');

@@ -2,16 +2,27 @@
 @section('title', 'Social Cells')
 
 @section('dashboardContent')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="row">
                 <div class="col-md-3">
                     <a href="{{ url('/socialcell/add') }}" class="btn btn-primary">Create Social Cell</a>
                 </div>
-                <div class="col-md-5 text-right">
+                <div class="col-md-2"></div>
+                <div class="col-md-1 text-right">
+                    <b>Select Date: </b>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" placehoder="Start Date" id="startdate" value="{{ (isset($start_date)) ? $start_date : '' }}" />
+                    <input type="text" placehoder="End Date" id="enddate" value="{{ (isset($end_date)) ? $end_date : '' }}" />
+                </div>
+                <div class="col-md-1 text-right">
                     <b>Select Status: </b>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <select class="form-control" name="socialcell" onchange="(window.location = '/socialcell/status/' + this.options[this.selectedIndex].value);">
                         <option value="all">Active & Waiting Payment</option>
                         @foreach ($statuses as $status_key => $status)
@@ -86,4 +97,32 @@
             </div>
         </div>
     </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    $("#enddate").datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        endDate: today
+    });
+    $("#startdate").datepicker({
+        todayBtn:  1,
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        endDate: today
+    }).on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        $('#enddate').datepicker('setStartDate', minDate);
+    });
+    $("#startdate,#enddate").on('change',function() {
+        let startdate = $('#startdate').val();
+        let enddate = $('#enddate').val();
+        if(startdate != '' && enddate != '') {
+            window.location.href = '/socialcell/date/'+startdate+'/'+enddate;
+        }
+    });
+});
+</script>
 @endsection

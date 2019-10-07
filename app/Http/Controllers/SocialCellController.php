@@ -73,6 +73,38 @@ class SocialCellController extends Controller
         // return view('pages.social-cells', $data);
     }
 
+    public function date_filter($start_date,$end_date)
+    {
+        $this->_loadSharedViews();
+
+        $data = [];
+        
+        if (is_admin())
+        {
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+            $data['user_email'] = $loginUserEmail;
+            $data['socialcells'] = $this->socialCell->whereBetween('created_at',[$start_date,$end_date])->orderBy('created_at', 'DESC')->get();
+        }
+        else
+        {
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+            $data['user_email'] = $loginUserEmail;
+
+            $data['socialcells'] = $this->socialCell->whereBetween('created_at',[$start_date,$end_date])->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+            
+        }
+        
+        // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        $data['statuses'] = $this->payment_statuses();
+        $data['status_id'] = 'all';
+        $data['start_date'] = $start_date;
+        $data['end_date'] = $end_date;
+        
+        return view('pages.social-cells', $data);
+    }
+
     public function add_social_cell($id='')
     {
     	$this->_loadSharedViews();
