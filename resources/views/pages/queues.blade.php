@@ -49,7 +49,6 @@
                 $postCnt = 1;
                 ?>
                 @forelse ($posts as $post)
-                    @if($postCnt > 0)
                     <div class="col-md-3 queue-{{ $post->id }}">
                         <div class="card post_box" style="border: 5px solid
                             @if ($post->status == 0)
@@ -138,7 +137,6 @@
                             </div>
                         </div>
                     </div>
-                    @endif
                 <?php
                 $postCnt++;
                 ?>
