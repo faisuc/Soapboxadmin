@@ -37,7 +37,8 @@ class SocialCellController extends Controller
         if (is_admin())
         {
             if($status_id == null) {
-                $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+                // $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+                $data['socialcells'] = $this->socialCell->whereIn('payment_status',array(1,2))->orderBy('created_at', 'DESC')->get();
             }
             else {
                 $data['socialcells'] = $this->socialCell->where('payment_status',$status_id)->orderBy('created_at', 'DESC')->get();
@@ -53,7 +54,10 @@ class SocialCellController extends Controller
             $data['user_email'] = $loginUserEmail;
 
             if($status_id == null) {
-                $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+                // $data['socialcells'] = $this->socialCell->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%')->orderBy('created_at', 'DESC')->get();
+                $data['socialcells'] = $this->socialCell->where(function($query) use($loginUserEmail) {
+                    $query->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%');
+                })->whereIn('payment_status',array(1,2))->orderBy('created_at', 'DESC')->get();
             }
             else {
                 $data['socialcells'] = $this->socialCell->where(function($query) use($loginUserEmail) {
