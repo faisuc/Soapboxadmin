@@ -103,12 +103,12 @@
                         @if(!empty($pages))
                             <label for="facebook_post">Facebook Pages</label>
                             <label class="custom-control custom-checkbox">
-                                <input class="custom-control-input" id="facebook_post" type="checkbox" name="facebook_post"><span class="custom-control-label">Post to Facebook</span>
+                                <input class="custom-control-input" id="facebook_post" type="checkbox" name="facebook_post" {{ ($post->facebook) ? 'checked' : '' }}><span class="custom-control-label">Post to Facebook</span>
                             </label>
-                            <div id="facebook-pages" style="display: none;">
+                            <div id="facebook-pages" style="{{ ($post->facebook) ? '' : 'display: none;' }}">
                                 @foreach ($pages as $page_key => $page)
                                 <label class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" name="fb_page" data-page-name="{{ $page['name'] }}" data-page-picture="{{ (isset($page['picture'])) ? $page['picture']['data']['url'] : '' }}" value="{{ $page['id'] }}" {{ ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
+                                    <input class="custom-control-input" type="radio" name="fb_page" data-page-name="{{ $page['name'] }}" data-page-picture="{{ (isset($page['picture'])) ? $page['picture']['data']['url'] : '' }}" value="{{ $page['id'] }}" {{ ($post->facebook) ? ($post->facebook_page_id == $page['id']) ? 'checked' : '' : ($page_key == 0) ? 'checked' : '' }}><span class="custom-control-label">{{ $page['name'] }}</span>
                                 </label>
                                 @endforeach
                             </div>
@@ -119,7 +119,7 @@
                     <div class="form-group">
                         <label for="twitter_post">Twitter Post</label>
                         <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" id="twitter_post" type="checkbox" data-profile-name="{{ $twitter_profile_name }}" data-username="{{ $twitter_username }}" data-profile-pic="{{ $twitter_profile_pic }}" name="twitter_post"><span class="custom-control-label">Post to Twitter</span>
+                            <input class="custom-control-input" id="twitter_post" type="checkbox" data-profile-name="{{ $twitter_profile_name }}" data-username="{{ $twitter_username }}" data-profile-pic="{{ $twitter_profile_pic }}" name="twitter_post" {{ ($post->twitter) ? 'checked' : '' }}><span class="custom-control-label">Post to Twitter</span>
                         </label>
                     </div>
                     @endif
@@ -128,7 +128,7 @@
                     <div class="form-group">
                         <label for="instagram_post">Instagram</label>
                         <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" id="instagram_post" data-username="{{ $insta_username }}" data-profile-pic="{{ $insta_profile_pic }}" type="checkbox" name="instagram_post"><span class="custom-control-label">Post to instagram</span>
+                            <input class="custom-control-input" id="instagram_post" data-username="{{ $insta_username }}" data-profile-pic="{{ $insta_profile_pic }}" type="checkbox" name="instagram_post" {{ ($post->instagram) ? 'checked' : '' }}><span class="custom-control-label">Post to instagram</span>
                         </label>
                     </div>
                     <?php /* ?><div id="instagram_user_pass" style="display: none;">

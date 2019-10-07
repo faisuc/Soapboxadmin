@@ -344,6 +344,9 @@ jQuery(document).ready(function($) {
         facebook_post_preview();
         twitter_post_preview();
         instagram_post_preview();
+        $('#fb_post_preview .fb-post-disp-btn').css('right','20%');
+        $('#fb_post_preview .twt-post-disp-btn').css('right','20%');
+        $('#fb_post_preview .insta-post-disp-btn').css('right','20%');
     });
     /* Fetch FB Post Preview Content */
 

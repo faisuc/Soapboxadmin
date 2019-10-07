@@ -7232,13 +7232,13 @@ Media Query
     ********************* FB Preview Tool *****************************
     *******************************************************************
 */
-#fb_post_preview { display: none; }
-.fb_preview_tool { position: fixed; right: 0; bottom: 0; width: 20%; z-index: 9999; height: 100%; transition: all 1s; }
-.twt_preview_tool { position: fixed; right: 0; bottom: 0; width: 0; z-index: 9999; height: 100%; transition: all 1s; }
-.insta_preview_tool { position: fixed; right: 0; bottom: 0; width: 0; z-index: 9999; height: 100%; transition: all 1s; }
-.fb-post-disp-btn { position: fixed; right: 20%; top: 0; z-index: 9999; transition: all 1s; }
-.twt-post-disp-btn { position: fixed; right: 20%; top: 5%; z-index: 9999; transition: all 1s; }
-.insta-post-disp-btn { position: fixed; right: 20%; top: 10%; z-index: 9999; transition: all 1s; }
+/*#fb_post_preview { display: none; }*/
+.fb_preview_tool { position: fixed; right: 0; bottom: 0; width: 20%; z-index: 9999; height: 100%; transition: all 1s; display: none; }
+.twt_preview_tool { position: fixed; right: 0; bottom: 0; width: 0; z-index: 9999; height: 100%; transition: all 1s; display: none; }
+.insta_preview_tool { position: fixed; right: 0; bottom: 0; width: 0; z-index: 9999; height: 100%; transition: all 1s; display: none; }
+.fb-post-disp-btn { position: fixed; right: 0%; top: 0; z-index: 9999; transition: all 1s; }
+.twt-post-disp-btn { position: fixed; right: 0%; top: 5%; z-index: 9999; transition: all 1s; }
+.insta-post-disp-btn { position: fixed; right: 0%; top: 10%; z-index: 9999; transition: all 1s; }
 .fb-testimonial,.twt-testimonial,.insta-testimonial{background:#fff;padding:5px;border-radius:2px; border: #aaa solid 2px;}
 .fb-testimonial-inner,.twt-testimonial-inner,.insta-testimonial-inner{background:#fff;padding:5px;border-radius:3px;}
 .facebook-thumb {width:40px; height: 40px; display:inline-block; vertical-align:top;}
