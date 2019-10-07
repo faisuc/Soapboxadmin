@@ -118,7 +118,7 @@ class SocialCellController extends Controller
                     '<a class="btn btn-primary" href="'.URL::to('/').'/generate_payment/'.$socialcell->id.'">Make Payment</a>';
                     foreach ($ownerEmail as $owner_email) {
                         $userdata = new $this->user;
-                        $userdata->email = $c_email;
+                        $userdata->email = $owner_email;
                         $userdata->html = $html;
                         Mail::send([], [], function ($message) use ($userdata) { 
                             $html = $userdata->html;
