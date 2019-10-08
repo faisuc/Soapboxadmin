@@ -52,14 +52,12 @@
             <div class="row">
                 @forelse ($socialcells as $socialcell)
                     <div class="col-md-3">
-                        <div class="card" style="border: 5px solid;" >
-                            <div class="card-body" style="height: 400px; overflow: auto;">
-                                <p class="card-text">
-                                    <h3>{{ $socialcell->cell_name }}</h3>
-                                    <div class="tools">
-                                        <span><i class="fa fa-clock"></i> {{ $socialcell->created_at }} </span>
-                                    </div>
-                                </p>
+                        <div class="card" style="border: 2px solid #ccc;" >
+                            <div class="card-body">
+                                <h3>{{ $socialcell->cell_name }}</h3>
+                                <div class="tools">
+                                    <span><i class="fa fa-clock"></i> {{ $socialcell->created_at }} </span>
+                                </div>
                                 <p class="card-text">Owner Mail : {{ $socialcell->email_owner ? $socialcell->email_owner: 'N/A'}} </p>
                                 <p class="card-text">Marketer Mail : {{ $socialcell->email_marketer ? $socialcell->email_marketer : 'N/A' }} </p>
                                 <p class="card-text">Client Mail : {{ $socialcell->email_client ? $socialcell->email_client : 'N/A' }} </p>

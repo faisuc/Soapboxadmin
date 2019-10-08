@@ -333,9 +333,6 @@ class PostController extends Controller
                 });
             }
         }
-        if($request->input('save_and_schedule') != '') {
-            echo "string"; die();
-        }
 
         if (!$user_id) {
             $user_id = Sentinel::getUser()->id;
@@ -380,17 +377,35 @@ class PostController extends Controller
             }
         }*/
 
-
-        if($status != '') {
-            $post->status = $status;
+        if($request->input('save_and_schedule') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
+            $post->status = 2;
         }
         else {
-            $post->status = 0;
-            if(in_array($loginUserEmail, $email_marketer)) {
-                $post->status = 4;
+            
+            if($status != '') {
+                $post->status = $status;
             }
-            if(in_array($loginUserEmail, $email_client)) {
-                $post->status = 1;
+            else {
+                $post->status = 0;
+                if(in_array($loginUserEmail, $email_marketer)) {
+                    $post->status = 4;
+                }
+                if(in_array($loginUserEmail, $email_client)) {
+                    $post->status = 1;
+                }
             }
         }
 
@@ -787,9 +802,6 @@ class PostController extends Controller
                 });
             }
         }
-        if($request->input('save_and_schedule') != '') {
-            echo "string"; die();
-        }
 
         $data = [];
         $media_id = 0;
@@ -824,22 +836,40 @@ class PostController extends Controller
             $post->featured_image_id = $media_id;
         }
 
-
-        if($status != $old_status) {
-            $post->status = $status;
+        if($request->input('save_and_schedule') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
+            $post->status = 2;
         }
         else {
-            if($social_cells->post_status) {
-                $post->status = 1;
+            
+            if($status != $old_status) {
+                $post->status = $status;
             }
             else {
-                $post->status = 4;
-                /*if(in_array($loginUserEmail, $email_marketer)) {
-                    $post->status = 4;
-                }
-                if(in_array($loginUserEmail, $email_client)) {
+                if($social_cells->post_status) {
                     $post->status = 1;
-                }*/
+                }
+                else {
+                    $post->status = 4;
+                    /*if(in_array($loginUserEmail, $email_marketer)) {
+                        $post->status = 4;
+                    }
+                    if(in_array($loginUserEmail, $email_client)) {
+                        $post->status = 1;
+                    }*/
+                }
             }
         }
         

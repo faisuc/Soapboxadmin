@@ -365,6 +365,7 @@ function facebook_post_preview()
     let page_picture = $('#facebook-pages input[name="fb_page"]:checked').data('page-picture');
     let title = $('#inputTitle').val();
     let description = $('#inputTextContent').val();
+    let link = $('#inputURL').val();
     let image = $('#inputPhoto')[0].files[0];
     let image_val = $('#inputPhoto').val();
     let old_image = $('#feature_image').val();
@@ -379,7 +380,10 @@ function facebook_post_preview()
             $('#fb_post_preview .fb_preview_tool').find('.fb-post h4').text(title);
         }
         if(description != '') {
-            $('#fb_post_preview .fb_preview_tool').find('.fb-post p').text(description);
+            $('#fb_post_preview .fb_preview_tool').find('.fb-post p.description').text(description);
+        }
+        if(link != '') {
+            $('#fb_post_preview .fb_preview_tool').find('.fb-post p.link').text(link);
         }
         if(image === undefined) {
             if(old_image !== undefined) {
@@ -406,6 +410,7 @@ function twitter_post_preview()
     let profile_picture = $('#twitter_post').data('profile-pic');
     let title = $('#inputTitle').val();
     let description = $('#inputTextContent').val();
+    let link = $('#inputURL').val();
     let image = $('#inputPhoto')[0].files[0];
     let image_val = $('#inputPhoto').val();
     let old_image = $('#feature_image').val();
@@ -423,7 +428,10 @@ function twitter_post_preview()
         $('#fb_post_preview .twt_preview_tool').find('.twt-post h4').text(title);
     }
     if(description != '') {
-        $('#fb_post_preview .twt_preview_tool').find('.twt-post p').text(description);
+        $('#fb_post_preview .twt_preview_tool').find('.twt-post p.description').text(description);
+    }
+    if(link != '') {
+        $('#fb_post_preview .twt_preview_tool').find('.twt-post p.link').text(link);
     }
     if(image === undefined) {
         if(old_image !== undefined) {
@@ -450,9 +458,13 @@ function instagram_post_preview()
     let image = $('#inputPhoto')[0].files[0];
     let image_val = $('#inputPhoto').val();
     let old_image = $('#feature_image').val();
+    let link = $('#inputURL').val();
 
     if(insta_username != '') {
         $('#fb_post_preview .insta_preview_tool').find('.username').text(insta_username);
+    }
+    if(link != '') {
+        $('#fb_post_preview .insta_preview_tool').find('p.link').text(link);
     }
     if(profile_picture != '') {
         $('#fb_post_preview .insta_preview_tool').find('.twitter-thumb').attr('src',profile_picture);

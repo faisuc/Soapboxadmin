@@ -4,7 +4,7 @@
             <div class="fb-testimonial-inner">
                 <div class="fb-profile">
                     <img class="facebook-thumb" src="{{ asset('assets/images/defaultnoimage.png') }}" alt="Page Image">
-                    <p class="facebook-name"><span class="page-name">Page Name</span> <br><span class="facebook-date">Published By S.A.M. <span class="date">{{ date('M j') }}</span> <i class="fa fa-globe"></i></span></p>
+                    <p class="facebook-name"><span class="page-name">Page Name</span> <br><span class="facebook-date"> <span class="date">{{ date('M j') }}</span> <i class="fa fa-globe"></i></span></p>
                 </div>
                 <div class="fb-testimonial-copy">
                     <!-- <p>Message</p> -->
@@ -12,7 +12,8 @@
                         <img src="{{ asset('assets/images/defaultnoimage.png') }}">
                         <hr>
                         <h4>Title</h4>
-                        <p>Description</p>
+                        <p class="description">Description</p>
+                        <p class="link">Link</p>
                     </div>
                 </div>
             </div>
@@ -28,7 +29,8 @@
                 <div class="twt-testimonial-copy twt-post">
                     <!-- <p>Message</p> -->
                     <h4>Title</h4>
-                    <!-- <p>Description</p> -->
+                    <!-- <p class="description">Description</p> -->
+                    <p class="link">Link</p>
                     <div class="">
                         <img src="{{ asset('assets/images/defaultnoimage.png') }}">
                         <hr>
@@ -45,6 +47,7 @@
                     <p class="instagram-name"><span class="username">Profile Name</span></p>
                 </div>
                 <div class="insta-testimonial-copy">
+                    <p class="link">Link</p>
                     <div class="insta-post">
                         <img src="{{ asset('assets/images/defaultnoimage.png') }}">
                     </div>
