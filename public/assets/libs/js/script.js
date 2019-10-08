@@ -274,6 +274,8 @@ jQuery(document).ready(function($) {
             $('.fb_preview_tool').addClass('showing');
             $('.twt_preview_tool').removeClass('showing');
             $('.insta_preview_tool').removeClass('showing');
+
+            $('#fb_post_preview .fb_preview_tool').show();
         }
     });
     /* FB Post Preview Hide Show */
@@ -305,6 +307,8 @@ jQuery(document).ready(function($) {
             $('.twt_preview_tool').addClass('showing');
             $('.fb_preview_tool').removeClass('showing');
             $('.insta_preview_tool').removeClass('showing');
+
+            $('#fb_post_preview .twt_preview_tool').show();
         }
     });
     /* Twitter Post Preview Hide Show */
@@ -335,6 +339,8 @@ jQuery(document).ready(function($) {
             $('.insta_preview_tool').addClass('showing');
             $('.fb_preview_tool').removeClass('showing');
             $('.twt_preview_tool').removeClass('showing');
+
+            $('#fb_post_preview .insta_preview_tool').show();
         }
     });
     /* Insta Post Preview Hide Show */
@@ -434,7 +440,7 @@ function twitter_post_preview()
         }
     }
 
-    $('#fb_post_preview').show();
+    $('#fb_post_preview .twt_preview_tool').show();
 }
 
 function instagram_post_preview()
@@ -466,5 +472,5 @@ function instagram_post_preview()
         }
     }
 
-    $('#insta_post_preview').show();
+    $('#fb_post_preview .insta_preview_tool').show();
 }

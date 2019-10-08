@@ -1,5 +1,5 @@
 <div id="fb_post_preview">
-    <div class="fb_preview_tool showing">
+    <div class="fb_preview_tool">
         <div class="fb-testimonial">
             <div class="fb-testimonial-inner">
                 <div class="fb-profile">

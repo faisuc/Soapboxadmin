@@ -165,7 +165,9 @@
                         @endif
                     @endif
                     <div class="form-group">
-                        <input type="submit" value="SAVE" class="btn btn-primary" <?php echo $disabled; ?>>
+                        <!-- <input type="submit" value="SAVE" class="btn btn-primary" <?php echo $disabled; ?>> -->
+                        <input type="submit" name="send_approval" value="Send for Approval" class="btn btn-primary" <?php echo $disabled; ?>>
+                        <input type="submit" name="save_and_schedule" value="Save and Schedule" class="btn btn-primary" <?php echo $disabled; ?>>
                     </div>
                 </form>
             </div>

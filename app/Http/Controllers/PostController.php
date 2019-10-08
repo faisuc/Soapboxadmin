@@ -299,6 +299,7 @@ class PostController extends Controller
             'schedule_date' => 'required',
             'cell_id' => 'required',
         ]);
+        
 
         $title = $request->input('title');
         $description = $request->input('description');
@@ -307,6 +308,34 @@ class PostController extends Controller
         $user_id = $request->input('user_id');
         $cell_id = $request->input('cell_id');
         $status = $request->input('status');
+
+        /**/
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+        $social_cells = $this->socialCell->find($cell_id);
+        $email_owner = explode(',', $social_cells->email_owner);
+        $email_marketer = explode(',', $social_cells->email_marketer);
+        $email_client = explode(',', $social_cells->email_client);
+
+        if($request->input('send_approval') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>'.
+            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
+        }
+        if($request->input('save_and_schedule') != '') {
+            echo "string"; die();
+        }
 
         if (!$user_id) {
             $user_id = Sentinel::getUser()->id;
@@ -351,13 +380,6 @@ class PostController extends Controller
             }
         }*/
 
-        /**/
-        $loginUser = Sentinel::getUser();
-        $loginUserEmail = $loginUser->email;
-        $social_cells = $this->socialCell->find($cell_id);
-        $email_owner = explode(',', $social_cells->email_owner);
-        $email_marketer = explode(',', $social_cells->email_marketer);
-        $email_client = explode(',', $social_cells->email_client);
 
         if($status != '') {
             $post->status = $status;
@@ -740,6 +762,34 @@ class PostController extends Controller
         $status = $request->input('status');
         $old_status = $request->input('old_status');
         $cell_id = $request->input('cell_id');
+        
+        /**/
+        $loginUser = Sentinel::getUser();
+        $loginUserEmail = $loginUser->email;
+        $social_cells = $this->socialCell->find($cell_id);
+        $email_owner = explode(',', $social_cells->email_owner);
+        $email_marketer = explode(',', $social_cells->email_marketer);
+        $email_client = explode(',', $social_cells->email_client);
+
+        if($request->input('send_approval') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>'.
+            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
+        }
+        if($request->input('save_and_schedule') != '') {
+            echo "string"; die();
+        }
 
         $data = [];
         $media_id = 0;
@@ -774,13 +824,6 @@ class PostController extends Controller
             $post->featured_image_id = $media_id;
         }
 
-        /**/
-        $loginUser = Sentinel::getUser();
-        $loginUserEmail = $loginUser->email;
-        $social_cells = $this->socialCell->find($cell_id);
-        $email_owner = explode(',', $social_cells->email_owner);
-        $email_marketer = explode(',', $social_cells->email_marketer);
-        $email_client = explode(',', $social_cells->email_client);
 
         if($status != $old_status) {
             $post->status = $status;
