@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome/css/fontawesome-all.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap-datetimepicker.min.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
+        <link rel="stylesheet" href="{{ asset('assets/libs/montserrat_web_font/stylesheet.css') }}">
         @if (Sentinel::check())
             <meta name="active_user" content="{{ Sentinel::getUser()->id }}">
         @endif
