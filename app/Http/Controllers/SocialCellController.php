@@ -259,7 +259,10 @@ class SocialCellController extends Controller
 
             }
         }
-
+        else {
+            
+            return redirect('socialcell/edit/'.$cell_id)->withInput()->withErrors(['Please fill your email in any of the below.']);
+        }
 
     }
 
