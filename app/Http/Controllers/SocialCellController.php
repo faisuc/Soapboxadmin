@@ -226,7 +226,8 @@ class SocialCellController extends Controller
         $clientEmail = explode(',', $email_client);
 
         if(in_array($loginUserEmail, $ownerEmail) || in_array($loginUserEmail, $marketerEmail) || in_array($loginUserEmail, $clientEmail)) {
-            $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
+            // $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
+            $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->get();
 
             if(count($checkCellName) > 0) {
 
