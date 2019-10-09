@@ -42,10 +42,10 @@ class DashboardController extends Controller
                     $fandata = $this->api->get($page_id.'?fields=talking_about_count,fan_count,rating_count ,new_like_count, posts.summary(true),published_posts.limit(1).summary(total_count).since(1)',$page_token);
                     $fandata = $fandata->getDecodedBody();
 
-                    $fb_data['talking_about_count'] = $fandata['talking_about_count'];
-                    $fb_data['fan_count'] = $fandata['fan_count'];
-                    $fb_data['rating_count'] = $fandata['rating_count'];
-                    $fb_data['published_posts_count'] = $fandata['published_posts']['summary']['total_count'];
+                    $fb_data['talking_about_count'] = (isset($fandata['talking_about_count'])) ? $fandata['talking_about_count'] : 0;
+                    $fb_data['fan_count'] = (isset($fandata['fan_count'])) ? $fandata['fan_count'] : 0;
+                    $fb_data['rating_count'] = (isset($fandata['rating_count'])) ? $fandata['rating_count'] : 0;
+                    $fb_data['published_posts_count'] = (isset($fandata['published_posts']['summary']['total_count'])) ? $fandata['published_posts']['summary']['total_count'] : 0;
                     $data['facebook_follower'] = true;
                 }
                 else {
