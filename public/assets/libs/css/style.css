@@ -7233,6 +7233,9 @@ Media Query
     float: left;
     text-align: center;
 }
+.tools {
+    margin-bottom: 10px;
+}
 
 /*
     *******************************************************************

@@ -7,8 +7,16 @@ use Illuminate\Mail\Mailable;
 use Sentinel;
 use Mail;
 use URL;
+use DB;
 use Illuminate\Support\Facades\Input;
 use Cartalyst\Sentinel\Laravel\Facades\Activation;
+
+use Illuminate\Support\Facades\Storage;
+
+use Carbon\Carbon;
+use Session;
+use Redirect;
+
 
 class ProfileController extends Controller
 {
@@ -238,9 +246,8 @@ class ProfileController extends Controller
 
     public function create_user(Request $request)
     {
-
         $checkUser = $this->user->where('email',$request->input('email'))->get();
-        if(empty($checkUser)) {
+        if($checkUser->isEmpty()) {
             $user = $this->user;
             $user->first_name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
