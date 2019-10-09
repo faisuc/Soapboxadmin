@@ -317,23 +317,6 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
-        if($request->input('send_approval') != '') {
-            $html = 'Post Title: '.$title.'<br>'.
-            'Post Content:'.$description.'<br>'.
-            'Post Schedule On:'.$schedule_date.'<br>'.
-            'Post Image:'.$image.'<br>'.'<br>'.
-            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
-            }
-        }
-
         if (!$user_id) {
             $user_id = Sentinel::getUser()->id;
         }
@@ -377,41 +360,14 @@ class PostController extends Controller
             }
         }*/
 
-        if($request->input('save_and_schedule') != '') {
-            $html = 'Post Title: '.$title.'<br>'.
-            'Post Content:'.$description.'<br>'.
-            'Post Schedule On:'.$schedule_date.'<br>'.
-            'Post Image:'.$image.'<br>'.'<br>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
-            }
-            $post->status = 2;
-        }
-        else {
-            
-            if($status != '') {
-                $post->status = $status;
-            }
-            else {
-                $post->status = 0;
-                if(in_array($loginUserEmail, $email_marketer)) {
-                    $post->status = 4;
-                }
-                if(in_array($loginUserEmail, $email_client)) {
-                    $post->status = 1;
-                }
-            }
-        }
-
         if ($media_id != 0)
         {
             $post->featured_image_id = $media_id;
+        }
+
+        $image = 'N/A';
+        if($post->featured_image_id) {
+            $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
         }
         
         $post->link = $link;
@@ -443,10 +399,56 @@ class PostController extends Controller
             <textarea name="content" required></textarea>
             <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';*/
-        $image = 'N/A';
-        if($post->featured_image_id) {
-            $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
+
+        if($request->input('send_approval') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>'.
+            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
         }
+
+        if($request->input('save_and_schedule') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
+            $post->status = 2;
+        }
+        else {
+            
+            if($status != '') {
+                $post->status = $status;
+            }
+            else {
+                $post->status = 0;
+                if(in_array($loginUserEmail, $email_marketer)) {
+                    $post->status = 4;
+                }
+                if(in_array($loginUserEmail, $email_client)) {
+                    $post->status = 1;
+                }
+            }
+        }
+        
         $html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
         'Post Schedule On:'.$schedule_date.'<br>'.
@@ -786,23 +788,6 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
-        if($request->input('send_approval') != '') {
-            $html = 'Post Title: '.$title.'<br>'.
-            'Post Content:'.$description.'<br>'.
-            'Post Schedule On:'.$schedule_date.'<br>'.
-            'Post Image:'.$image.'<br>'.'<br>'.
-            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
-            }
-        }
-
         $data = [];
         $media_id = 0;
 
@@ -834,6 +819,27 @@ class PostController extends Controller
         if ($media_id != 0)
         {
             $post->featured_image_id = $media_id;
+        }
+
+        $image = 'N/A';
+        if($post->featured_image_id) {
+            $image = '<br><img src="'.URL::to('/').$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
+        }
+        if($request->input('send_approval') != '') {
+            $html = 'Post Title: '.$title.'<br>'.
+            'Post Content:'.$description.'<br>'.
+            'Post Schedule On:'.$schedule_date.'<br>'.
+            'Post Image:'.$image.'<br>'.'<br>'.
+            '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
+            foreach ($email_client as $c_email) {
+                $userdata = new $this->user;
+                $userdata->email = $c_email;
+                $userdata->html = $html;
+                Mail::send([], [], function ($message) use ($userdata) { 
+                    $html = $userdata->html;
+                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                });
+            }
         }
 
         if($request->input('save_and_schedule') != '') {
@@ -885,10 +891,6 @@ class PostController extends Controller
         }
 
         /* emails */
-        $image = 'N/A';
-        if($post->featured_image_id) {
-            $image = '<br><img src="'.URL::to('/').$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
-        }
         $html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
         'Post Schedule On:'.$schedule_date.'<br>'.
