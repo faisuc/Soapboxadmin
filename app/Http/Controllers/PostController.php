@@ -365,11 +365,6 @@ class PostController extends Controller
             $post->featured_image_id = $media_id;
         }
 
-        $image = 'N/A';
-        if($post->featured_image_id) {
-            $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
-        }
-        
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
@@ -400,6 +395,10 @@ class PostController extends Controller
             <input type="submit" value="Make Changes" class="btn btn-default" />
         </form>';*/
 
+        $image = 'N/A';
+        if($post->featured_image_id) {
+            $image = '<br><img src="'.$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
+        }
         if($request->input('send_approval') != '') {
             $html = 'Post Title: '.$title.'<br>'.
             'Post Content:'.$description.'<br>'.
@@ -821,6 +820,18 @@ class PostController extends Controller
             $post->featured_image_id = $media_id;
         }
 
+        $post->link = $link;
+        $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
+        $post->save();
+
+        if ($media_id != 0)
+        {
+            $media = $this->media->find($media_id);
+            $media->post_id = $post_id;
+            $media->save();
+        }
+
+        /* emails */
         $image = 'N/A';
         if($post->featured_image_id) {
             $image = '<br><img src="'.URL::to('/').$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
@@ -878,19 +889,6 @@ class PostController extends Controller
                 }
             }
         }
-        
-        $post->link = $link;
-        $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
-        $post->save();
-
-        if ($media_id != 0)
-        {
-            $media = $this->media->find($media_id);
-            $media->post_id = $post_id;
-            $media->save();
-        }
-
-        /* emails */
         $html = 'Post Title: '.$title.'<br>'.
         'Post Content:'.$description.'<br>'.
         'Post Schedule On:'.$schedule_date.'<br>'.
