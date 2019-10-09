@@ -226,39 +226,30 @@ class SocialCellController extends Controller
         $clientEmail = explode(',', $email_client);
 
         if(in_array($loginUserEmail, $ownerEmail) || in_array($loginUserEmail, $marketerEmail) || in_array($loginUserEmail, $clientEmail)) {
-            // $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->where('user_id', Sentinel::getUser()->id)->get();
-            $checkCellName = $this->socialCell->where('cell_name',$cellname)->where('id','!=',$cell_id)->get();
 
-            if(count($checkCellName) > 0) {
+            $socialcell = $this->socialCell->find($cell_id);
+            $socialcell->cell_name = $cellname;
+            $socialcell->email_owner = $email_owner;
+            $socialcell->email_marketer = $email_marketer;
+            $socialcell->email_client = $email_client;
+            $socialcell->payment_status = $payment_status;
 
-                return redirect()->back()->withErrors(['Cell Name : '.$cellname.' Already Exists!']);
+            if($request->input('post_status') != '') {
+                $socialcell->post_status = '1';
+            }
+            
+            $socialcell->save();
+
+            $cell_id = $socialcell->id;
+
+            if($request->input('payment') != '') {
+                return redirect('generate_payment/'.$cell_id);
             }
             else {
-                
-                $socialcell = $this->socialCell->find($cell_id);
-                $socialcell->cell_name = $cellname;
-                $socialcell->email_owner = $email_owner;
-                $socialcell->email_marketer = $email_marketer;
-                $socialcell->email_client = $email_client;
-                $socialcell->payment_status = $payment_status;
 
-                if($request->input('post_status') != '') {
-                    $socialcell->post_status = '1';
-                }
-                
-                $socialcell->save();
-
-                $cell_id = $socialcell->id;
-
-                if($request->input('payment') != '') {
-                    return redirect('generate_payment/'.$cell_id);
-                }
-                else {
-
-                    return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
-                }
-
+                return redirect('socialcell/edit/'.$cell_id)->with('flash_message', 'Social Cell has been Updated.');
             }
+            
         }
         else {
             
