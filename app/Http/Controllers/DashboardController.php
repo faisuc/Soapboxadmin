@@ -13,15 +13,38 @@ use App\Http\Controllers\TwitterAPIExchange;
 class DashboardController extends Controller
 {
 
-    public function index()
+    public function index($cell_id = null)
     {
 
         $this->_loadSharedViews();
 
         $data = [];
 
+        if (is_admin())
+        {
+            $data['socialcells'] = $this->socialCell->orderBy('created_at', 'DESC')->get();
+        }
+        else
+        {
+            $loginUser = Sentinel::getUser();
+            $loginUserEmail = $loginUser->email;
+            
+            $data['socialcells'] = $this->socialCell->where(function($query) use($loginUserEmail) {
+                $query->where('user_id', Sentinel::getUser()->id)->orWhere('email_owner','like','%'.$loginUserEmail.'%')->orWhere('email_marketer','like','%'.$loginUserEmail.'%')->orWhere('email_client','like','%'.$loginUserEmail.'%');
+            })->orderBy('created_at', 'DESC')->get();
+        }
+
+        if($cell_id == null) {
+            $socialcell_id = $data['socialcells'][0]->id;
+        }
+        else {
+            $socialcell_id = $cell_id;
+        }
+        $data['cell_id'] = $socialcell_id;
+
         /* Facebook Page Info start */
-        $facebook_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 1)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $facebook_account = $this->socialAccount->where('type_id', 1)->where('social_cell_id',$socialcell_id)->orderBy('created_at', 'DESC')->get()->first();
+        // $facebook_account = $this->socialAccount->where('type_id', 1)->where('social_cell_id',$socialcell_id)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($facebook_account)) {
 
             $this->setFacebookObject();
@@ -117,7 +140,9 @@ class DashboardController extends Controller
         /* Facebook Page Info End */
 
         /* Twitter Info start */
-        $twitter_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 3)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $twitter_account = $this->socialAccount->where('type_id', 3)->where('social_cell_id',$socialcell_id)->orderBy('created_at', 'DESC')->get()->first();
+        // $twitter_account = $this->socialAccount->where('type_id', 3)->where('social_cell_id',$socialcell_id)->orderBy('created_at', 'DESC')->get()->first();
+        $q = DB::getQueryLog();
         if(!empty($twitter_account)) {
         	
             if($twitter_account->twitter_session && $twitter_account->twitter_secret) {
@@ -224,7 +249,8 @@ class DashboardController extends Controller
         /* Twitter Info End*/
 
         /* Instagram Info Start*/
-        $instagram_account = $this->socialAccount->where('user_id', Sentinel::getUser()->id)->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
+        $instagram_account = $this->socialAccount->where('type_id', 5)->where('social_cell_id',$socialcell_id)->orderBy('created_at', 'DESC')->get()->first();
+        // $instagram_account = $this->socialAccount->where('type_id', 5)->where('deleted_at', NULL)->orderBy('created_at', 'DESC')->get()->first();
         if(!empty($instagram_account)) {
             
             $username = $instagram_account->instagram_username;

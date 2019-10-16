@@ -8,6 +8,36 @@
 
             <div class="row">
             	<div class="col-sm-12">
+            		<div class="row">
+            			<div class="col-md-7"></div>
+            			<div class="col-md-2 text-right">
+		                    <b>Select Social Cell: </b>
+		                </div>
+		                <div class="col-md-3">
+		                	<?php
+		                	foreach ($socialcells as $key => $socialcell) {
+		                		$user_id = $socialcell->user_id;
+		                		$user = Sentinel::findById($user_id);
+		                		$username = $user['first_name'].' '.$user['last_name'];
+		                	}
+		                	?>
+		                    <select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
+		                        @foreach ($socialcells as $key => $socialcell)
+		                        	@if(is_admin())
+			                        	<?php
+			                        	$user_id = $socialcell->user_id;
+				                		$user = Sentinel::findById($user_id);
+				                		$username = $user['first_name'].' '.$user['last_name'];
+				                		?>
+		                				<option {{ (isset($cell_id) && $cell_id == $socialcell->id) ? 'selected' : '' }} value="{{ $socialcell->id }}">{{ $socialcell->cell_name.' ('.$username.')' }}</option>
+		                			@else
+		                				<option {{ (isset($cell_id) && $cell_id == $socialcell->id) ? 'selected' : '' }} value="{{ $socialcell->id }}">{{ $socialcell->cell_name }}</option>
+		                        	@endif
+                        		@endforeach
+		                    </select>
+		                </div>
+		            </div>
+		            <hr />
             		<?php
             		/*if(isset($twitter_follower)) {
             			$twitter_follower = $twitter_follower[0];
