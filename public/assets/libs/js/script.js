@@ -181,20 +181,41 @@ jQuery(document).ready(function($) {
         let check = $(this).prop('checked');
         if(check) {
             $('#facebook-pages').show();
-            // Facebook Post Preview
+            $('#fb_post_preview .fb-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .twt-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .insta-post-disp-btn').css('right','20%');
             facebook_post_preview();
+            twitter_post_preview();
+            instagram_post_preview();
+
+            $('.fb_preview_tool').addClass('showing').css('width','20%');
+            $('.twt_preview_tool').removeClass('showing').hide();
+            $('.insta_preview_tool').removeClass('showing').hide();
         }
         else {
             $('#facebook-pages').hide();
-            $('#fb_post_preview').hide();
+        }
+    });
+    $(document).on('change','input[name="twitter_post"]',function() {
+        let check = $(this).prop('checked');
+        if(check) {
+            $('#fb_post_preview .fb-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .twt-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .insta-post-disp-btn').css('right','20%');
+            facebook_post_preview();
+            instagram_post_preview();
+            twitter_post_preview();
+            $('.twt_preview_tool').addClass('showing').css('width','20%');
+            $('.fb_preview_tool').removeClass('showing').hide();
+            $('.insta_preview_tool').removeClass('showing').hide();
         }
     });
     /* Facebook Pages Display For Post */
 
-    /* Instagram Display For Post /
+    /* Instagram Display For Post */
     $(document).on('change','input[name="instagram_post"]',function() {
         let check = $(this).prop('checked');
-        if(check) {
+        /*if(check) {
             $('#instagram_user_pass').show();
             $('#instagram_user_pass').find('input[name="insta_username"]').attr('required','required');
             $('#instagram_user_pass').find('input[name="insta_password"]').attr('required','required');
@@ -203,6 +224,17 @@ jQuery(document).ready(function($) {
             $('#instagram_user_pass').hide();
             $('#instagram_user_pass').find('input[name="insta_username"]').removeAttr('required');
             $('#instagram_user_pass').find('input[name="insta_password"]').removeAttr('required');
+        }*/
+        if(check) {
+            $('#fb_post_preview .fb-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .twt-post-disp-btn').css('right','20%');
+            $('#fb_post_preview .insta-post-disp-btn').css('right','20%');
+            facebook_post_preview();
+            instagram_post_preview();
+            twitter_post_preview();
+            $('.insta_preview_tool').addClass('showing').css('width','20%');
+            $('.fb_preview_tool').removeClass('showing').hide();
+            $('.twt_preview_tool').removeClass('showing').hide();
         }
     });
     /* Instagram Display For Post */
