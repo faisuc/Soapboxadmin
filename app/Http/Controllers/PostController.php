@@ -862,6 +862,9 @@ class PostController extends Controller
                 $userdata = new $this->user;
                 $userdata->email = $c_email;
                 $userdata->html = $html;
+                echo "<pre>";
+                print_r($userdata);
+                die();
                 Mail::send([], [], function ($message) use ($userdata) { 
                     $html = $userdata->html;
                     $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
