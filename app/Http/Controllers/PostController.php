@@ -791,6 +791,8 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
+        $email_client = array_filter($email_client);
+
         $data = [];
         $media_id = 0;
 
