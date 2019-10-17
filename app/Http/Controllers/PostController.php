@@ -836,7 +836,6 @@ class PostController extends Controller
         if($post->featured_image_id) {
             $image = '<br><img src="'.URL::to('/').$post->featuredimage.'" alt="'.$post->title.'" height="50px" />';
         }
-        echo "string"; die();
         if($request->input('send_approval') != '') {
             $html = 'Post Title: '.$title.'<br>'.
             'Post Content:'.$description.'<br>'.
@@ -853,6 +852,7 @@ class PostController extends Controller
                 });
             }
         }
+        echo "string"; die();
 
         if($request->input('save_and_schedule') != '') {
             $html = 'Post Title: '.$title.'<br>'.
