@@ -317,6 +317,10 @@ class PostController extends Controller
         $email_marketer = explode(',', $social_cells->email_marketer);
         $email_client = explode(',', $social_cells->email_client);
 
+        $email_client = array_filter($email_client);
+        $email_marketer = array_filter($email_marketer);
+        $email_owner = array_filter($email_owner);
+
         if (!$user_id) {
             $user_id = Sentinel::getUser()->id;
         }
@@ -792,6 +796,8 @@ class PostController extends Controller
         $email_client = explode(',', $social_cells->email_client);
 
         $email_client = array_filter($email_client);
+        $email_marketer = array_filter($email_marketer);
+        $email_owner = array_filter($email_owner);
 
         $data = [];
         $media_id = 0;
@@ -867,9 +873,6 @@ class PostController extends Controller
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>';
             if(!empty($email_client)) {
-                echo "<pre>";
-                print_r($email_client);
-                die();
                 foreach ($email_client as $c_email) {
                     $userdata = new $this->user;
                     $userdata->email = $c_email;
