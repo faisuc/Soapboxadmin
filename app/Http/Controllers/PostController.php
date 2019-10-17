@@ -865,6 +865,9 @@ class PostController extends Controller
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>';
             if(!empty($email_client)) {
+                echo "<pre>";
+                print_r($email_client);
+                die();
                 foreach ($email_client as $c_email) {
                     $userdata = new $this->user;
                     $userdata->email = $c_email;
@@ -875,7 +878,6 @@ class PostController extends Controller
                     });
                 }
             }
-            echo "string"; die();
             $post->status = 2;
         }
         else {
