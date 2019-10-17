@@ -852,7 +852,6 @@ class PostController extends Controller
                 });
             }
         }
-        echo "string"; die();
 
         if($request->input('save_and_schedule') != '') {
             $html = 'Post Title: '.$title.'<br>'.
@@ -868,6 +867,7 @@ class PostController extends Controller
                     $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
                 });
             }
+            echo "string"; die();
             $post->status = 2;
         }
         else {
