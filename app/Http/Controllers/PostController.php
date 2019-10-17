@@ -405,14 +405,16 @@ class PostController extends Controller
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>'.
             '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                    });
+                }
             }
         }
 
@@ -421,14 +423,16 @@ class PostController extends Controller
             'Post Content:'.$description.'<br>'.
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                    });
+                }
             }
             $post->status = 2;
         }
@@ -842,14 +846,16 @@ class PostController extends Controller
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>'.
             '<a class="btn btn-primary" href="'.URL::to('/').'/post/approve/'.$post->id.'">Approve</a>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                    });
+                }
             }
         }
 
@@ -858,17 +864,16 @@ class PostController extends Controller
             'Post Content:'.$description.'<br>'.
             'Post Schedule On:'.$schedule_date.'<br>'.
             'Post Image:'.$image.'<br>'.'<br>';
-            foreach ($email_client as $c_email) {
-                $userdata = new $this->user;
-                $userdata->email = $c_email;
-                $userdata->html = $html;
-                echo "<pre>";
-                print_r($userdata);
-                die();
-                Mail::send([], [], function ($message) use ($userdata) { 
-                    $html = $userdata->html;
-                    $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
-                });
+            if(!empty($email_client)) {
+                foreach ($email_client as $c_email) {
+                    $userdata = new $this->user;
+                    $userdata->email = $c_email;
+                    $userdata->html = $html;
+                    Mail::send([], [], function ($message) use ($userdata) { 
+                        $html = $userdata->html;
+                        $message->to($userdata->email)->subject('Post Approval')->setBody($html, 'text/html'); 
+                    });
+                }
             }
             echo "string"; die();
             $post->status = 2;
