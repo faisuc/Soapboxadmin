@@ -245,7 +245,15 @@ class ProfileController extends Controller
     }
 
     public function create_user(Request $request)
-    {
+    {   
+        $validatedData = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'password' => 'required|min:5|max:20',
+        ]);
+
         $checkUser = $this->user->where('email',$request->input('email'))->get();
         if($checkUser->isEmpty()) {
             $user = $this->user;

@@ -35,7 +35,7 @@ class DashboardController extends Controller
         }
 
         if($cell_id == null) {
-            $socialcell_id = $data['socialcells'][0]->id;
+            $socialcell_id = (isset($data['socialcells'][0])) ? $data['socialcells'][0]->id : 0;
         }
         else {
             $socialcell_id = $cell_id;

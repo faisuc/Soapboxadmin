@@ -34,6 +34,8 @@
                             <div class="card-header">
                                 <h1>Sign Up</h1>
                             </div>
+
+                            
                             <div class="card-body">
                                 <form action="/guestuser/create" method="post" enctype="multipart/form-data">
                                     
