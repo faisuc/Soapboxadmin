@@ -66,7 +66,7 @@
                                 $owner_emails = explode(',', $socialcell->email_owner);
                                 ?>
                                 @if(in_array($user_email, $owner_emails))
-                                    @if($socialcell->payment_status != '2')
+                                    @if($socialcell->payment_status == '2')
                                         @if($socialcell->payment_status != '3')
                                         <a href="{{ url('socialcell/cancel_payment/'.$socialcell->id) }}" class="btn btn-info">Cancel Payment</a>
                                         @endif
