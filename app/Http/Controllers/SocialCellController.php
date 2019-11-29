@@ -129,7 +129,7 @@ class SocialCellController extends Controller
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
-        $payment_status = '1';//$request->input('payment_status');
+        $payment_status = $request->input('payment_status');
 
         $ownerEmail = explode(',', $email_owner);
         $marketerEmail = explode(',', $email_marketer);
@@ -219,7 +219,7 @@ class SocialCellController extends Controller
         $email_owner = $request->input('email_owner');
         $email_marketer = $request->input('email_marketer');
         $email_client = $request->input('email_client');
-        $payment_status = '1';//$request->input('payment_status');
+        $payment_status = $request->input('payment_status');
 
         $ownerEmail = explode(',', $email_owner);
         $marketerEmail = explode(',', $email_marketer);
@@ -235,7 +235,7 @@ class SocialCellController extends Controller
             $socialcell->payment_status = $payment_status;
 
             if($request->input('post_status') != '') {
-                $socialcell->post_status = $request->input('post_status');
+                $socialcell->post_status = '1';
             }
             
             $socialcell->save();
