@@ -295,7 +295,6 @@ class ProfileController extends Controller
         $id = Input::get('user_id');
         $user = Sentinel::findById($id);
         $user_id = $user->id;
-        echo $user_id.'<br>';
         $activation_data = DB::select("SELECT * FROM `activations` WHERE completed = 1 AND user_id = ".$user_id);
         if(!empty($activation_data)) {
             return redirect('/login')->withErrors(['Already Activated.!!!!']);
