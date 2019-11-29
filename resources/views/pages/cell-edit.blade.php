@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <input type="hidden" name="payment_status" value="{{ $socialcell->payment_status }}">
                             <input type="submit" value="SAVE" class="btn btn-primary">
-                            @if($socialcell->payment_status != 2)
+                            @if($socialcell->payment_status == '1')
                             <input type="submit" name="payment" value="Generate Payment" class="btn btn-primary generate" style="display: none;">
                             @endif
                         </div>
