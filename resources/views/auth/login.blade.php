@@ -35,6 +35,12 @@
                         @endforeach
                     @endif
 
+                    @if (session()->has('flash_message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('flash_message') }}
+                        </div>
+                    @endif
+
                     <div class="form-group">
                         <input class="form-control form-control-lg" id="login" name="login" type="text" placeholder="Username/Email" autocomplete="off" value="{{ old('login') }}">
                     </div>
