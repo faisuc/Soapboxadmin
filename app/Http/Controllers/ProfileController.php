@@ -297,7 +297,8 @@ class ProfileController extends Controller
         $user_id = $user->id;
         $activation_data = DB::select("SELECT * FROM `activations` WHERE completed = 1 AND user_id = ".$user_id);
         if(!empty($activation_data)) {
-            return redirect('/login')->withErrors(['Already Activated.!!!!']);
+            return redirect('/login')->with('flash_message', 'User Activated. You can login now.');    
+            // return redirect('/login')->withErrors(['Already Activated.!!!!']);
         }
         else {
 
