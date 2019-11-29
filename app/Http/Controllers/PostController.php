@@ -949,11 +949,10 @@ class PostController extends Controller
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
             
-            echo $schedule_date; die();
             $post = $this->post->find($post_id);
+            echo "<pre>"; print_r($post); die();
             $post->facebook = '1';
             $post->facebook_page_id = $page_id;
-            echo "<pre>"; print_r($post); die();
             $post->save();
         }
         /* Schedule Post Facebook Page */
