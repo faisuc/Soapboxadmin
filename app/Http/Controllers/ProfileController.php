@@ -298,11 +298,10 @@ class ProfileController extends Controller
         echo $user_id.'<br>';
         $activation_data = DB::select("SELECT * FROM `activations` WHERE user_id = ".$user_id);
         if(!empty($activation_data)) {
-            echo "string"; die();
+            return redirect('/login')->withErrors(['Already Activated.!!!!']);
         }
         else {
 
-            die();
             if (!Activation::complete($user, $code)) {
                 // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
                 return redirect('/login')->withErrors(['Something went wrong.. Please try again later.']);
