@@ -235,7 +235,7 @@ class SocialCellController extends Controller
             $socialcell->payment_status = $payment_status;
 
             if($request->input('post_status') != '') {
-                $socialcell->post_status = '1';
+                $socialcell->post_status = $request->input('post_status');
             }
             
             $socialcell->save();
