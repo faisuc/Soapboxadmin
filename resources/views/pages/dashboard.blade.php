@@ -14,6 +14,11 @@
 		                    <b>Select Social Cell: </b>
 		                </div>
 		                <div class="col-md-3">
+		                	<?php
+		                	echo "<pre>";
+		                	print_r($socialcells);
+		                	echo "</pre>";
+		                	?>
 		                	@if(!empty($socialcells))
 		                	<select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
 		                        @foreach ($socialcells as $key => $socialcell)
