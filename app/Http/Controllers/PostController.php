@@ -527,6 +527,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
 
             /* Direct POST /
@@ -570,6 +571,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->instagram = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
 
             /*$root = $_SERVER['DOCUMENT_ROOT'];
@@ -620,6 +622,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->pinterest = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
         }
 
@@ -977,6 +980,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
 
             /* Direct POST /
@@ -1024,6 +1028,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->instagram = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
 
             // $new_filename = url($filename);
@@ -1100,6 +1105,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->pinterest = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
         }
         
