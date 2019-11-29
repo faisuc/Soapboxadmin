@@ -948,13 +948,12 @@ class PostController extends Controller
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
-            
+
             $post = $this->post->find($post_id);
             $post->facebook = '1';
             $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->facebook_page_id = $page_id;
             $post->save();
-            echo "<pre>"; print_r($post); die();
         }
         /* Schedule Post Facebook Page */
 
@@ -994,6 +993,8 @@ class PostController extends Controller
             // $url = 'https://ads-api.twitter.com/5/accounts/'.$account_id.'/scheduled_tweets';
             /* Schedule POST */
         }
+
+        echo "<pre>"; print_r($post); die();
 
         if($request->input('instagram_post') != '') {
             $post_id = $post->id;
