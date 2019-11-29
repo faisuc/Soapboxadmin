@@ -502,6 +502,7 @@ class PostController extends Controller
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->facebook_page_id = $page_id;
             $post->save();
         }
@@ -1101,8 +1102,6 @@ class PostController extends Controller
             $post->pinterest = '1';
             $post->save();
         }
-
-        echo "<pre>"; print_r($post); die();
         
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been updated.');
 
