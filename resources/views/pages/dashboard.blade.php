@@ -10,11 +10,11 @@
             	<div class="col-sm-12">
             		<div class="row">
             			<div class="col-md-7"></div>
+	                	@if($socialcells->count() > 0)
             			<div class="col-md-2 text-right">
 		                    <b>Select Social Cell: </b>
 		                </div>
 		                <div class="col-md-3">
-		                	@if($socialcells->count() > 0)
 		                	<select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
 		                        @foreach ($socialcells as $key => $socialcell)
 		                        	@if(is_admin())
@@ -29,8 +29,10 @@
 		                        	@endif
                         		@endforeach
 		                    </select>
-		                    @endif
 		                </div>
+		                @else
+		                <div class="col-md-5"></div>
+	                    @endif
 		            </div>
 		            <hr />
             		<?php
