@@ -73,9 +73,9 @@
                                         @if($socialcell->payment_status != '4' && $socialcell->payment_status != '3')
                                         <a href="{{ url('socialcell/onhold_payment/'.$socialcell->id) }}" class="btn btn-info">On Hold Payment</a>
                                         @endif
-                                        @if($socialcell->payment_status == '4')
-                                        <a href="{{ url('socialcell/active_payment/'.$socialcell->id) }}" class="btn btn-info">Active Payment</a>
-                                        @endif
+                                    @endif
+                                    @if($socialcell->payment_status == '4')
+                                    <a href="{{ url('socialcell/active_payment/'.$socialcell->id) }}" class="btn btn-info">Active Payment</a>
                                     @endif
                                 @endif
                             </div>
