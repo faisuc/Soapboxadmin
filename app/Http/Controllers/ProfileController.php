@@ -297,16 +297,20 @@ class ProfileController extends Controller
         $user_id = $user->id;
         echo $user_id.'<br>';
         $activation_data = DB::select("SELECT * FROM `activations` WHERE user_id = ".$user_id);
-        echo "<pre>";
-        print_r($activation_data);
-        die();
-        if (!Activation::complete($user, $code)) {
-            // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
-            return redirect('/login')->withErrors(['Something went wrong.. Please try again later.']);
+        if(!empty($activation_data)) {
+            echo "string"; die();
         }
         else {
-            // return redirect()->back()->with('flash_message', 'Please Login..');
-            return redirect('/login')->with('flash_message', 'User Activated. You can login now.');    
+
+            die();
+            if (!Activation::complete($user, $code)) {
+                // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
+                return redirect('/login')->withErrors(['Something went wrong.. Please try again later.']);
+            }
+            else {
+                // return redirect()->back()->with('flash_message', 'Please Login..');
+                return redirect('/login')->with('flash_message', 'User Activated. You can login now.');    
+            }
         }
     }
 
