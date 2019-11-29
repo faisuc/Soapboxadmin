@@ -14,10 +14,7 @@
 		                    <b>Select Social Cell: </b>
 		                </div>
 		                <div class="col-md-3">
-		                	<?php
-		                	echo $socialcells->count();
-		                	?>
-		                	@if(!empty($socialcells))
+		                	@if($socialcells->count() > 0)
 		                	<select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
 		                        @foreach ($socialcells as $key => $socialcell)
 		                        	@if(is_admin())
@@ -64,7 +61,7 @@
             <div class="social_cards_wrapper container">
 	            <div class="row">
 
-	            	@if(!empty($socialcells))
+	            	@if($socialcells->count() > 0)
 	            	<?php if(isset($facebook_follower)) {?>
 		            	<div class="col-md-4">
 		            		<div class="social_card">
