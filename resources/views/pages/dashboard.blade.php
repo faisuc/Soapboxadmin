@@ -14,14 +14,8 @@
 		                    <b>Select Social Cell: </b>
 		                </div>
 		                <div class="col-md-3">
-		                	<?php
-		                	foreach ($socialcells as $key => $socialcell) {
-		                		$user_id = $socialcell->user_id;
-		                		$user = Sentinel::findById($user_id);
-		                		$username = $user['first_name'].' '.$user['last_name'];
-		                	}
-		                	?>
-		                    <select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
+		                	@if(!empty($socialcells))
+		                	<select class="form-control" name="socialcell" onchange="(window.location = '/dashboard/' + this.options[this.selectedIndex].value);">
 		                        @foreach ($socialcells as $key => $socialcell)
 		                        	@if(is_admin())
 			                        	<?php
@@ -35,6 +29,7 @@
 		                        	@endif
                         		@endforeach
 		                    </select>
+		                    @endif
 		                </div>
 		            </div>
 		            <hr />
@@ -66,94 +61,91 @@
             <div class="social_cards_wrapper container">
 	            <div class="row">
 
-	            	<?php
-	            	if(isset($facebook_follower)) {
-	            	?>
-	            	<div class="col-md-4">
-	            		<div class="social_card">
-		            		<div class="card_header">
-			            		<h3>
-			            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
-			            			<i class="fab fa-facebook"></i>
-				            		Facebook
-				            	</h3>
-				            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
-		            		</div>
-		            		<?php
-		            			$fb_talking_about_count = $fb_fan_count = $fb_rating_count = $fb_published_posts_count = '';
-		            			$fb_talking_about_count = $fb_data['talking_about_count'];
-		            			$fb_fan_count = $fb_data['fan_count'];
-		            			$fb_rating_count = $fb_data['rating_count'];
-		            			$fb_published_posts_count = $fb_data['published_posts_count'];
-		            		?>
-		            		<div class="card_section">
+	            	@if(!empty($socialcells))
+	            	<?php if(isset($facebook_follower)) {?>
+		            	<div class="col-md-4">
+		            		<div class="social_card">
+			            		<div class="card_header">
+				            		<h3>
+				            			<!-- <img src="{{ asset('assets/images/logo_hat.png') }}" alt="facebook" height="20px"> -->
+				            			<i class="fab fa-facebook"></i>
+					            		Facebook
+					            	</h3>
+					            	<!--p>5.11 Tactical &nbsp; - &nbsp; 5.11 Tactical</p-->
+			            		</div>
 			            		<?php
-			            		$circle = 'fa fa-minus-circle';
-								$color = 'text-gray';
-		            			if($fb_talking_about_count > $fbpastinfo->fb_talking_about_count) {
-		            				$circle = 'fa fa-arrow-circle-up';
-		            				$color = 'text-success';
-		            			}else if($fb_talking_about_count < $fbpastinfo->fb_talking_about_count) {
-									$circle = 'fa fa-arrow-circle-down';
-									$color = 'text-danger';
-		            			}else{
-									$circle = 'fa fa-minus-circle';
-									$color = 'text-gray';
-		            			}
-			            		?>		            			
-            					<p class="main-title">Total Talking About Count: <span class="up-down-price"><?php echo $fb_talking_about_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_talking_about_count }}</b><br> Prev 7 Days</span> </span> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<?php
-		            			if($fb_fan_count > $fbpastinfo->fb_fan_count) {
-		            				$circle = 'fa fa-arrow-circle-up';
-		            				$color = 'text-success';
-		            			}else if($fb_fan_count < $fbpastinfo->fb_fan_count) {
-									$circle = 'fa fa-arrow-circle-down';
-									$color = 'text-danger';
-		            			}else{
-									$circle = 'fa fa-minus-circle';
-									$color = 'text-gray';
-		            			}
+			            			$fb_talking_about_count = $fb_fan_count = $fb_rating_count = $fb_published_posts_count = '';
+			            			$fb_talking_about_count = $fb_data['talking_about_count'];
+			            			$fb_fan_count = $fb_data['fan_count'];
+			            			$fb_rating_count = $fb_data['rating_count'];
+			            			$fb_published_posts_count = $fb_data['published_posts_count'];
 			            		?>
-		            			<p class="main-title">Total Friends: <span class="up-down-price"><?php echo $fb_fan_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_fan_count }}</b><br> Prev 7 Days</span> </span> </p>
-		            		</div>
-		            		<div class="card_section">
-		            			<?php
-		            			if($fb_rating_count > $fbpastinfo->fb_rating_count) {
-		            				$circle = 'fa fa-arrow-circle-up';
-		            				$color = 'text-success';
-		            			}else if($fb_rating_count < $fbpastinfo->fb_rating_count) {
-									$circle = 'fa fa-arrow-circle-down';
-									$color = 'text-danger';
-		            			}else{
-									$circle = 'fa fa-minus-circle';
+			            		<div class="card_section">
+				            		<?php
+				            		$circle = 'fa fa-minus-circle';
 									$color = 'text-gray';
-		            			}
-			            		?>
-	            				<p class="main-title">Total Rating Count: <span class="up-down-price"><?php echo $fb_rating_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_rating_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            			if($fb_talking_about_count > $fbpastinfo->fb_talking_about_count) {
+			            				$circle = 'fa fa-arrow-circle-up';
+			            				$color = 'text-success';
+			            			}else if($fb_talking_about_count < $fbpastinfo->fb_talking_about_count) {
+										$circle = 'fa fa-arrow-circle-down';
+										$color = 'text-danger';
+			            			}else{
+										$circle = 'fa fa-minus-circle';
+										$color = 'text-gray';
+			            			}
+				            		?>		            			
+	            					<p class="main-title">Total Talking About Count: <span class="up-down-price"><?php echo $fb_talking_about_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_talking_about_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<?php
+			            			if($fb_fan_count > $fbpastinfo->fb_fan_count) {
+			            				$circle = 'fa fa-arrow-circle-up';
+			            				$color = 'text-success';
+			            			}else if($fb_fan_count < $fbpastinfo->fb_fan_count) {
+										$circle = 'fa fa-arrow-circle-down';
+										$color = 'text-danger';
+			            			}else{
+										$circle = 'fa fa-minus-circle';
+										$color = 'text-gray';
+			            			}
+				            		?>
+			            			<p class="main-title">Total Friends: <span class="up-down-price"><?php echo $fb_fan_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_fan_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<?php
+			            			if($fb_rating_count > $fbpastinfo->fb_rating_count) {
+			            				$circle = 'fa fa-arrow-circle-up';
+			            				$color = 'text-success';
+			            			}else if($fb_rating_count < $fbpastinfo->fb_rating_count) {
+										$circle = 'fa fa-arrow-circle-down';
+										$color = 'text-danger';
+			            			}else{
+										$circle = 'fa fa-minus-circle';
+										$color = 'text-gray';
+			            			}
+				            		?>
+		            				<p class="main-title">Total Rating Count: <span class="up-down-price"><?php echo $fb_rating_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_rating_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            		</div>
+			            		<div class="card_section">
+			            			<?php
+			            			if($fb_published_posts_count > $fbpastinfo->fb_published_posts_count) {
+			            				$circle = 'fa fa-arrow-circle-up';
+			            				$color = 'text-success';
+			            			}else if($fb_published_posts_count < $fbpastinfo->fb_published_posts_count) {
+										$circle = 'fa fa-arrow-circle-down';
+										$color = 'text-danger';
+			            			}else{
+										$circle = 'fa fa-minus-circle';
+										$color = 'text-gray';
+			            			}
+				            		?>
+		            				<p class="main-title">Total Posts Summary: <span class="up-down-price"><?php echo $fb_published_posts_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_published_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
+			            		</div>		            		
 		            		</div>
-		            		<div class="card_section">
-		            			<?php
-		            			if($fb_published_posts_count > $fbpastinfo->fb_published_posts_count) {
-		            				$circle = 'fa fa-arrow-circle-up';
-		            				$color = 'text-success';
-		            			}else if($fb_published_posts_count < $fbpastinfo->fb_published_posts_count) {
-									$circle = 'fa fa-arrow-circle-down';
-									$color = 'text-danger';
-		            			}else{
-									$circle = 'fa fa-minus-circle';
-									$color = 'text-gray';
-		            			}
-			            		?>
-	            				<p class="main-title">Total Posts Summary: <span class="up-down-price"><?php echo $fb_published_posts_count; ?> <span class="{{ $color }}"><i class="{{ $circle }}"></i></span>  <span class="prise-down-up"><b>{{ $fbpastinfo->fb_published_posts_count }}</b><br> Prev 7 Days</span> </span> </p>
-		            		</div>		            		
-	            		</div>
 
-	            	</div>
-	            	<?php
-	            	}
-	            	?>
+		            	</div>
+	            	<?php } ?>
 
 	            	<?php if(isset($twitter_follower)) {?>
 		            	<div class="col-md-4">
@@ -322,6 +314,14 @@
 		            		</div>
 		            	</div>
 		            <?php } ?>
+
+		            @else
+		            	<div class="col-md-12">
+		            		<p>Please Add Social Cell & Accounts</p>
+		            		<a href="{{ url('/socialcell') }}">Add Social Cell</a>
+		            	</div>
+
+		            @endif
 	            </div>
 
             </div>
