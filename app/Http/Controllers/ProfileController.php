@@ -294,6 +294,9 @@ class ProfileController extends Controller
         $code = Input::get('code');
         $id = Input::get('user_id');
         $user = Sentinel::findById($id);
+        echo "<pre>";
+        print_r($user);
+        die();
         if (!Activation::complete($user, $code)) {
             // return redirect()->back()->withErrors(['Something went wrong.. Please try again later.']);
             return redirect('/login')->withErrors(['Something went wrong.. Please try again later.']);
