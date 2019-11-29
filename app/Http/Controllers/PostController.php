@@ -994,8 +994,6 @@ class PostController extends Controller
             /* Schedule POST */
         }
 
-        echo "<pre>"; print_r($post); die();
-
         if($request->input('instagram_post') != '') {
             $post_id = $post->id;
             // $social_id = session()->get('instagram');
@@ -1103,6 +1101,8 @@ class PostController extends Controller
             $post->pinterest = '1';
             $post->save();
         }
+
+        echo "<pre>"; print_r($post); die();
         
         return redirect('/post/edit/'.$post->id)->with('flash_message', 'Post has been updated.');
 
