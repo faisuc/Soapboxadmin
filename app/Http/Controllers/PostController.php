@@ -949,6 +949,7 @@ class PostController extends Controller
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
             $post = $this->post->find($post_id);
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             echo "<pre>"; print_r($post); die();
             
             $post = $this->post->find($post_id);
