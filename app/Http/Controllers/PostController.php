@@ -836,11 +836,6 @@ class PostController extends Controller
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
         $post->save();
 
-        echo "<pre>";
-        print_r($post);
-        die();
-
-
         if ($media_id != 0)
         {
             $media = $this->media->find($media_id);
@@ -1017,7 +1012,7 @@ class PostController extends Controller
 
             $caption = $title;
             $schedule = $schedule_date;
-            date_default_timezone_set('Asia/Kolkata');
+            // date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
 
@@ -1094,7 +1089,7 @@ class PostController extends Controller
             ));*/
 
             $schedule = $schedule_date;
-            date_default_timezone_set('Asia/Kolkata');
+            // date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
