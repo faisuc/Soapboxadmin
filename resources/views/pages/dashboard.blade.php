@@ -317,8 +317,10 @@
 
 		            @else
 		            	<div class="col-md-12">
-		            		<p>Please Add Social Cell & Accounts</p>
-		            		<a href="{{ url('/socialcell') }}">Add Social Cell</a>
+		            		<div class="text-center">
+			            		<p>Please Add Social Cell & Accounts</p>
+			            		<a href="{{ url('/socialcell') }}" class="btn btn-primary">Add Social Cell</a>
+		            		</div>
 		            	</div>
 
 		            @endif
