@@ -834,12 +834,12 @@ class PostController extends Controller
 
         $post->link = $link;
         $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
+        $post->save();
 
         echo "<pre>";
         print_r($post);
         die();
 
-        $post->save();
 
         if ($media_id != 0)
         {
