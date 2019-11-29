@@ -40,6 +40,7 @@ class DashboardController extends Controller
         else {
             $socialcell_id = $cell_id;
         }
+        echo 'social cell id:'.$socialcell_id; die;
         $data['cell_id'] = $socialcell_id;
 
         /* Facebook Page Info start */
