@@ -943,6 +943,10 @@ class PostController extends Controller
         }
         /**/
 
+        echo "<pre>";
+        print_r($post);
+        die();
+
         /* Schedule Post Facebook Page */
         if ($request->input('facebook_post') != '') {
             $page_id = $request->input('fb_page');
