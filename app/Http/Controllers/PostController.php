@@ -953,8 +953,8 @@ class PostController extends Controller
             $post = $this->post->find($post_id);
             $post->facebook = '1';
             $post->facebook_page_id = $page_id;
-            $post->save();
             echo "<pre>"; print_r($post); die();
+            $post->save();
         }
         /* Schedule Post Facebook Page */
 
