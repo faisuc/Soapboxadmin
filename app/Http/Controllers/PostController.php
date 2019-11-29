@@ -948,6 +948,8 @@ class PostController extends Controller
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
             $publish_post = $this->fb_publish_post($page_id,$post_id);
+            
+            echo "<pre>"; print_r($post); die();
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
@@ -955,7 +957,6 @@ class PostController extends Controller
             $post->save();
         }
         /* Schedule Post Facebook Page */
-        echo "<pre>"; print_r($post); die();
 
         if ($request->input('twitter_post') != '') {
 
