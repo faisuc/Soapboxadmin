@@ -1368,13 +1368,14 @@ class PostController extends Controller
             // echo $token; die();
             $timestamp = $schedule;
             $timestamp = strtotime($timestamp);
+            $date = strtotime("now +10 minute");
 
             $data = array(
                 'message' => $title,
                 // 'description' => $description,
                 // 'link' => $link,
-                'scheduled_publish_time' => $timestamp,
-                // 'scheduled_publish_time' => $current_time,
+                // 'scheduled_publish_time' => $timestamp,
+                'scheduled_publish_time' => $date,
                 'published' => 'false'
             );
 
