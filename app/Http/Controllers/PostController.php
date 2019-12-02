@@ -1362,7 +1362,7 @@ class PostController extends Controller
         echo $schedule; die();*/
 
         if($facebook_page_id != '') {
-            // date_default_timezone_set('Asia/Kolkata');
+            date_default_timezone_set('Asia/Kolkata');
             // $message = 'scheduled post my script new script';
             // echo $current_time.'--'.$timestamp; die();
             // echo $token; die();
@@ -1373,8 +1373,8 @@ class PostController extends Controller
                 'message' => $title,
                 // 'description' => $description,
                 // 'link' => $link,
-                // 'scheduled_publish_time' => $timestamp,
-                'scheduled_publish_time' => $current_time,
+                'scheduled_publish_time' => $timestamp,
+                // 'scheduled_publish_time' => $current_time,
                 'published' => 'false'
             );
 
