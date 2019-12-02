@@ -1357,6 +1357,8 @@ class PostController extends Controller
         $status = $post->status;
         $schedule = $post->schedule_to_post_date;
 
+        echo $schedule; die();
+
         if($facebook_page_id != '') {
             // date_default_timezone_set('Asia/Kolkata');
             // $message = 'scheduled post my script new script';
