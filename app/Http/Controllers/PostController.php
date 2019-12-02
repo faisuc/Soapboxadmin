@@ -1358,8 +1358,8 @@ class PostController extends Controller
         $schedule = $post->schedule_to_post_date;
 
         $current_time = date('Y-m-d H:i:00');
-        echo $current_time.'<br>';
-        echo $schedule; die();
+        /*echo $current_time.'<br>';
+        echo $schedule; die();*/
 
         if($facebook_page_id != '') {
             // date_default_timezone_set('Asia/Kolkata');
@@ -1373,7 +1373,8 @@ class PostController extends Controller
                 'message' => $title,
                 // 'description' => $description,
                 // 'link' => $link,
-                'scheduled_publish_time' => $timestamp,
+                // 'scheduled_publish_time' => $timestamp,
+                'scheduled_publish_time' => $current_time,
                 'published' => 'false'
             );
 
