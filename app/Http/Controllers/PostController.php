@@ -1357,9 +1357,9 @@ class PostController extends Controller
         $status = $post->status;
         $schedule = $post->schedule_to_post_date;
 
-        $current_time = date('Y-m-d H:i:00');
+        /*$current_time = date('Y-m-d H:i:00');
         echo $current_time.'<br>';
-        echo $schedule; die();
+        echo $schedule; die();*/
 
         if($facebook_page_id != '') {
             // date_default_timezone_set('Asia/Kolkata');
