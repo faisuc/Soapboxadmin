@@ -917,7 +917,7 @@ class PostController extends Controller
         '<a class="btn btn-danger" href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a>'.'<br>'.
         '<a class="btn btn-info" href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
         
-        /*if(in_array($loginUserEmail, $email_marketer)) {
+        if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
             if(!empty($email_client)) {
                 foreach ($email_client as $c_email) {
@@ -944,7 +944,7 @@ class PostController extends Controller
                     });
                 }
             }
-        }*/
+        }
         /**/
 
         /* Schedule Post Facebook Page */
@@ -1023,9 +1023,9 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
 
-            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
+            DB::table('cron_script')->insert($data);*/
 
             $post = $this->post->find($post_id);
             $post->instagram = '1';
@@ -1033,7 +1033,7 @@ class PostController extends Controller
             $post->save();
 
             // $new_filename = url($filename);
-            /*$root = $_SERVER['DOCUMENT_ROOT'];
+            $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $new_filename = $root.$filename;
             }
@@ -1059,7 +1059,7 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $insta_post = $this->insta_post($new_filename, $caption, $schedule);*/
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
             /*echo "<pre>";
             print_r($response);
             die();*/
