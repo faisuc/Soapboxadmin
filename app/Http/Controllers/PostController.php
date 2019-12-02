@@ -1750,7 +1750,7 @@ class PostController extends Controller
                     if(strtotime($post_date) == strtotime($current_time)){
 
                         if($data->type_name == 'twitter') {
-                            echo $post_id; die();
+
                             $postData = $this->post->find($post_id);
                             $title = $postData->title;
 
