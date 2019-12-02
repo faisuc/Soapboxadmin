@@ -1732,9 +1732,6 @@ class PostController extends Controller
         date_default_timezone_set('Asia/Kolkata');
         $current_time = date('Y-m-d H:i:00');
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
-        echo "<pre>";
-        print_r($cronData);
-        die();
         
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
@@ -1753,6 +1750,7 @@ class PostController extends Controller
                     if(strtotime($post_date) == strtotime($current_time)){
 
                         if($data->type_name == 'twitter') {
+                            echo $post_id; die();
                             $postData = $this->post->find($post_id);
                             $title = $postData->title;
 
