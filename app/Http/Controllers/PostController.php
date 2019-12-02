@@ -917,7 +917,7 @@ class PostController extends Controller
         '<a class="btn btn-danger" href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a>'.'<br>'.
         '<a class="btn btn-info" href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
         
-        if(in_array($loginUserEmail, $email_marketer)) {
+        /*if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
             if(!empty($email_client)) {
                 foreach ($email_client as $c_email) {
@@ -944,7 +944,7 @@ class PostController extends Controller
                     });
                 }
             }
-        }
+        }*/
         /**/
 
         /* Schedule Post Facebook Page */
@@ -974,9 +974,9 @@ class PostController extends Controller
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
-            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);*/
+            DB::table('cron_script')->insert($data);
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
@@ -988,6 +988,7 @@ class PostController extends Controller
             $parameters = array('status' => $title.'On '.date('Y m D'));
             $result = $this->Request($url, 'post', $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $parameters);
             $twitter_post_id = $result['id_str'];
+            die();
             /* Direct POST */
             
 
