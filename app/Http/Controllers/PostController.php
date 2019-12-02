@@ -951,7 +951,7 @@ class PostController extends Controller
         if ($request->input('facebook_post') != '') {
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
-            $publish_post = $this->fb_publish_post($page_id,$post_id);
+            // $publish_post = $this->fb_publish_post($page_id,$post_id);
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
@@ -974,9 +974,9 @@ class PostController extends Controller
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
-            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
+            DB::table('cron_script')->insert($data);*/
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
