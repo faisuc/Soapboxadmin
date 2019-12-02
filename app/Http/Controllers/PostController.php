@@ -1731,6 +1731,7 @@ class PostController extends Controller
 
         date_default_timezone_set('Asia/Kolkata');
         $current_time = date('Y-m-d H:i:00');
+        echo "SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0"; die();
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
         echo "<pre>";
         print_r($cronData);
