@@ -1040,9 +1040,6 @@ class PostController extends Controller
             $username = $oauth_token;
             $password = $oauth_token_secret;
 
-            echo 'username: '.$username.'<br>';
-            echo 'password:'.$password; die();
-
             // Upload Photo
             $obj = new InstagramUpload();
             $obj->Login("YOUR_IG_USERNAME", "YOUR_IG_PASSWORD");
