@@ -440,11 +440,7 @@ class SocialCellController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        // $social = new $this->socialAccount;
-        $social = $this->socialAccount->find('27');
-        echo "<pre>";
-        print_r($social);
-        die();
+        $social = new $this->socialAccount;
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->social_cell_id = $social_cell_id;
