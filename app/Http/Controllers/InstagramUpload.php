@@ -1,4 +1,6 @@
 <?php
+namespace App\Http\Controllers;
+
 class InstagramUpload
 {
     private $username;
