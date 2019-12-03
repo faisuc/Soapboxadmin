@@ -1089,7 +1089,7 @@ class PostController extends Controller
             
             $token = $social_account->pinterest_token;
             
-            $filename = $post->featured_image;
+            /*$filename = $post->featured_image;
             $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $image = $root.$filename;
@@ -1110,9 +1110,7 @@ class PostController extends Controller
                 "note"          => $caption,
                 "image"     => $image,
                 "board"         => $board_id
-            ));
-
-            die();
+            ));*/
 
             $schedule = $schedule_date;
             // date_default_timezone_set('Asia/Kolkata');
