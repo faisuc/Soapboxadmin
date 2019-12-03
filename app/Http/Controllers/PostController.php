@@ -1742,6 +1742,9 @@ class PostController extends Controller
             curl_setopt($ch, CURLOPT_COOKIEJAR,  dirname(__FILE__). '/cookies.txt');
         }
         $response = curl_exec($ch);
+        echo "<pre>";
+        print_r($response);
+        die();
         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);    
         curl_close($ch);    
         return array($http, $response);
