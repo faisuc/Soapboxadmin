@@ -1037,6 +1037,9 @@ class PostController extends Controller
             }
             
 
+            // echo "https://api.instagram.com/oauth/authorize/?client_id=".."&redirect_uri=".."&response_type=token";
+            die();
+
             $username = $oauth_token;
             $password = $oauth_token_secret;
             

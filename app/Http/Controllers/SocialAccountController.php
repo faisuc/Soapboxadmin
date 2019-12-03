@@ -455,6 +455,11 @@ class SocialAccountController extends Controller
         }
     }
 
+    public function instagram_callback()
+    {
+        echo "instagram callback function";
+    }
+
     function BaseString($url, $parameters, $method = null){
         if( empty($method) ){
             $method = 'GET';

@@ -62,6 +62,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('twitter_callback', 'SocialAccountController@twitter_callback');
     /* Twitter */
 
+    /* Instagram */
+    Route::get('instagram_callback', 'SocialAccountController@instagram_callback');
+    /* Instagram */
+
     /* Twitter */
     Route::get('pinterest_callback', 'SocialAccountController@pinterest_callback');
     /* Twitter */
