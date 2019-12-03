@@ -1024,10 +1024,15 @@ class PostController extends Controller
             $schedule = strtotime($schedule);
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
-            
+
             $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'instagram' AND post_date = '".$post_date."' AND is_cron_run = 0");
-            echo "<pre>";
-            print_r($checkCron);
+            if(!empty($checkCron)) {
+                echo "<pre>";
+                print_r($checkCron);
+                die();
+                // DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
+            }
+            
             die();
 
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
