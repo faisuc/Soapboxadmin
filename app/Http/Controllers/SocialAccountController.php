@@ -583,7 +583,6 @@ class SocialAccountController extends Controller
             $pinterest_token = $token->access_token;
             $social_id = str_replace('social_id=','',$_GET['state']);
             $social = $this->socialAccount->find($social_id);
-            echo $pinterest_token; die();
             $social->pinterest_token = $pinterest_token;
             $social->save();
 
