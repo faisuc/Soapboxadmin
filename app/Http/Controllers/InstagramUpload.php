@@ -60,7 +60,6 @@ class InstagramUpload
     private function GetToken()
     {
         $strUrl = $this->api_url . "/si/fetch_headers/?challenge_type=signup";
-        echo $strUrl; die();
         $ch     = curl_init();
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -70,6 +69,9 @@ class InstagramUpload
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($ch);
+        echo "<pre>";
+        print_r($result);
+        die();
         curl_close($ch);
         preg_match_all("|csrftoken=(.*);|U", $result, $arrOut, PREG_PATTERN_ORDER);
         $csrftoken = $arrOut[1][0];
