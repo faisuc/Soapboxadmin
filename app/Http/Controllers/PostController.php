@@ -1127,9 +1127,11 @@ class PostController extends Controller
                 DB::table('cron_script')->insert($data);
             }
 
+            echo $schedule_date.'<br>';
             $post = $this->post->find($post_id);
             $post->pinterest = '1';
             $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
+            echo $schedule_date.'<br>';
             echo "<pre>";
             print_r($post);
             die();
