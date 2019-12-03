@@ -1130,6 +1130,9 @@ class PostController extends Controller
             $post = $this->post->find($post_id);
             $post->pinterest = '1';
             $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
+            echo "<pre>";
+            print_r($post);
+            die();
             $post->save();
         }
         
