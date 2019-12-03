@@ -975,9 +975,16 @@ class PostController extends Controller
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
-            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
-            $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);*/
+            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'twitter' AND post_date = '".$post_date."' AND is_cron_run = 0");
+            if(!empty($checkCron)) {
+
+                // DB::update("UPDATE cron_script SET is_cron_run = 1 WHERE post_id = ? AND type_name = 'twitter' AND post_date = ? AND is_cron_run = 0" ,[$post_id,$post_date]);
+            }
+            else {
+                $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+                DB::table('cron_script')->insert($data);
+            }
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
@@ -1036,11 +1043,15 @@ class PostController extends Controller
                 DB::table('cron_script')->insert($data);
             }
             
+            $post = $this->post->find($post_id);
+            $post->instagram = '1';
+            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
+            $post->save();
 
-            $username = $oauth_token;
+            /*$username = $oauth_token;
             $password = $oauth_token_secret;
 
-            echo $username.'--'.$password; die();
+            // $new_filename = url($filename);
             $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $new_filename = $root.$filename;
@@ -1049,19 +1060,6 @@ class PostController extends Controller
                 $request_uri = '/public/';
                 $new_filename = $root.$request_uri.$filename;
             }
-
-            /*// Upload Photo
-            $obj = new InstagramUpload();
-            $obj->Login($username, $password);
-            $obj->UploadPhoto($new_filename, $caption);
-            die();*/
-
-            $post = $this->post->find($post_id);
-            $post->instagram = '1';
-            $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
-            $post->save();
-
-            // $new_filename = url($filename);
 
             $this->image_load($new_filename);
             $this->image_resize(480,600);
@@ -1080,15 +1078,7 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
-            echo "response";
-            echo "<pre>";
-            print_r($response);
-            echo "</pre>";
-            echo "insta post response";
-            echo "<pre>";
-            print_r($insta_post);
-            die();
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);*/
         }
 
         if ($request->input('pinterest_post') != '') {
@@ -1099,7 +1089,7 @@ class PostController extends Controller
             
             $token = $social_account->pinterest_token;
             
-            /*$filename = $post->featured_image;
+            $filename = $post->featured_image;
             $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $image = $root.$filename;
@@ -1120,15 +1110,24 @@ class PostController extends Controller
                 "note"          => $caption,
                 "image"     => $image,
                 "board"         => $board_id
-            ));*/
+            ));
+
+            die();
 
             $schedule = $schedule_date;
             // date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
-            $data = array('post_id'=>$post_id,'type_name'=>'pinterest','session'=>$token,'session_secret'=>$board_id,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
+            $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'pinterest' AND post_date = '".$post_date."' AND is_cron_run = 0");
+            if(!empty($checkCron)) {
+
+                // DB::update("UPDATE cron_script SET is_cron_run = 1 WHERE post_id = ? AND type_name = 'pinterest' AND post_date = ? AND is_cron_run = 0" ,[$post_id,$post_date]);
+            }
+            else {
+                $data = array('post_id'=>$post_id,'type_name'=>'pinterest','session'=>$token,'session_secret'=>$board_id,'post_date'=>$post_date,'is_cron_run'=>0);
+                DB::table('cron_script')->insert($data);
+            }
 
             $post = $this->post->find($post_id);
             $post->pinterest = '1';
