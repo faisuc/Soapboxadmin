@@ -1027,10 +1027,8 @@ class PostController extends Controller
 
             $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'instagram' AND post_date = '".$post_date."' AND is_cron_run = 0");
             if(!empty($checkCron)) {
-                echo "<pre>";
-                print_r($checkCron);
-                die();
-                // DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
+
+                DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE post_id = ? AND type_name = 'instagram' AND post_date = ? AND is_cron_run = 0' ,[$post_id,$post_date]);
             }
             
             die();
