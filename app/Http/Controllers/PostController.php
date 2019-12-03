@@ -1039,10 +1039,10 @@ class PostController extends Controller
 
             // echo "https://api.instagram.com/oauth/authorize/?client_id=".."&redirect_uri=".."&response_type=token";
             $access_token = "13857630942.1677ed0.89bceb8a3ef344a49ae0eb71fa82600b";
-            $url = "https://api.instagram.com/v1/self/media/recent?access_token=".$access_token;
+            $url = "https://api.instagram.com/v1/users/self/media/recent?access_token=".$access_token;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_POST, false);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
