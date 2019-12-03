@@ -132,6 +132,9 @@ class InstagramUpload
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_COOKIE, $this->cookies);
         $result = curl_exec($ch);
+        echo "<pre>";
+        print_r($result);
+        die();
         curl_close($ch);
         $arrResult = json_decode($result, true);
         if ($arrResult['status'] == "ok") {
