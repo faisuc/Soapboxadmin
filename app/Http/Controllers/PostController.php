@@ -1040,9 +1040,7 @@ class PostController extends Controller
             $username = $oauth_token;
             $password = $oauth_token_secret;
 
-            $username = "kunalsoni@imailt.com";
-            $password = "ZxcAsd@1234";
-            
+            echo $username.'--'.$password; die();
             $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $new_filename = $root.$filename;
@@ -1742,12 +1740,6 @@ class PostController extends Controller
             curl_setopt($ch, CURLOPT_COOKIEJAR,  dirname(__FILE__). '/cookies.txt');
         }
         $response = curl_exec($ch);
-        /*if($cookies) {
-            echo $this->instagramUrl . $url;
-            echo "<pre>";
-            print_r($response);
-            die();
-        }*/
         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);    
         curl_close($ch);    
         return array($http, $response);
