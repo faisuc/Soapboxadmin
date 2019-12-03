@@ -1052,11 +1052,11 @@ class PostController extends Controller
                 $new_filename = $root.$request_uri.$filename;
             }
 
-            // Upload Photo
+            /*// Upload Photo
             $obj = new InstagramUpload();
             $obj->Login($username, $password);
             $obj->UploadPhoto($new_filename, $caption);
-            die();
+            die();*/
 
             $post = $this->post->find($post_id);
             $post->instagram = '1';
@@ -1085,6 +1085,9 @@ class PostController extends Controller
             $insta_post = $this->insta_post($new_filename, $caption, $schedule);
             echo "<pre>";
             print_r($response);
+            echo "</pre>";
+            echo "<pre>";
+            print_r($insta_post);
             die();
         }
 
