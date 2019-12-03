@@ -576,9 +576,6 @@ class SocialAccountController extends Controller
 
         if (isset($_GET["code"])) {
             $token = $pinterest->auth->getOAuthToken($_GET["code"]);
-            echo "<pre>";
-            print_r($token);
-            die();
             $pinterest->auth->setOAuthToken($token->access_token);
             // setcookie("access_token", $token->access_token);
 
