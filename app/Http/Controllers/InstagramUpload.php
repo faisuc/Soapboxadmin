@@ -120,6 +120,7 @@ class InstagramUpload
         $arrPostData['image_compression'] = '{"lib_name":"jt","lib_version":"1.3.0","quality":"100"}';
         $arrPostData['photo']             = curl_file_create(realpath($file));
         $strUrl                           = $this->api_url . "/upload/photo/";
+        echo $strUrl; die();
         $ch                               = curl_init();
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_HEADER, false);
