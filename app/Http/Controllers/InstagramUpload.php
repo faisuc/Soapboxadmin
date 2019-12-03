@@ -21,7 +21,8 @@ class InstagramUpload
     private $android_manufacturer = "Huawei";
     private $android_model = "EVA-L19";
     private $headers = array();
-    private $user_agent = "Instagram 10.3.2 Android (18/4.3; 320dpi; 720x1280; Huawei; HWEVA; EVA-L19; qcom; en_US)";
+    // private $user_agent = "Instagram 10.3.2 Android (18/4.3; 320dpi; 720x1280; Huawei; HWEVA; EVA-L19; qcom; en_US)";
+    private $user_agent = "Mozilla/5.0 (Linux; U; Android 4.0; en-us; GT-I9300 Build/IMM76D) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30' : 'Mozilla/5.0(Windows;U;WindowsNT5.0;en-US;rv:1.4)Gecko/20030624Netscape/7.1(ax)";
     public function __construct()
     {
         $this->guid      = $this->generateUUID();
@@ -30,6 +31,10 @@ class InstagramUpload
         $this->upload_id = $this->generateUploadId();
         $this->headers[] = "X-IG-Capabilities: " . $this->x_ig_capabilities;
         $this->headers[] = "X-IG-Connection-Type: WIFI";
+        echo "<pre>";
+        print_r($_SERVER);
+        die();
+        $this->proxy = '';
     }
     public function Login($username = "", $password = "")
     {
@@ -125,6 +130,7 @@ class InstagramUpload
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_PROXY,$proxy);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arrPostData);
