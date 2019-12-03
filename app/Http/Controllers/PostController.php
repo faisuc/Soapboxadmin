@@ -917,7 +917,7 @@ class PostController extends Controller
         '<a class="btn btn-danger" href="'.URL::to('/').'/post/decline/'.$post->id.'">Decline</a>'.'<br>'.
         '<a class="btn btn-info" href="'.URL::to('/').'/post/make_change/'.$post->id.'">Make Changes</a>';
         
-        if(in_array($loginUserEmail, $email_marketer)) {
+        /*if(in_array($loginUserEmail, $email_marketer)) {
             // sent email to client with post content
             if(!empty($email_client)) {
                 foreach ($email_client as $c_email) {
@@ -944,14 +944,14 @@ class PostController extends Controller
                     });
                 }
             }
-        }
+        }*/
         /**/
 
         /* Schedule Post Facebook Page */
         if ($request->input('facebook_post') != '') {
             $page_id = $request->input('fb_page');
             $post_id = $post->id;
-            $publish_post = $this->fb_publish_post($page_id,$post_id);
+            // $publish_post = $this->fb_publish_post($page_id,$post_id);
 
             $post = $this->post->find($post_id);
             $post->facebook = '1';
@@ -974,9 +974,9 @@ class PostController extends Controller
             $oauth_token = $social_account->twitter_session;
             $oauth_token_secret = $social_account->twitter_secret;
 
-            $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
+            /*$post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'twitter','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
+            DB::table('cron_script')->insert($data);*/
 
             $post = $this->post->find($post_id);
             $post->twitter = '1';
@@ -1033,7 +1033,7 @@ class PostController extends Controller
             $post->save();
 
             // $new_filename = url($filename);
-            /*$root = $_SERVER['DOCUMENT_ROOT'];
+            $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
                 $new_filename = $root.$filename;
             }
@@ -1059,10 +1059,10 @@ class PostController extends Controller
                 exit(); 
             }
 
-            $insta_post = $this->insta_post($new_filename, $caption, $schedule);*/
-            /*echo "<pre>";
+            $insta_post = $this->insta_post($new_filename, $caption, $schedule);
+            echo "<pre>";
             print_r($response);
-            die();*/
+            die();
         }
 
         if ($request->input('pinterest_post') != '') {
