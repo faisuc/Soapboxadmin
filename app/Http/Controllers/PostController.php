@@ -1083,9 +1083,11 @@ class PostController extends Controller
             }
 
             $insta_post = $this->insta_post($new_filename, $caption, $schedule);
+            echo "response";
             echo "<pre>";
             print_r($response);
             echo "</pre>";
+            echo "insta post response";
             echo "<pre>";
             print_r($insta_post);
             die();
