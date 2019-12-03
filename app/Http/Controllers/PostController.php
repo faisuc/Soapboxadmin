@@ -16,6 +16,7 @@ use Facebook\Facebook;
 use Illuminate\Mail\Mailable;
 use Mail;
 use App\Http\Controllers\TwitterAPIExchange;
+use App\Http\Controllers\InstagramUpload;
 
 class PostController extends Controller
 {
@@ -1022,6 +1023,10 @@ class PostController extends Controller
             // date_default_timezone_set('Asia/Kolkata');
             $schedule = strtotime($schedule);
 
+            $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'instagram' AND post_date = '".$post_date."' AND is_cron_run = 0");
+            echo "<pre>";
+            print_r($checkCron);
+            die();
 
             $post_date = date('Y-m-d H:i:s',strtotime($schedule_date));
             $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
