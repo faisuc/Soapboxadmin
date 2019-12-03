@@ -760,7 +760,7 @@ class PostController extends Controller
                     $pinterest->auth->setOAuthToken($token);
 
                     echo "<pre>";
-                    print_r($pinterest->users);
+                    print_r($pinterest->users->getMeBoards());
                     die();
                     $boards = $pinterest->users->getMeBoards();
                     echo "string"; die();
