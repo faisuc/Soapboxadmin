@@ -1049,11 +1049,10 @@ class PostController extends Controller
                 $new_filename = $root.$request_uri.$filename;
             }
 
-            echo $new_filename; die();
             // Upload Photo
             $obj = new InstagramUpload();
             $obj->Login($username, $password);
-            $obj->UploadPhoto("square-image.jpg", "Test Upload Photo From PHP");
+            $obj->UploadPhoto($new_filename, $caption);
             die();
 
             $post = $this->post->find($post_id);
