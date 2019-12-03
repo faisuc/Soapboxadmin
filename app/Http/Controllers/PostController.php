@@ -758,9 +758,9 @@ class PostController extends Controller
                     $callback_url = getenv('PINTEREST_REDIRECT');
                     $pinterest = new Pinterest($app_id, $app_secret);
                     $pinterest->auth->setOAuthToken($token);
-                    echo "string"; die();
 
                     $boards = $pinterest->users->getMeBoards();
+                    echo "string"; die();
                     $boardsArr = array();
                     foreach ($boards as $board_key => $board) {
                         $board_id = $board->id;
