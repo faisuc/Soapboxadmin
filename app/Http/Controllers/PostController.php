@@ -1732,7 +1732,7 @@ class PostController extends Controller
         date_default_timezone_set('Asia/Kolkata');
         $current_time = date('Y-m-d H:i:00');
         $cronData = DB::select("SELECT * FROM cron_script WHERE post_date >= '".$current_time."' AND is_cron_run = 0");
-        
+
         foreach ($cronData as $data) {
             $post_id = $data->post_id;
             $post_date = $data->post_date;
@@ -1744,11 +1744,6 @@ class PostController extends Controller
                 
                 $cellData = $this->socialCell->find($cell_id);
                 $payment_status = $cellData->payment_status;
-
-                echo $cell_id.'<br>';
-                echo $payment_status.'<br>';
-                echo $postData->status.'<br>';
-                die();
 
                 if($postData->status == '1' && $payment_status == '2') {
                         
@@ -1852,10 +1847,11 @@ class PostController extends Controller
                                 "board"         => $board_id
                             ));
                         }
+                    
+                        DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
+                    
                     }
 
-                    
-                    DB::update('UPDATE cron_script SET is_cron_run = 1 WHERE id = ?' ,[$data->id]);
                 }
             }
 
