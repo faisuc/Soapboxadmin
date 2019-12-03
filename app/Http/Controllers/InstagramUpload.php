@@ -60,6 +60,7 @@ class InstagramUpload
     private function GetToken()
     {
         $strUrl = $this->api_url . "/si/fetch_headers/?challenge_type=signup";
+        echo $strUrl; die();
         $ch     = curl_init();
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_HEADER, true);
