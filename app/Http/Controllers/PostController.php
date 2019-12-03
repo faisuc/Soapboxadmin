@@ -1039,10 +1039,20 @@ class PostController extends Controller
 
             $username = $oauth_token;
             $password = $oauth_token_secret;
+            
+            $root = $_SERVER['DOCUMENT_ROOT'];
+            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+                $new_filename = $root.$filename;
+            }
+            else {
+                $request_uri = '/public/';
+                $new_filename = $root.$request_uri.$filename;
+            }
 
+            echo $new_filename; die();
             // Upload Photo
             $obj = new InstagramUpload();
-            $obj->Login("YOUR_IG_USERNAME", "YOUR_IG_PASSWORD");
+            $obj->Login($username, $password);
             $obj->UploadPhoto("square-image.jpg", "Test Upload Photo From PHP");
             die();
 
@@ -1052,14 +1062,6 @@ class PostController extends Controller
             $post->save();
 
             // $new_filename = url($filename);
-            $root = $_SERVER['DOCUMENT_ROOT'];
-            if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-                $new_filename = $root.$filename;
-            }
-            else {
-                $request_uri = '/public/';
-                $new_filename = $root.$request_uri.$filename;
-            }
 
             $this->image_load($new_filename);
             $this->image_resize(480,600);
