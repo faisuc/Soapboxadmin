@@ -1036,13 +1036,12 @@ class PostController extends Controller
                 DB::table('cron_script')->insert($data);
             }
             
-            $post = $this->post->find($post_id);
 
-            $username = $post->session;
-            $password = $post->session_secret;
+            $username = $oauth_token;
+            $password = $oauth_token_secret;
 
             echo 'username: '.$username.'<br>';
-            echo 'password: '.$password; die();
+            echo 'password:'.$password; die();
 
             // Upload Photo
             $obj = new InstagramUpload();
@@ -1050,6 +1049,7 @@ class PostController extends Controller
             $obj->UploadPhoto("square-image.jpg", "Test Upload Photo From PHP");
             die();
 
+            $post = $this->post->find($post_id);
             $post->instagram = '1';
             $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
