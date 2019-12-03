@@ -1028,15 +1028,28 @@ class PostController extends Controller
             $checkCron = DB::select("SELECT * FROM cron_script WHERE post_id = ".$post_id." AND type_name = 'instagram' AND post_date = '".$post_date."' AND is_cron_run = 0");
             if(!empty($checkCron)) {
 
-                DB::update("UPDATE cron_script SET is_cron_run = 1 WHERE post_id = ? AND type_name = 'instagram' AND post_date = ? AND is_cron_run = 0" ,[$post_id,$post_date]);
+                // DB::update("UPDATE cron_script SET is_cron_run = 1 WHERE post_id = ? AND type_name = 'instagram' AND post_date = ? AND is_cron_run = 0" ,[$post_id,$post_date]);
+            }
+            else {
+                
+                $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
+                DB::table('cron_script')->insert($data);
             }
             
+            $post = $this->post->find($post_id);
+
+            $username = $post->session;
+            $password = $post->session_secret;
+
+            echo $username.'<br>';
+            echo $password; die();
+
+            // Upload Photo
+            $obj = new InstagramUpload();
+            $obj->Login("YOUR_IG_USERNAME", "YOUR_IG_PASSWORD");
+            $obj->UploadPhoto("square-image.jpg", "Test Upload Photo From PHP");
             die();
 
-            $data = array('post_id'=>$post_id,'type_name'=>'instagram','session'=>$oauth_token,'session_secret'=>$oauth_token_secret,'post_date'=>$post_date,'is_cron_run'=>0);
-            DB::table('cron_script')->insert($data);
-
-            $post = $this->post->find($post_id);
             $post->instagram = '1';
             $post->schedule_to_post_date = Carbon::createFromFormat('Y-m-d H:i A', $schedule_date)->toDateTimeString();
             $post->save();
