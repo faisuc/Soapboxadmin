@@ -1743,6 +1743,7 @@ class PostController extends Controller
         }
         $response = curl_exec($ch);
         if($post) {
+            echo $this->instagramUrl . $url;
             echo "<pre>";
             print_r($response);
             die();
