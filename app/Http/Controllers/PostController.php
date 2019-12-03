@@ -759,6 +759,9 @@ class PostController extends Controller
                     $pinterest = new Pinterest($app_id, $app_secret);
                     $pinterest->auth->setOAuthToken($token);
 
+                    echo "<pre>";
+                    print_r($pinterest);
+                    die();
                     $boards = $pinterest->users->getMeBoards();
                     echo "string"; die();
                     $boardsArr = array();
