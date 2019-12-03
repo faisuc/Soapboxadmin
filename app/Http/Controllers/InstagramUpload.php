@@ -130,7 +130,7 @@ class InstagramUpload
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_PROXY,$this->proxy);
+        // curl_setopt($ch, CURLOPT_PROXY,$this->proxy);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arrPostData);
