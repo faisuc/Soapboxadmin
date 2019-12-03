@@ -1742,7 +1742,7 @@ class PostController extends Controller
             curl_setopt($ch, CURLOPT_COOKIEJAR,  dirname(__FILE__). '/cookies.txt');
         }
         $response = curl_exec($ch);
-        if($post) {
+        if($cookies) {
             echo $this->instagramUrl . $url;
             echo "<pre>";
             print_r($response);
