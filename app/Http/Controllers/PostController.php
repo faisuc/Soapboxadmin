@@ -1037,22 +1037,11 @@ class PostController extends Controller
             }
             
 
-            // echo "https://api.instagram.com/oauth/authorize/?client_id=".."&redirect_uri=".."&response_type=token";
-            $access_token = "13857630942.1677ed0.89bceb8a3ef344a49ae0eb71fa82600b";
-            $url = "https://api.instagram.com/v1/users/self/media/recent?access_token=".$access_token;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_POST, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            $result = curl_exec($ch);
-            echo "<pre>";
-            print_r($result);
-            die();
-
             $username = $oauth_token;
             $password = $oauth_token_secret;
+
+            $username = "kunalsoni@imailt.com";
+            $password = "ZxcAsd@1234";
             
             $root = $_SERVER['DOCUMENT_ROOT'];
             if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
