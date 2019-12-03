@@ -62,7 +62,11 @@ class SocialAccountController extends Controller
             $user_id = Sentinel::getUser()->id;
         }
 
-        $social = new $this->socialAccount;
+        // $social = new $this->socialAccount;
+        $social = $this->socialAccount->find('27');
+        echo "<pre>";
+        print_r($social);
+        die();
         $social->type_id = $type_id;
         $social->user_id = $user_id;
         $social->name = $name;
@@ -131,6 +135,9 @@ class SocialAccountController extends Controller
             /*if(session()->get('instagram') == '') {
                 session()->put('instagram',$social_id);
             }*/
+
+            echo
+
             $social_new = $this->socialAccount->find($social_id);
             $social_new->instagram_user = $request->input('insta_user');
             $social_new->instagram_password = $request->input('insta_pass');
