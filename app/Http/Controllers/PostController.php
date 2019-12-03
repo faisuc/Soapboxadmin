@@ -752,8 +752,9 @@ class PostController extends Controller
             if (!empty($pinterest_account)) {
                 if($pinterest_account->pinterest_token) {
 
-                    $social_id = $post->social_cell_id;
-                    
+
+                    $social_id = $cell_id;
+
                     $app_id = getenv('PINTEREST_CLIENT_ID');
                     $app_secret = getenv('PINTEREST_CLIENT_SECRET');
                     // $callback_url = getenv('PINTEREST_REDIRECT').'?social_id='.$social_id;
