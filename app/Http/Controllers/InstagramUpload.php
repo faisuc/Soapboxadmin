@@ -32,6 +32,9 @@ class InstagramUpload
         $this->upload_id = $this->generateUploadId();
         $this->headers[] = "X-IG-Capabilities: " . $this->x_ig_capabilities;
         $this->headers[] = "X-IG-Connection-Type: WIFI";
+        echo "<pre>";
+        print_r($_SERVER);
+        die();
         $this->proxy = $_SERVER['SERVER_ADDR'];
     }
     public function Login($username = "", $password = "")
