@@ -71,10 +71,11 @@ class InstagramUpload
         $result = curl_exec($ch);
         echo "<pre>";
         print_r($result);
-        die();
+        echo "</pre>";
         curl_close($ch);
         preg_match_all("|csrftoken=(.*);|U", $result, $arrOut, PREG_PATTERN_ORDER);
         $csrftoken = $arrOut[1][0];
+        echo $csrftoken; die();
         if ($csrftoken != "") {
             return $csrftoken;
         } else {
