@@ -1041,8 +1041,8 @@ class PostController extends Controller
             $username = $post->session;
             $password = $post->session_secret;
 
-            echo $username.'<br>';
-            echo $password; die();
+            echo 'username: '.$username.'<br>';
+            echo 'password: '.$password; die();
 
             // Upload Photo
             $obj = new InstagramUpload();
