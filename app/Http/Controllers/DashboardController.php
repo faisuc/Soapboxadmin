@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sentinel;
 use DateTime;
 use DB;
+use Session;
 use URL;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
