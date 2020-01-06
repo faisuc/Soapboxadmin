@@ -511,6 +511,8 @@ class DashboardController extends Controller
 
             $this->setFacebookObject();
             $token = session()->get('insta_fb');
+            echo 'Token: '.$token.'<br>';
+            die();
             $accounts = $this->api->get('me/accounts',$token);
             echo "You Facebook Account Has Been Connected Successfully With Instagram Access";
             echo "<pre>";
