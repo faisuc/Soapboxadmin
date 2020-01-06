@@ -511,6 +511,7 @@ class DashboardController extends Controller
         if(session()->get('insta_fb') != '') {
 
             session()->forget('insta_fb');
+            echo session()->get('insta_fb');
             die;
             $this->setFacebookObject();
             $token = session()->get('insta_fb');
