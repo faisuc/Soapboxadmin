@@ -507,7 +507,7 @@ class DashboardController extends Controller
 
     public function test_instagram() {
 
-        if(isset($_SESSION['insta_fb'])) {
+        if(session()->get('insta_fb') == '') {
 
         }
         else {
