@@ -597,7 +597,7 @@ class DashboardController extends Controller
         
 
         $facebook_token = $accessToken;
-        $_SESSION['insta_fb'] = $facebook_token;
+        session()->put('insta_fb', $facebook_token);
 
         // session()->put('fb_access_token', $accessToken);
         // echo Session::get('fb_access_token'); die();
