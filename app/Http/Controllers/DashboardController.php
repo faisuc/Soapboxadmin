@@ -508,9 +508,8 @@ class DashboardController extends Controller
 
     public function test_instagram() {
 
-        if(session()->get('insta_fb') == '') {
+        if(session()->get('insta_fb') != '') {
 
-            session()->forget('insta_fb');
             $this->setFacebookObject();
             $token = session()->get('insta_fb');
             echo 'Token: '.$token.'<br>';
