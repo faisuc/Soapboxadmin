@@ -512,18 +512,9 @@ class DashboardController extends Controller
         }
         else {
             
-            $app_id = getenv('FACEBOOK_CLIENT_ID');
-            $app_secret = getenv('FACEBOOK_CLIENT_SECRET');
-            $fb = new Facebook([
-                'app_id' => $app_id,
-                'app_secret' => $app_secret,
-                'default_graph_version' => 'v2.5',
-            ]);
+            $this->setFacebookObject();
 
-            echo $app_id.'<br>';
-            echo $app_secret.'<br>';
-
-            $helper = $fb->getRedirectLoginHelper();
+            $helper = $this->api->getRedirectLoginHelper();
 
             $permissions = ['instagram_basic','instagram_content_publish','instagram_manage_comments','instagram_manage_insights','manage_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/callback_instagram', $permissions);
