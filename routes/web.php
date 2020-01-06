@@ -33,6 +33,8 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('dashboard', 'DashboardController@index');
     Route::get('dashboard/{cell_id?}', 'DashboardController@index');
+    Route::get('test_instagram', 'DashboardController@test_instagram');
+    Route::get('callback_instagram', 'DashboardController@calbback_instagram');
     Route::get('profile', 'ProfileController@index');
     Route::get('messages/{user_id?}', 'MessageController@index');
     // Route::get('queues/{user_id?}', 'PostController@index');

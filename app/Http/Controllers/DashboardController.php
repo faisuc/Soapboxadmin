@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sentinel;
 use DateTime;
 use DB;
+use URL;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use App\Http\Controllers\TwitterAPIExchange;
@@ -503,5 +504,23 @@ class DashboardController extends Controller
         }
     }
     /* Twitter */
+
+    public function test_instagram() {
+
+        if(isset($_SESSION['insta_fb'])) {
+
+        }
+        else {
+            
+            $this->setFacebookObject();
+
+            $helper = $this->api->getRedirectLoginHelper();
+
+            $permissions = ['instagram_basic','instagram_content_publish','instagram_manage_comments','instagram_manage_insights','manage_pages'];
+            $loginUrl = $helper->getLoginUrl(URL::to('/').'/callback_instagram', $permissions);
+
+            echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
+        }
+    }
 
 }
