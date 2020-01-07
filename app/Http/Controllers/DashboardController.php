@@ -534,11 +534,11 @@ class DashboardController extends Controller
                 $page_token = $account['access_token'];
             }
 
-            echo $page_id.'<br>';
-            echo $page_token;
-            die();
             $instagram_data = $this->api->get($page_id.'?fields=instagram_business_account',$page_token);
             // https://graph.facebook.com/v5.0/134895793791914?fields=instagram_business_account&access_token={access-token}
+            echo "<pre>";
+            print_r($instagram_data);
+            die();
         }
         else {
             
