@@ -543,9 +543,8 @@ class DashboardController extends Controller
             
             $publish = $this->api->get('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
             
-            echo $page_id.'<br>';
-            echo $business_account.'<br>';
-            echo $instagram_page_id.'<br>';
+            echo "<pre>";
+            print_r($publish);
             die();
         }
         else {
