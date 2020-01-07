@@ -536,8 +536,13 @@ class DashboardController extends Controller
 
             $instagram_data = $this->api->get($page_id.'?fields=instagram_business_account',$page_token);
             $instagram_data = $instagram_data->getDecodedBody();
-            echo "<pre>";
-            print_r($instagram_data);
+
+            $business_account = $instagram_data['instagram_business_account']['id'];
+            $instagram_page_id = $instagram_data['id'];
+            
+            echo $page_id.'<br>';
+            echo $business_account.'<br>';
+            echo $instagram_page_id.'<br>';
             die();
         }
         else {
