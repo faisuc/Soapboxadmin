@@ -538,7 +538,7 @@ class DashboardController extends Controller
 
             $helper = $this->api->getRedirectLoginHelper();
 
-            $permissions = ['instagram_basic','instagram_content_publish','instagram_manage_comments','instagram_manage_insights','manage_pages'];
+            $permissions = ['instagram_basic','instagram_manage_comments','instagram_manage_insights','manage_pages'];
             $loginUrl = $helper->getLoginUrl(URL::to('/').'/callback_instagram', $permissions);
 
             echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
