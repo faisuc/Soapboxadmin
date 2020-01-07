@@ -535,7 +535,7 @@ class DashboardController extends Controller
             }
 
             $instagram_data = $this->api->get($page_id.'?fields=instagram_business_account',$page_token);
-            // https://graph.facebook.com/v5.0/134895793791914?fields=instagram_business_account&access_token={access-token}
+            $instagram_data = $instagram_data->getDecodedBody();
             echo "<pre>";
             print_r($instagram_data);
             die();
