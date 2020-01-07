@@ -541,8 +541,12 @@ class DashboardController extends Controller
             $img_url = 'https://socialhat.net/storage/medias/images/5de0e4bdcd914886673_1527680348830kartra_screen2.jpg';
             $caption = 'Caption';
             
-            /*$container = $this->api->get('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
-            $containers = $container->getDecodedBody();*/
+            $container = $this->api->post('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
+            $containers = $container->getDecodedBody();
+
+            echo "<pre>";
+            print_r($containers);
+            die();
 
             // $containers = '{"data":[{"id":"18044019094145253"},{"id":"18053019781101828"},{"id":"18053609452101940"},{"id":"18066858793066195"},{"id":"18070599811034849"},{"id":"17976065920246990"}],"paging":{"cursors":{"before":"QVFIUllrNnRBZAFphT2p1ZAmNoNi1Lc1NTZAWx6NG1FSWdaV2FUWHZA6VkhWcV95WGp6UEFPNTZAQYjk5WXlHS0lCb3pidm82YkNqa3llMmZAudm5uTHpvQVMzUE5R","after":"QVFIUkd4RWJYTldFUUJWeXZAodzRxNmRoNUxXLVMyTGtjRThLOTU4QkViVEp1c3hqT2FXdnQ1X202bW5vVXR0anI2UlNUYkRBSW1UWG5XWUdlajRRMUV0enVB"}}}';
 
