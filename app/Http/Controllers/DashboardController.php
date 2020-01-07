@@ -506,12 +506,24 @@ class DashboardController extends Controller
     }
     /* Twitter */
 
+    public function setFacebookObject_new()
+    {
+        $app_id = getenv('FACEBOOK_CLIENT_ID');
+        $app_secret = getenv('FACEBOOK_CLIENT_SECRET');
+        $fb = new Facebook([
+            'app_id' => $app_id,
+            'app_secret' => $app_secret,
+            'default_graph_version' => 'v5.0',
+        ]);
+        $this->api = $fb;
+    }
+
     public function test_instagram() {
 
         if(session()->get('insta_fb') != '') {
 
             // session_destroy();
-            $this->setFacebookObject();
+            $this->setFacebookObject_new();
             $token = session()->get('insta_fb');
             echo 'Token: '.$token.'<br><br>';
             $accounts = $this->api->get('me/accounts',$token);
@@ -522,7 +534,7 @@ class DashboardController extends Controller
         }
         else {
             
-            $this->setFacebookObject();
+            $this->setFacebookObject_new();
 
             $helper = $this->api->getRedirectLoginHelper();
 
