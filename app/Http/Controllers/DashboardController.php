@@ -527,7 +527,7 @@ class DashboardController extends Controller
             $token = session()->get('insta_fb');
             echo 'Token: '.$token.'<br><br>';
             $accounts = $this->api->get('me/accounts',$token);
-            echo "You Facebook Account Has Been Connected Successfully With Instagram Access";
+            echo "You Facebook Account Has Been Connected Successfully With Instagram Access <br>";
             $accounts = $accounts->getDecodedBody();
             foreach ($accounts['data'] as $ac_key => $account) {
                 $page_id = $account['id'];
@@ -537,8 +537,11 @@ class DashboardController extends Controller
             $instagram_data = $this->api->get($page_id.'?fields=instagram_business_account',$page_token);
             $instagram_data = $instagram_data->getDecodedBody();
 
-            $business_account = $instagram_data['instagram_business_account']['id'];
-            $instagram_page_id = $instagram_data['id'];
+            $ig_user_id = $instagram_data['instagram_business_account']['id'];
+            $img_url = 'https://socialhat.net/storage/medias/images/5de0e4bdcd914886673_1527680348830kartra_screen2.jpg';
+            $caption = 'Caption';
+            
+            $publish = $this->api->get('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
             
             echo $page_id.'<br>';
             echo $business_account.'<br>';
