@@ -555,7 +555,10 @@ class DashboardController extends Controller
                 array('id'=>"17976065920246990"),
             );
             
-            echo $container_id = $containers[0]['id'];
+            $container_id = $containers[0]['id'];
+
+            echo '/'.$ig_user_id.'/media_publish?creation_id='.$container_id; die();
+
             $media_publish = $this->api->get('/'.$ig_user_id.'/media_publish?creation_id='.$container_id,$token);
             echo "<pre>";
             print_r($media_publish);
