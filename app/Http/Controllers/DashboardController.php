@@ -544,6 +544,8 @@ class DashboardController extends Controller
             /*$container = $this->api->get('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
             $containers = $container->getDecodedBody();*/
 
+            // $containers = '{"data":[{"id":"18044019094145253"},{"id":"18053019781101828"},{"id":"18053609452101940"},{"id":"18066858793066195"},{"id":"18070599811034849"},{"id":"17976065920246990"}],"paging":{"cursors":{"before":"QVFIUllrNnRBZAFphT2p1ZAmNoNi1Lc1NTZAWx6NG1FSWdaV2FUWHZA6VkhWcV95WGp6UEFPNTZAQYjk5WXlHS0lCb3pidm82YkNqa3llMmZAudm5uTHpvQVMzUE5R","after":"QVFIUkd4RWJYTldFUUJWeXZAodzRxNmRoNUxXLVMyTGtjRThLOTU4QkViVEp1c3hqT2FXdnQ1X202bW5vVXR0anI2UlNUYkRBSW1UWG5XWUdlajRRMUV0enVB"}}}';
+
             $containers = array(
                 array('id'=>"18044019094145253"),
                 array('id'=>"18053019781101828"),
@@ -553,11 +555,12 @@ class DashboardController extends Controller
                 array('id'=>"17976065920246990"),
             );
             
-            $media_publish = $this->api->get('/'.$ig_user_id.'/media_publish?creation_id='.$containers[0]['id'],$token);
+            echo $container_id = $containers[0]['id'];
+            $media_publish = $this->api->get('/'.$ig_user_id.'/media_publish?creation_id='.$container_id,$token);
             echo "<pre>";
             print_r($media_publish);
             die();
-
+            
         }
         else {
             
