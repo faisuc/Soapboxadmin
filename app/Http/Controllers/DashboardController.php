@@ -541,7 +541,14 @@ class DashboardController extends Controller
             $img_url = 'https://socialhat.net/storage/medias/images/5de0e4bdcd914886673_1527680348830kartra_screen2.jpg';
             $caption = 'Caption';
             
-            $container = $this->api->post('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
+
+            $data = array(
+                'image_url' => $img_url,
+                'caption' => $caption
+            );
+
+            // $container = $this->api->post('/'.$ig_user_id.'/media?image_url='.$img_url.'&caption='.$caption,$token);
+            $container = $this->api->post('/'.$ig_user_id.'/media', $data, $token);
             $containers = $container->getDecodedBody();
 
             echo "<pre>";
